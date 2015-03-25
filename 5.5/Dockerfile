@@ -1,0 +1,43 @@
+FROM openshift/base-centos7
+
+# This image provides an Apache+PHP environment for running PHP
+# applications.
+
+MAINTAINER Ben Parees <bparees@redhat.com>
+
+# Image metadata
+ENV PHP_VERSION           5.5
+ENV IMAGE_DESCRIPTION     PHP 5.5
+ENV IMAGE_TAGS            php,php55
+ENV IMAGE_EXPOSE_SERVICES 8080:http
+#ENV PHPRC /opt/openshift/etc/php.ini
+#ENV PHP_INI_SCAN_DIR /opt/openshift/etc/php.d
+
+# Install Apache httpd and PHP
+RUN yum install -y \
+    https://www.softwarecollections.org/en/scls/rhscl/httpd24/epel-7-x86_64/download/rhscl-httpd24-epel-7-x86_64.noarch.rpm \
+    https://www.softwarecollections.org/en/scls/rhscl/php55/epel-7-x86_64/download/rhscl-php55-epel-7-x86_64.noarch.rpm \
+    https://www.softwarecollections.org/en/scls/remi/php55more/epel-7-x86_64/download/remi-php55more-epel-7-x86_64.noarch.rpm && \
+    yum install -y --setopt=tsflags=nodocs httpd24 php55 php55-php php55-php-mysqlnd php55-php-pgsql php55-php-bcmath php55-php-devel \
+    php55-php-fpm php55-php-gd php55-php-intl php55-php-ldap php55-php-mbstring php55-php-mcript php55-php-pdo \
+    php55-php-pecl-memcache php55-php-process php55-php-soap php55-php-opcache php55-php-xml \
+    php55-php-pecl-imagick php55-php-pecl-xdebug && \
+    yum clean all -y && \
+    mkdir /tmp/sessions
+
+ENV PATH $PATH:/opt/rh/php55/root/usr/bin
+
+USER root
+
+EXPOSE 8080
+
+# Copy the STI scripts from the specific language image to /usr/local/sti
+COPY ./.sti/bin/ /usr/local/sti
+
+# Each language image can have 'contrib' a directory with extra files needed to
+# run and build the applications.
+COPY ./contrib/ /opt/openshift
+RUN chown -R default:default /opt/openshift /tmp/sessions
+
+# Set the default CMD to print the usage of the language image
+CMD ["usage"]
