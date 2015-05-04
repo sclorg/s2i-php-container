@@ -27,8 +27,6 @@ RUN yum install -y \
 
 ENV PATH $PATH:/opt/rh/php55/root/usr/bin
 
-USER root
-
 EXPOSE 8080
 
 # Copy the STI scripts from the specific language image to /usr/local/sti
@@ -38,6 +36,12 @@ COPY ./.sti/bin/ /usr/local/sti
 # run and build the applications.
 COPY ./contrib/ /opt/openshift
 RUN chown -R default:default /opt/openshift /tmp/sessions
+
+RUN sed -i -f /opt/openshift/httpdconf.sed /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf  && \
+    chmod -R og+rwx /opt/rh/php55/root/etc && \
+    chmod -R og+rwx /opt/rh/httpd24/root/var/run/httpd
+
+USER default
 
 # Set the default CMD to print the usage of the language image
 CMD ["usage"]

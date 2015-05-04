@@ -22,4 +22,4 @@ envsubst < /opt/openshift/etc/php.ini.template > /opt/rh/php55/root/etc/php.ini
 envsubst < /opt/openshift/etc/php.d/opcache.ini.template > /opt/rh/php55/root/etc/php.d/opcache.ini
 
 set -e
-exec httpd -C 'Include /opt/openshift/httpd.conf' -D FOREGROUND
+exec httpd -D FOREGROUND
