@@ -5,12 +5,15 @@ FROM openshift/base-centos7
 
 MAINTAINER Ben Parees <bparees@redhat.com>
 
-# Image metadata
+EXPOSE 8080
+
 ENV PHP_VERSION=5.5 \
-    IMAGE_DESCRIPTION="PHP 5.5" \
-    IMAGE_TAGS=php,php55 \
-    IMAGE_EXPOSE_SERVICES=8080:http \
     PATH=$PATH:/opt/rh/php55/root/usr/bin
+
+LABEL k8s.io/description="Platform for building and running PHP 5.5 applications" \
+      k8s.io/display-name="Apache 2.4 with PHP 5.5" \
+      openshift.io/expose-services="8080:http" \
+      openshift.io/tags="builder,php,php55"
 
 #ENV PHPRC /opt/openshift/etc/php.ini
 #ENV PHP_INI_SCAN_DIR /opt/openshift/etc/php.d
@@ -37,8 +40,6 @@ RUN yum install -y \
     sed -i -f /opt/openshift/httpdconf.sed /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf && \
     chmod -R og+rwx /opt/rh/php55/root/etc && \
     chmod -R og+rwx /opt/rh/httpd24/root/var/run/httpd
-
-EXPOSE 8080
 
 USER default
 
