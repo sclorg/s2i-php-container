@@ -15,9 +15,6 @@ LABEL k8s.io/description="Platform for building and running PHP 5.5 applications
       openshift.io/expose-services="8080:http" \
       openshift.io/tags="builder,php,php55"
 
-#ENV PHPRC /opt/openshift/etc/php.ini
-#ENV PHP_INI_SCAN_DIR /opt/openshift/etc/php.d
-
 # Copy the STI scripts from the specific language image to /usr/local/sti
 COPY ./.sti/bin/ /usr/local/sti
 
