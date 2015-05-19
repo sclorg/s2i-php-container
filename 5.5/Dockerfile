@@ -38,7 +38,7 @@ RUN yum install -y \
     chmod -R og+rwx /opt/rh/php55/root/etc && \
     chmod -R og+rwx /opt/rh/httpd24/root/var/run/httpd
 
-USER default
+USER 1001
 
 # Set the default CMD to print the usage of the language image
 CMD ["usage"]
