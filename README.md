@@ -42,7 +42,7 @@ To build a PHP image, choose between a CentOS or RHEL based image:
     ```
 
 Alternatively, you can pull the CentOS image from Docker Hub via:
-    
+
     $ docker pull openshift/php-55-centos7
 
 **Notice: By omitting the `VERSION` parameter, the build/test action will be performed
@@ -58,13 +58,13 @@ resulting image with [Docker](http://docker.io) execute:
 
 *  **For RHEL based image**
     ```
-    $ sti build https://github.com/openshift/sti-php.git --contextDir=5.5/test/test-app openshift/php-55-rhel7 php-test-app
+    $ sti build https://github.com/openshift/sti-php.git --context-dir=5.5/test/test-app openshift/php-55-rhel7 php-test-app
     $ docker run -p 8080:8080 php-test-app
     ```
 
 *  **For CentOS based image**
     ```
-    $ sti build https://github.com/openshift/sti-php.git --contextDir=5.5/test/test-app openshift/php-55-centos7 php-test-app
+    $ sti build https://github.com/openshift/sti-php.git --context-dir=5.5/test/test-app openshift/php-55-centos7 php-test-app
     $ docker run -p 8080:8080 php-test-app
     ```
 
