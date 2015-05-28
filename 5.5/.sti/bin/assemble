@@ -5,7 +5,7 @@ source ./.bashrc
 set -e
 
 echo "---> Installing application source"
-cp -Rf /tmp/src/* ./
+cp -Rf /tmp/src/. ./
 
 if [ -f composer.json ]; then
     echo "Installing dependencies from composer.json... "
