@@ -28,7 +28,7 @@ RUN yum install -y \
     https://www.softwarecollections.org/en/scls/rhscl/php55/epel-7-x86_64/download/rhscl-php55-epel-7-x86_64.noarch.rpm \
     https://www.softwarecollections.org/en/scls/remi/php55more/epel-7-x86_64/download/remi-php55more-epel-7-x86_64.noarch.rpm && \
     yum install -y --setopt=tsflags=nodocs httpd24 php55 php55-php php55-php-mysqlnd php55-php-pgsql php55-php-bcmath php55-php-devel \
-    php55-php-fpm php55-php-gd php55-php-intl php55-php-ldap php55-php-mbstring php55-php-mcript php55-php-pdo \
+    php55-php-fpm php55-php-gd php55-php-intl php55-php-ldap php55-php-mbstring php55-php-pdo \
     php55-php-pecl-memcache php55-php-process php55-php-soap php55-php-opcache php55-php-xml \
     php55-php-pecl-imagick php55-php-pecl-xdebug && \
     yum clean all -y && \
