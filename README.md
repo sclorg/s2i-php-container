@@ -203,3 +203,11 @@ You can also override the entire directory used to load the PHP configuration by
   * Sets the path to the php.ini file
 * **PHP_INI_SCAN_DIR**
   * Path to scan for additional ini configuration files
+
+Apache .htaccess file
+---------------------
+
+In case the **DocumentRoot** of the application is nested in source directory `/opt/openshift/src`,
+user can provide own **.htaccess** file, to override Apache behavior and specify how application 
+requests should be handled. The **.htaccess** file needs to be located at the root of the application 
+source.
