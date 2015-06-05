@@ -5,3 +5,4 @@ s%^DocumentRoot "/opt/rh/httpd24/root/var/www/html"%DocumentRoot "/opt/openshift
 s%^<Directory "/opt/rh/httpd24/root/var/html"%<Directory "/opt/openshift/src"%
 s%^ErrorLog "logs/error_log"%ErrorLog "/tmp/error_log"%
 s%CustomLog "logs/access_log"%CustomLog "/tmp/access_log"%
+151s%AllowOverride None%AllowOverride All%

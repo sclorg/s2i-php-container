@@ -35,6 +35,7 @@ RUN yum install -y \
     mkdir /tmp/sessions && \
     chown -R default:default /opt/openshift /tmp/sessions && \
     sed -i -f /opt/openshift/httpdconf.sed /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf && \
+    head -n151 /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf | tail -n1 | grep "AllowOverride All" || exit && \
     chmod -R og+rwx /opt/rh/php55/root/etc && \
     chmod -R og+rwx /opt/rh/httpd24/root/var/run/httpd
 
