@@ -1,7 +1,5 @@
 #!/bin/bash
 
-source ./.bashrc
-
 set -e
 
 echo "---> Installing application source"
