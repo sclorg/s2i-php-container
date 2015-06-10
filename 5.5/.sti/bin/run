@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# For SCL enablement
-source ./.bashrc
-
 # Default php.ini configuration values, all taken 
 # from php defaults.
 export ERROR_REPORTING=${ERROR_REPORTING:-E_ALL & ~E_NOTICE}
