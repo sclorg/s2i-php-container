@@ -32,7 +32,7 @@ RUN yum-config-manager --enable rhel-server-rhscl-7-rpms && \
     yum install -y --setopt=tsflags=nodocs httpd24 php55 php55-php php55-php-mysqlnd php55-php-pgsql php55-php-bcmath php55-php-devel \
     php55-php-fpm php55-php-gd php55-php-intl php55-php-ldap php55-php-mbstring php55-php-pdo \
     php55-php-pecl-memcache php55-php-process php55-php-soap php55-php-opcache php55-php-xml \
-    php55-php-pecl-imagick php55-php-pecl-xdebug && \
+    php55-php-pecl-imagick && \
     yum clean all -y && \
     mkdir /tmp/sessions && \
     chown -R default:default /opt/openshift /tmp/sessions && \
