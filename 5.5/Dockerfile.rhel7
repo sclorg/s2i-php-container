@@ -15,6 +15,12 @@ LABEL k8s.io/description="Platform for building and running PHP 5.5 applications
       openshift.io/expose-services="8080:http" \
       openshift.io/tags="builder,php,php55"
 
+# Labels consumed by Red Hat build service
+LABEL Component="php55" \
+      Name="openshift3/php-55-rhel7" \
+      Version="5.5" \
+      Release="1"
+
 #ENV PHPRC /opt/openshift/etc/php.ini
 #ENV PHP_INI_SCAN_DIR /opt/openshift/etc/php.d
 
