@@ -36,7 +36,7 @@ RUN yum-config-manager --enable rhel-server-rhscl-7-rpms && \
     yum clean all -y && \
     mkdir /tmp/sessions && \
     chown -R default:default /opt/openshift /tmp/sessions && \
-    sed -i -f /opt/openshift/httpdconf.sed /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf && \
+    sed -i -f /opt/openshift/etc/httpdconf.sed /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf && \
     chmod -R og+rwx /opt/rh/php55/root/etc && \
     chmod -R og+rwx /opt/rh/httpd24/root/var/run/httpd
 
