@@ -1,10 +1,10 @@
 PHP for OpenShift - Docker images
 ========================================
 
-This repository contains sources of the images for building various versions
-of PHP applications as reproducible Docker images using
+This repository contains the source for building various versions of
+the PHP application as a reproducible Docker image using
 [source-to-image](https://github.com/openshift/source-to-image).
-User can choose between RHEL and CentOS based builder images.
+Users can choose between RHEL and CentOS based builder images.
 The resulting image can be run using [Docker](http://docker.io).
 
 
@@ -22,10 +22,10 @@ CentOS versions currently supported are:
 
 Installation
 ---------------
-To build a PHP image, choose between a CentOS or RHEL based image:
+To build a PHP image, choose either the CentOS or RHEL based image:
 *  **RHEL based image**
 
-    To build a rhel-based php-5.5 image, you need to run the build on a properly
+    To build a RHEL based PHP-5.5 image, you need to run the build on a properly
     subscribed RHEL machine.
 
     ```
@@ -46,13 +46,13 @@ Alternatively, you can pull the CentOS image from Docker Hub via:
     $ docker pull openshift/php-55-centos7
 
 **Notice: By omitting the `VERSION` parameter, the build/test action will be performed
-on all the supported versions of PHP. Since we are currently only support version `5.5`,
+on all the supported versions of PHP. Since we currently only support version `5.5`,
 you can omit this parameter.**
 
 
 Usage
 ---------------------
-To build simple [php-test-app](https://github.com/openshift/sti-php/tree/master/5.5/test/test-app) application,
+To build a simple [php-test-app](https://github.com/openshift/sti-php/tree/master/5.5/test/test-app) application
 using standalone [STI](https://github.com/openshift/source-to-image) and then run the
 resulting image with [Docker](http://docker.io) execute:
 
@@ -76,16 +76,16 @@ $ curl 127.0.0.1:8080
 
 Test
 ---------------------
-This repository also provides [STI](https://github.com/openshift/source-to-image) test framework,
-which launches tests to check functionality of a simple php application built on top of sti-php image.
+This repository also provides a [S2I](https://github.com/openshift/source-to-image) test framework,
+which launches tests to check functionality of a simple PHP application built on top of the sti-php image.
 
-User can choose between testing php test application based on RHEL or CentOS image.
+Users can choose between testing a PHP test application based on a RHEL or CentOS image.
 
 *  **RHEL based image**
 
-    This image is not available as trusted build in [Docker Index](https://index.docker.io).
+    This image is not available as a trusted build in [Docker Index](https://index.docker.io).
 
-    To test a rhel7-based php-5.5 image, you need to run the test on a properly
+    To test a RHEL7 based PHP-5.5 image, you need to run the test on a properly
     subscribed RHEL machine.
 
     ```
@@ -124,7 +124,7 @@ Repository organization
 
         *   **assemble**
 
-            Is used to install the sources into location from where the application
+            Used to install the sources into the location where the application
             will be run and prepare the application for deployment (eg. installing
             modules using npm, etc..)
 
@@ -135,31 +135,31 @@ Repository organization
 
     * **`contrib/`**
 
-        This folder contains file with commonly used modules.
+        This folder contains a file with commonly used modules.
 
     * **`test/`**
 
-        This folder contains a simple [STI](https://github.com/openshift/source-to-image)
+        This folder contains the [S2I](https://github.com/openshift/source-to-image)
         test framework with a sample PHP app.
 
         * **`test-app/`**
 
-            Simple PHP app for used for testing purposes in the [STI](https://github.com/openshift/source-to-image) test framework.
+            A simple PHP app used for testing purposes by the [S2I](https://github.com/openshift/source-to-image) test framework.
 
         * **run**
 
-            Script that runs the [STI](https://github.com/openshift/source-to-image) test framework.
+            Script that runs the [S2I](https://github.com/openshift/source-to-image) test framework.
 
 * **`hack/`**
 
-    Folder contains scripts which are responsible for build and test actions performed by the `Makefile`.
+    Folder containing scripts which are responsible for the build and test actions performed by the `Makefile`.
 
 Image name structure
 ------------------------
 ##### Structure: openshift/1-2-3
 
-1. Platform name - php
-2. Platform version(without dots)
+1. Platform name (lowercase) - php
+2. Platform version(without dots) - 55
 3. Base builder image - centos7/rhel7
 
 Examples: `openshift/php-55-centos7`, `openshift/php-55-rhel7`
@@ -167,7 +167,7 @@ Examples: `openshift/php-55-centos7`, `openshift/php-55-rhel7`
 Environment variables
 ---------------------
 
-To set these environment variables, you can place them into `.sti/environment`
+To set these environment variables, you can place them as a key value pair into a `.sti/environment`
 file inside your source code repository.
 
 The following environment variables set their equivalent property value in the php.ini file:
@@ -207,7 +207,7 @@ You can also override the entire directory used to load the PHP configuration by
 Apache .htaccess file
 ---------------------
 
-In case the **DocumentRoot** of the application is nested in source directory `/opt/openshift/src`,
-user can provide own **.htaccess** file, to override Apache behavior and specify how application 
-requests should be handled. The **.htaccess** file needs to be located at the root of the application 
-source.
+In case the **DocumentRoot** of the application is nested within the source directory `/opt/openshift/src`,
+users can provide their own **.htaccess** file.  This allows the overriding of Apache's behavior and
+specifies how application requests should be handled. The **.htaccess** file needs to be located at the root 
+of the application source.
