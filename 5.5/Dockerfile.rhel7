@@ -15,6 +15,11 @@ LABEL io.k8s.description="Platform for building and running PHP 5.5 applications
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,php,php55"
 
+LABEL k8s.io/description="Platform for building and running PHP 5.5 applications" \
+      k8s.io/display-name="Apache 2.4 with PHP 5.5" \
+      openshift.io/expose-services="8080:http" \
+      openshift.io/tags="builder,php,php55"
+
 # Labels consumed by Red Hat build service
 LABEL Component="php55" \
       Name="openshift3/php-55-rhel7" \
