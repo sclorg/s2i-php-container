@@ -10,17 +10,10 @@ EXPOSE 8080
 ENV PHP_VERSION=5.5 \
     PATH=$PATH:/opt/rh/php55/root/usr/bin
 
-LABEL k8s.io/description="Platform for building and running PHP 5.5 applications" \
-      k8s.io/display-name="Apache 2.4 with PHP 5.5" \
-      openshift.io/expose-services="8080:http" \
-      openshift.io/tags="builder,php,php55"
-
-# Copy the STI scripts from the specific language image to /usr/local/sti
-COPY ./.sti/bin/ /usr/local/sti
-
-# Each language image can have 'contrib' a directory with extra files needed to
-# run and build the applications.
-COPY ./contrib/ /opt/openshift
+LABEL io.k8s.description="Platform for building and running PHP 5.5 applications" \
+      io.k8s.display-name="Apache 2.4 with PHP 5.5" \
+      io.openshift.expose-services="8080:http" \
+      io.openshift.tags="builder,php,php55"
 
 # Install Apache httpd and PHP
 RUN yum install -y \
@@ -31,13 +24,24 @@ RUN yum install -y \
     php55-php-fpm php55-php-gd php55-php-intl php55-php-ldap php55-php-mbstring php55-php-pdo \
     php55-php-pecl-memcache php55-php-process php55-php-soap php55-php-opcache php55-php-xml \
     php55-php-pecl-imagick php55-php-pecl-xdebug && \
-    yum clean all -y && \
-    mkdir /tmp/sessions && \
-    chown -R default:default /opt/openshift /tmp/sessions && \
-    sed -i -f /opt/openshift/etc/httpdconf.sed /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf && \
+    yum clean all -y
+
+# Copy the STI scripts from the specific language image to /usr/local/sti
+COPY ./.sti/bin/ /usr/local/sti
+
+# Each language image can have 'contrib' a directory with extra files needed to
+# run and build the applications.
+COPY ./contrib/ /opt/openshift
+
+# In order to drop the root user, we have to make some directories world
+# writeable as OpenShift default security model is to run the container under
+# random UID.
+RUN sed -i -f /opt/openshift/etc/httpdconf.sed /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf && \
     head -n151 /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf | tail -n1 | grep "AllowOverride All" || exit && \
+    mkdir /tmp/sessions && \
     chmod -R og+rwx /opt/rh/php55/root/etc && \
-    chmod -R og+rwx /opt/rh/httpd24/root/var/run/httpd
+    chmod -R og+rwx /opt/rh/httpd24/root/var/run/httpd && \
+    chown -R 1001:1001 /opt/openshift /tmp/sessions
 
 USER 1001
 
