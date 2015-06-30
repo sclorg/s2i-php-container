@@ -18,5 +18,4 @@ export PHP_INI_SCAN_DIR=${PHP_INI_SCAN_DIR:-/opt/rh/php55/root/etc/php.d}
 envsubst < /opt/openshift/etc/php.ini.template > /opt/rh/php55/root/etc/php.ini
 envsubst < /opt/openshift/etc/php.d/opcache.ini.template > /opt/rh/php55/root/etc/php.d/opcache.ini
 
-set -e
 exec httpd -D FOREGROUND
