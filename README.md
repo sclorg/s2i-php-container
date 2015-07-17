@@ -188,7 +188,7 @@ The following environment variables set their equivalent property value in the p
   * Default: ON
 * **INCLUDE_PATH**
   * Path for PHP source files
-  * Default: .:/opt/openshift/src:/opt/rh/php55/root/usr/share/pear
+  * Default: .:/opt/app-root/src:/opt/rh/php55/root/usr/share/pear
 * **SESSION_PATH**
   * Location for session data files
   * Default: /tmp/sessions
@@ -207,7 +207,7 @@ You can also override the entire directory used to load the PHP configuration by
 Apache .htaccess file
 ---------------------
 
-In case the **DocumentRoot** of the application is nested within the source directory `/opt/openshift/src`,
+In case the **DocumentRoot** of the application is nested within the source directory `/opt/app-root/src`,
 users can provide their own **.htaccess** file.  This allows the overriding of Apache's behavior and
 specifies how application requests should be handled. The **.htaccess** file needs to be located at the root 
 of the application source.
