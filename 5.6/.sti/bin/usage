@@ -1,0 +1,18 @@
+#!/bin/sh
+#
+# Default STI usage script for the php-5.0 image.
+#
+
+DISTRO=`cat /etc/*-release | grep ^ID= | grep -Po '".*?"' | tr -d '"'`
+
+cat <<EOF
+This is a STI PHP-5.5 ${DISTRO} base image:
+To use it, install STI: https://github.com/openshift/source-to-image
+
+Sample invocation:
+
+sti build https://github.com/openshift/sti-php.git --context-dir=/5.5/test/test-app/ openshift/php-55-${DISTRO}7 php-test-app
+
+You can then run the resulting image via:
+docker run -p 8080:8080 php-test-app
+EOF
