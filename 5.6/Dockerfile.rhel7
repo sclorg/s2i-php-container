@@ -7,32 +7,33 @@ MAINTAINER Ben Parees <bparees@redhat.com>
 
 EXPOSE 8080
 
-ENV PHP_VERSION=5.5 \
-    PATH=$PATH:/opt/rh/php55/root/usr/bin
+ENV PHP_VERSION=5.6 \
+    PATH=$PATH:/opt/rh/rh-php56/root/usr/bin
 
-LABEL io.k8s.description="Platform for building and running PHP 5.5 applications" \
-      io.k8s.display-name="Apache 2.4 with PHP 5.5" \
+LABEL io.k8s.description="Platform for building and running PHP 5.6 applications" \
+      io.k8s.display-name="Apache 2.4 with PHP 5.6" \
       io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,php,php55"
+      io.openshift.tags="builder,php,php56"
 
-LABEL k8s.io/description="Platform for building and running PHP 5.5 applications" \
-      k8s.io/display-name="Apache 2.4 with PHP 5.5" \
+LABEL k8s.io/description="Platform for building and running PHP 5.6 applications" \
+      k8s.io/display-name="Apache 2.4 with PHP 5.6" \
       openshift.io/expose-services="8080:http" \
-      openshift.io/tags="builder,php,php55"
+      openshift.io/tags="builder,php,php56"
 
 # Labels consumed by Red Hat build service
-LABEL Component="php55" \
-      Name="openshift3/php-55-rhel7" \
-      Version="5.5" \
+LABEL Component="rh-php56" \
+      Name="openshift3/php-56-rhel7" \
+      Version="5.6" \
       Release="1"
 
 # Install Apache httpd and PHP
 RUN yum-config-manager --enable rhel-server-rhscl-7-rpms && \
     yum-config-manager --enable rhel-7-server-optional-rpms && \
-    yum install -y --setopt=tsflags=nodocs httpd24 php55 php55-php php55-php-mysqlnd php55-php-pgsql php55-php-bcmath php55-php-devel \
-    php55-php-fpm php55-php-gd php55-php-intl php55-php-ldap php55-php-mbstring php55-php-pdo \
-    php55-php-pecl-memcache php55-php-process php55-php-soap php55-php-opcache php55-php-xml \
-    php55-php-pecl-imagick php55-php-pecl-xdebug && \
+    yum install -y --setopt=tsflags=nodocs httpd24 \
+    rh-php56 rh-php56-php rh-php56-php-mysqlnd rh-php56-php-pgsql rh-php56-php-bcmath \
+    rh-php56-php-gd rh-php56-php-intl rh-php56-php-ldap rh-php56-php-mbstring rh-php56-php-pdo \
+    rh-php56-php-pecl-memcache rh-php56-php-process rh-php56-php-soap rh-php56-php-opcache rh-php56-php-xml \
+    rh-php56-php-pecl-xdebug && \
     yum clean all -y
 
 # Copy the STI scripts from the specific language image to /usr/local/sti
@@ -48,7 +49,7 @@ COPY ./contrib/ /opt/app-root
 RUN sed -i -f /opt/app-root/etc/httpdconf.sed /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf && \
     head -n151 /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf | tail -n1 | grep "AllowOverride All" || exit && \
     mkdir /tmp/sessions && \
-    chmod -R og+rwx /opt/rh/php55/root/etc && \
+    chmod -R og+rwx /etc/opt/rh/rh-php56 && \
     chmod -R og+rwx /opt/rh/httpd24/root/var/run/httpd && \
     chown -R 1001:1001 /opt/app-root /tmp/sessions
 
