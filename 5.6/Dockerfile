@@ -3,7 +3,7 @@ FROM openshift/base-centos7
 # This image provides an Apache+PHP environment for running PHP
 # applications.
 
-MAINTAINER Ben Parees <bparees@redhat.com>
+MAINTAINER docker@softwarecollections.org
 
 EXPOSE 8080
 
