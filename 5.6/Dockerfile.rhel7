@@ -1,4 +1,4 @@
-FROM openshift/base-rhel7
+FROM rhel7
 
 # This image provides an Apache+PHP environment for running PHP
 # applications.
@@ -21,8 +21,8 @@ LABEL k8s.io/description="Platform for building and running PHP 5.6 applications
       openshift.io/tags="builder,php,php56"
 
 # Labels consumed by Red Hat build service
-LABEL Component="rh-php56" \
-      BZComponent="rh-php56" \
+LABEL Component="rh-php56-docker" \
+      BZComponent="rh-php56-docker" \
       Architecture="x86_64" \
       Name="rhscl/rh-php56-rhel7" \
       Version="5.6" \
