@@ -13,7 +13,7 @@ ENV PHP_VERSION=5.6 \
 LABEL io.k8s.description="Platform for building and running PHP 5.6 applications" \
       io.k8s.display-name="Apache 2.4 with PHP 5.6" \
       io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,php,php56"
+      io.openshift.tags="builder,php,php56,rh-php56"
 
 # Install Apache httpd and PHP
 RUN yum install -y \
