@@ -39,9 +39,10 @@ COPY ./contrib/ /opt/app-root
 RUN sed -i -f /opt/app-root/etc/httpdconf.sed /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf && \
     head -n151 /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf | tail -n1 | grep "AllowOverride All" || exit && \
     mkdir /tmp/sessions && \
-    chmod -R og+rwx /opt/rh/php55/root/etc && \
-    chmod -R og+rwx /opt/rh/httpd24/root/var/run/httpd && \
-    chown -R 1001:1001 /opt/app-root /tmp/sessions
+    chmod -R a+rwx /opt/rh/php55/root/etc && \
+    chmod -R a+rwx /opt/rh/httpd24/root/var/run/httpd && \
+    chmod -R a+rwx /tmp/sessions && \
+    chown -R 1001:1001 /opt/app-root
 
 USER 1001
 
