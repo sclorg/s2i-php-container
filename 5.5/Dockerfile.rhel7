@@ -3,7 +3,7 @@ FROM openshift/base-rhel7
 # This image provides an Apache+PHP environment for running PHP
 # applications.
 
-MAINTAINER Ben Parees <bparees@redhat.com>
+MAINTAINER SoftwareCollections.org <sclorg@redhat.com>
 
 EXPOSE 8080
 
