@@ -1,4 +1,4 @@
-FROM rhel7
+FROM openshift3/sti-base
 
 # This image provides an Apache+PHP environment for running PHP
 # applications.
@@ -26,7 +26,7 @@ LABEL Component="rh-php56-docker" \
       Architecture="x86_64" \
       Name="rhscl/rh-php56-rhel7" \
       Version="5.6" \
-      Release="2"
+      Release="3"
 
 # Install Apache httpd and PHP
 RUN yum-config-manager --enable rhel-server-rhscl-7-rpms && \
