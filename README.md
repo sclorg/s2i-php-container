@@ -12,6 +12,7 @@ Versions
 ---------------
 PHP versions currently supported are:
 * php-5.5
+* php-5.6
 
 RHEL versions currently supported are:
 * RHEL7
@@ -46,8 +47,7 @@ Alternatively, you can pull the CentOS image from Docker Hub via:
     $ docker pull openshift/php-55-centos7
 
 **Notice: By omitting the `VERSION` parameter, the build/test action will be performed
-on all the supported versions of PHP. Since we currently only support version `5.5`,
-you can omit this parameter.**
+on all the supported versions of PHP.**
 
 
 Usage
