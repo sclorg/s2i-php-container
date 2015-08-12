@@ -44,6 +44,8 @@ RUN sed -i -f /opt/app-root/etc/httpdconf.sed /opt/rh/httpd24/root/etc/httpd/con
     chmod -R a+rwx /tmp/sessions && \
     chown -R 1001:1001 /opt/app-root
 
+RUN sed -i '/php_value session.save_path/d' /opt/rh/httpd24/root/etc/httpd/conf.d/php55-php.conf
+
 USER 1001
 
 # Set the default CMD to print the usage of the language image
