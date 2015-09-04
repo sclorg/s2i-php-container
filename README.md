@@ -53,18 +53,18 @@ on all the supported versions of PHP.**
 Usage
 ---------------------
 To build a simple [php-test-app](https://github.com/openshift/sti-php/tree/master/5.5/test/test-app) application
-using standalone [STI](https://github.com/openshift/source-to-image) and then run the
+using standalone [S2I](https://github.com/openshift/source-to-image) and then run the
 resulting image with [Docker](http://docker.io) execute:
 
 *  **For RHEL based image**
     ```
-    $ sti build https://github.com/openshift/sti-php.git --context-dir=5.5/test/test-app openshift/php-55-rhel7 php-test-app
+    $ s2i build https://github.com/openshift/sti-php.git --context-dir=5.5/test/test-app openshift/php-55-rhel7 php-test-app
     $ docker run -p 8080:8080 php-test-app
     ```
 
 *  **For CentOS based image**
     ```
-    $ sti build https://github.com/openshift/sti-php.git --context-dir=5.5/test/test-app openshift/php-55-centos7 php-test-app
+    $ s2i build https://github.com/openshift/sti-php.git --context-dir=5.5/test/test-app openshift/php-55-centos7 php-test-app
     $ docker run -p 8080:8080 php-test-app
     ```
 
@@ -120,7 +120,7 @@ Repository organization
 
     * **`.sti/bin/`**
 
-        This folder contains scripts that are run by [STI](https://github.com/openshift/source-to-image):
+        This folder contains scripts that are run by [S2I](https://github.com/openshift/source-to-image):
 
         *   **assemble**
 
@@ -209,5 +209,5 @@ Apache .htaccess file
 
 In case the **DocumentRoot** of the application is nested within the source directory `/opt/app-root/src`,
 users can provide their own **.htaccess** file.  This allows the overriding of Apache's behavior and
-specifies how application requests should be handled. The **.htaccess** file needs to be located at the root 
+specifies how application requests should be handled. The **.htaccess** file needs to be located at the root
 of the application source.

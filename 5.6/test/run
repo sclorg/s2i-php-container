@@ -1,7 +1,7 @@
 #!/bin/bash
 #
-# The 'run' performs a simple test that verifies that STI image.
-# The main focus here is to excersise the STI scripts.
+# The 'run' performs a simple test that verifies that S2I image.
+# The main focus here is to excersise the S2I scripts.
 #
 # IMAGE_NAME specifies a name of the candidate image used for testing.
 # The image has to be available before this script is executed.
@@ -31,8 +31,8 @@ container_ip() {
   docker inspect --format="{{ .NetworkSettings.IPAddress }}" $(cat $cid_file)
 }
 
-run_sti_build() {
-  sti build ${sti_args} file://${test_dir}/test-app ${IMAGE_NAME} ${IMAGE_NAME}-testapp
+run_s2i_build() {
+  s2i build ${s2i_args} file://${test_dir}/test-app ${IMAGE_NAME} ${IMAGE_NAME}-testapp
 }
 
 prepare() {
@@ -40,7 +40,7 @@ prepare() {
     echo "ERROR: The image ${IMAGE_NAME} must exist before this script is executed."
     exit 1
   fi
-  # TODO: STI build require the application is a valid 'GIT' repository, we
+  # TODO: S2I build require the application is a valid 'GIT' repository, we
   # should remove this restriction in the future when a file:// is used.
   info "Build the test application image"
   pushd ${test_dir}/test-app >/dev/null
@@ -96,9 +96,9 @@ wait_for_cid() {
   done
 }
 
-test_sti_usage() {
-  info "Testing 'sti usage'"
-  sti usage ${sti_args} ${IMAGE_NAME} &>/dev/null
+test_s2i_usage() {
+  info "Testing 's2i usage'"
+  s2i usage ${s2i_args} ${IMAGE_NAME} &>/dev/null
 }
 
 test_docker_run_usage() {
@@ -167,16 +167,16 @@ test_application() {
 
 cid_file=$(mktemp -u --suffix=.cid)
 
-# Since we built the candidate image locally, we don't want STI attempt to pull
+# Since we built the candidate image locally, we don't want S2I attempt to pull
 # it from Docker hub
-sti_args="--force-pull=false"
+s2i_args="--force-pull=false"
 
 prepare
-run_sti_build
+run_s2i_build
 check_result $?
 
-# Verify the 'usage' script is working properly when running the base image with 'sti usage ...'
-test_sti_usage
+# Verify the 'usage' script is working properly when running the base image with 's2i usage ...'
+test_s2i_usage
 check_result $?
 
 # Verify the 'usage' script is working properly when running the base image with 'docker run ...'
