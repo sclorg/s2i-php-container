@@ -1,7 +1,4 @@
 #!/bin/sh
-#
-# Default STI usage script for the php-5.0 image.
-#
 
 DISTRO=`cat /etc/*-release | grep ^ID= | grep -Po '".*?"' | tr -d '"'`
 
@@ -11,7 +8,7 @@ To use it, install S2I: https://github.com/openshift/source-to-image
 
 Sample invocation:
 
-sti build https://github.com/openshift/sti-php.git --context-dir=/5.5/test/test-app/ openshift/php-55-${DISTRO}7 php-test-app
+s2i build https://github.com/openshift/sti-php.git --context-dir=/5.5/test/test-app/ openshift/php-55-${DISTRO}7 php-test-app
 
 You can then run the resulting image via:
 docker run -p 8080:8080 php-test-app
