@@ -4,6 +4,8 @@ set -e
 
 echo "---> Installing application source..."
 cp -Rf /tmp/src/. ./
+chgrp -R 0 ./
+chmod -R g+rw ./
 
 if [ -f composer.json ]; then
   echo "Found 'composer.json', installing dependencies using composer.phar... "
