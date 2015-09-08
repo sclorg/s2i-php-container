@@ -45,7 +45,7 @@ RUN sed -i -f /opt/app-root/etc/httpdconf.sed /opt/rh/httpd24/root/etc/httpd/con
     chmod -R a+rwx /etc/opt/rh/rh-php56 && \
     chmod -R a+rwx /opt/rh/httpd24/root/var/run/httpd && \
     chmod -R a+rwx /tmp/sessions && \
-    chown -R 1001:1001 /opt/app-root /tmp/sessions
+    chown -R 1001:0 /opt/app-root /tmp/sessions
 
 USER 1001
 
