@@ -3,8 +3,6 @@ FROM openshift/base-rhel7
 # This image provides an Apache+PHP environment for running PHP
 # applications.
 
-MAINTAINER SoftwareCollections.org <sclorg@redhat.com>
-
 EXPOSE 8080
 
 ENV PHP_VERSION=5.5 \
