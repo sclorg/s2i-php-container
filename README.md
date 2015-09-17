@@ -211,3 +211,16 @@ In case the **DocumentRoot** of the application is nested within the source dire
 users can provide their own **.htaccess** file.  This allows the overriding of Apache's behavior and
 specifies how application requests should be handled. The **.htaccess** file needs to be located at the root
 of the application source.
+
+Hot deploy
+---------------------
+
+Hot deploy works in this image out of the box.
+
+To change your source code in running container, use Docker's [exec](http://docker.io) command:
+```
+docker exec -it <CONTAINER_ID> /bin/bash
+```
+
+After you [Docker exec](http://docker.io) into the running container, your current directory is set
+to `/opt/app-root/src`, where the source code is located.
