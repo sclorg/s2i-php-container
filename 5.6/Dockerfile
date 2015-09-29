@@ -28,8 +28,8 @@ RUN yum install -y \
     rh-php56-php-pecl-xdebug && \
     yum clean all -y
 
-# Copy the S2I scripts from the specific language image to /usr/local/sti
-COPY ./s2i/bin/ /usr/local/sti
+# Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
+COPY ./s2i/bin/ $STI_SCRIPTS_PATH
 
 # Each language image can have 'contrib' a directory with extra files needed to
 # run and build the applications.
@@ -50,4 +50,4 @@ RUN sed -i -f /opt/app-root/etc/httpdconf.sed /opt/rh/httpd24/root/etc/httpd/con
 USER 1001
 
 # Set the default CMD to print the usage of the language image
-CMD ["usage"]
+CMD $STI_SCRIPTS_PATH/usage
