@@ -197,6 +197,9 @@ The following environment variables set their equivalent property value in the o
 * **OPCACHE_MEMORY_CONSUMPTION**
   * The OPcache shared memory storage size
   * Default: 16M
+* **OPCACHE_REVALIDATE_FREQ**
+  * How often to check script timestamps for updates, in seconds. 0 will result in OPcache checking for updates on every request.
+  * Default: 2
 
 You can also override the entire directory used to load the PHP configuration by setting:
 * **PHPRC**
@@ -215,7 +218,11 @@ of the application source.
 Hot deploy
 ---------------------
 
-Hot deploy works in this image out of the box.
+In order to immediately pick up changes made in your application source code, you need to run your built image with the `OPCACHE_REVALIDATE_FREQ=0` environment variable passed to the [Docker](http://docker.io) `-e` run flag:
+
+```
+$ docker run -e OPCACHE_REVALIDATE_FREQ=0 -p 8080:8080 php-app
+```
 
 To change your source code in running container, use Docker's [exec](http://docker.io) command:
 ```

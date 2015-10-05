@@ -33,7 +33,7 @@ opcache.max_accelerated_files=4000
 ; How often (in seconds) to check file timestamps for changes to the shared
 ; memory storage allocation. ("1" means validate once per second, but only
 ; once per request. "0" means always validate)
-;opcache.revalidate_freq=2
+opcache.revalidate_freq=${OPCACHE_REVALIDATE_FREQ}
 
 ; Enables or disables file search in include_path optimization
 ;opcache.revalidate_path=0
