@@ -1,5 +1,5 @@
 ; Enable Zend OPcache extension module
-zend_extension=/opt/rh/php55/root/usr/lib64/php/modules/opcache.so
+zend_extension=opcache.so
 
 ; Determines if Zend OPCache is enabled
 opcache.enable=1

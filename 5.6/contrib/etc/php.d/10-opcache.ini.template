@@ -1,5 +1,5 @@
 ; Enable Zend OPcache extension module
-zend_extension=/opt/rh/php54/root/usr/lib64/php/modules/opcache.so
+zend_extension=opcache.so
 
 ; Determines if Zend OPCache is enabled
 opcache.enable=1
@@ -63,7 +63,7 @@ opcache.fast_shutdown=1
 ; The location of the OPcache blacklist file (wildcards allowed).
 ; Each OPcache blacklist file is a text file that holds the names of files
 ; that should not be accelerated.
-opcache.blacklist_filename=/opt/rh/php54/root/etc/php.d/opcache*.blacklist
+opcache.blacklist_filename=/etc/opt/rh/rh-php56/php.d/opcache*.blacklist
 
 ; Allows exclusion of large files from being cached. By default all files
 ; are cached.
