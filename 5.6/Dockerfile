@@ -3,7 +3,7 @@ FROM openshift/base-centos7
 # This image provides an Apache+PHP environment for running PHP
 # applications.
 
-MAINTAINER docker@softwarecollections.org
+MAINTAINER SoftwareCollections.org <sclorg@redhat.com>
 
 EXPOSE 8080
 
