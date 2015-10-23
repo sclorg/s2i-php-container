@@ -4,8 +4,6 @@ set -e
 
 echo "---> Installing application source..."
 cp -Rf /tmp/src/. ./
-chgrp -R 0 ./
-chmod -R g+rw ./
 
 if [ -f composer.json ]; then
   echo "Found 'composer.json', installing dependencies using composer.phar... "
@@ -20,3 +18,6 @@ if [ -f composer.json ]; then
     echo -e "\nConsider adding a 'composer.lock' file into your source repository.\n"
   fi
 fi
+
+# Fix source directory permissions
+fix-permissions ./
