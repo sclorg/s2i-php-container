@@ -35,5 +35,5 @@ initialization by passing `-e VAR=VALUE` to the Docker run command.
 | HTTPD_OPTIONS              | HTTPD additional options, e.g. MaxRequestWorkers%2016 |
 
 Notice: PHP_OPTIONS, HTTPD_OPTIONS and PHP_DISABLED_EXT are space separated list.
-        Spaces and should be encoded as %20, see RFC-3986.
+        Spaces have to be encoded as %20, see RFC-3986.
 EOF
