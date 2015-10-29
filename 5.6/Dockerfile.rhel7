@@ -14,12 +14,11 @@ LABEL io.k8s.description="Platform for building and running PHP 5.6 applications
       io.openshift.tags="builder,php,php56,rh-php56"
 
 # Labels consumed by Red Hat build service
-LABEL Component="rh-php56-docker" \
+LABEL Name="rhscl/php-56-rhel7" \
       BZComponent="rh-php56-docker" \
-      Architecture="x86_64" \
-      Name="rhscl/rh-php56-rhel7" \
       Version="5.6" \
-      Release="3"
+      Release="3" \
+      Architecture="x86_64"
 
 # Install Apache httpd and PHP
 RUN yum-config-manager --enable rhel-server-rhscl-7-rpms && \
