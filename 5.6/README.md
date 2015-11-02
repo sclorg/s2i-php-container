@@ -123,10 +123,10 @@ You can also override the entire directory used to load the PHP configuration by
 
 For other configuration options:
 * **PHP_OPTIONS**
-  * Allow to set any PHP options, space separated list.
+  * Allow to set any PHP option, space separated list.
   * Example: PHP_OPTIONS="memory_limit=32M"
 * **HTTPD_OPTIONS**
-  * Allow to set any HTTPD options, space separated list. Spaces have to be encoded as %20, see RFC-3986.
+  * Allow to set any HTTPD option, space separated list. Spaces have to be encoded as %20, see RFC-3986.
   * Example: HTTPD_OPTIONS="StartServers%202 MinSpareServers%202 MaxRequestWorkers%208"
 * **PHP_DISABLED_EXT**
   * Allow to disable unneeded extensions
