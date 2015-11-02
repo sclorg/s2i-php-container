@@ -20,4 +20,28 @@ export PHP_INI_SCAN_DIR=${PHP_INI_SCAN_DIR:-/etc/opt/rh/rh-php56/php.d}
 envsubst < /opt/app-root/etc/php.ini.template > $PHPRC
 envsubst < /opt/app-root/etc/php.d/10-opcache.ini.template > $PHP_INI_SCAN_DIR/10-opcache.ini
 
+HTTPD_CONFDIR=/opt/rh/httpd24/root/etc/httpd/conf.d
+
+if [ -n "$PHP_OPTIONS" ]; then
+  for opt in $PHP_OPTIONS
+  do php -r "echo urldecode('$opt') . PHP_EOL;"
+  done > $PHP_INI_SCAN_DIR/99-options.ini
+fi
+
+if [ -n "$HTTPD_OPTIONS" ]; then
+  for opt in $HTTPD_OPTIONS
+  do php -r "echo urldecode('$opt') . PHP_EOL;"
+  done > $HTTPD_CONFDIR/options.conf
+fi
+
+if [ -n "$PHP_DISABLED_EXT" ]; then
+  for ext in $PHP_DISABLED_EXT
+  do
+    if [ -f $PHP_INI_SCAN_DIR/??-$ext.ini ]
+    then mv $PHP_INI_SCAN_DIR/??-$ext.ini $PHP_INI_SCAN_DIR/$ext.off
+    else echo "ERROR: $ext.ini not found in $PHP_INI_SCAN_DIR"
+    fi
+  done
+fi
+
 exec httpd -D FOREGROUND

@@ -12,4 +12,28 @@ s2i build https://github.com/openshift/sti-php.git --context-dir=/5.6/test/test-
 
 You can then run the resulting image via:
 docker run -p 8080:8080 php-test-app
+
+Environment variables
+---------------------
+
+The image recognizes the following environment variables that you can set during
+initialization by passing `-e VAR=VALUE` to the Docker run command.
+
+|    Variable name           |    Description                                        |
+| -------------------------- | ----------------------------------------------------- |
+| ERROR_REPORTING            | PHP error_reporting, default E_ALL & ~E_NOTICE        |
+| DISPLAY_ERRORS             | PHP display_error, default ON                         |
+| DISPLAY_STARTUP_ERRORS     | PHP display_startup_errors, default OFF               |
+| TRACK_ERRORS               | PHP track_errors, default OFF                         |
+| HTML_ERRORS                | PHP html_errors, default ON                           |
+| INCLUDE_PATH               | PHP include_path                                      |
+| SESSION_PATH               | PHP session_path, default /tmp/sessions               |
+| OPCACHE_MEMORY_CONSUMPTION | PHP opcache.memory_consumption, default 16M           |
+| OPCACHE_REVALIDATE_FREQ    | PHP opcache.revalidate_freq, default 2                |
+| PHP_OPTIONS                | PHP additional options, e.g. memory_limit=32M         |
+| PHP_DISABLED_EXT           | PHP disabled extensions, e.g. "xdebug intl"           |
+| HTTPD_OPTIONS              | HTTPD additional options, e.g. MaxRequestWorkers%2016 |
+
+Notice: PHP_OPTIONS, HTTPD_OPTIONS and PHP_DISABLED_EXT are space separated list.
+        Spaces have to be encoded as %20, see RFC-3986.
 EOF
