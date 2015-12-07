@@ -53,7 +53,12 @@ Repository organization
 
             Used to install the sources into the location where the application
             will be run and prepare the application for deployment (eg. installing
-            modules using npm, etc..)
+            modules using npm, etc..). The assemle script installs [composer](https://getcomposer.org/) and executes 
+            
+            ```
+            ./composer.phar install --no-interaction --no-ansi --optimize-autoloader
+            ```
+            if a composer.json file is found in the source respository
 
         *   **run**
 
