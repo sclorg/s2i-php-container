@@ -16,10 +16,7 @@ LABEL io.k8s.description="Platform for building and running PHP 5.6 applications
       io.openshift.tags="builder,php,php56,rh-php56"
 
 # Install Apache httpd and PHP
-RUN yum install -y \
-    https://www.softwarecollections.org/en/scls/rhscl/httpd24/epel-7-x86_64/download/rhscl-httpd24-epel-7-x86_64.noarch.rpm \
-    https://www.softwarecollections.org/en/scls/rhscl/rh-php56/epel-7-x86_64/download/rhscl-rh-php56-epel-7-x86_64.noarch.rpm \
-    https://www.softwarecollections.org/en/scls/remi/php56more/epel-7-x86_64/download/remi-php56more-epel-7-x86_64.noarch.rpm && \
+RUN yum install -y centos-release-scl && \
     yum install -y --setopt=tsflags=nodocs httpd24 \
     rh-php56 rh-php56-php rh-php56-php-mysqlnd rh-php56-php-pgsql rh-php56-php-bcmath \
     rh-php56-php-gd rh-php56-php-intl rh-php56-php-ldap rh-php56-php-mbstring rh-php56-php-pdo \
