@@ -121,13 +121,24 @@ You can also override the entire directory used to load the PHP configuration by
 * **PHP_INI_SCAN_DIR**
   * Path to scan for additional ini configuration files
 
-Apache .htaccess file
----------------------
+Source repository layout
+------------------------
 
-In case the **DocumentRoot** of the application is nested within the source directory `/opt/app-root/src`,
-users can provide their own **.htaccess** file.  This allows the overriding of Apache's behavior and
-specifies how application requests should be handled. The **.htaccess** file needs to be located at the root
-of the application source.
+You do not need to change anything in your existing PHP project's repository.
+However, if these files exist they will affect the behavior of the build process:
+
+* **composer.json**
+
+  List of dependencies to be installed with `composer`. The format is documented
+  [here](https://getcomposer.org/doc/04-schema.md).
+
+
+* **.htaccess**
+
+  In case the **DocumentRoot** of the application is nested within the source directory `/opt/app-root/src`,
+  users can provide their own Apache **.htaccess** file.  This allows the overriding of Apache's behavior and
+  specifies how application requests should be handled. The **.htaccess** file needs to be located at the root
+  of the application source.
 
 Hot deploy
 ---------------------
