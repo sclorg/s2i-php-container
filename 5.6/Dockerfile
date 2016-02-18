@@ -38,7 +38,10 @@ COPY ./contrib/ /opt/app-root
 RUN sed -i -f /opt/app-root/etc/httpdconf.sed /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf && \
     sed -i '/php_value session.save_path/d' /opt/rh/httpd24/root/etc/httpd/conf.d/rh-php56-php.conf && \
     head -n151 /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf | tail -n1 | grep "AllowOverride All" || exit && \
-    mkdir /tmp/sessions && \
+    mkdir -p /tmp/sessions /opt/app-root/etc/conf.d && \
+    touch /opt/app-root/etc/conf.d/env.conf && \
+    ln -sf /opt/app-root/etc/conf.d/env.conf /opt/rh/httpd24/root/etc/httpd/conf.d/env.conf && \
+    chmod -R a+rwx /opt/app-root/etc/conf.d && \
     chmod -R a+rwx /etc/opt/rh/rh-php56 && \
     chmod -R a+rwx /opt/rh/httpd24/root/var/run/httpd && \
     chmod -R a+rwx /tmp/sessions && \
