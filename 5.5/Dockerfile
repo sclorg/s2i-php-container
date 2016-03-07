@@ -35,7 +35,6 @@ COPY ./contrib/ /opt/app-root
 # random UID.
 RUN sed -i -f /opt/app-root/etc/httpdconf.sed /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf && \
     sed -i '/php_value session.save_path/d' /opt/rh/httpd24/root/etc/httpd/conf.d/php55-php.conf && \
-    sed -i 's/^;date.timezone.*/date.timezone = GMT/g' /etc/opt/rh/rh-php56/php.ini && \
     head -n151 /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf | tail -n1 | grep "AllowOverride All" || exit && \
     mkdir /tmp/sessions && \
     chmod -R a+rwx /opt/rh/php55/root/etc && \
