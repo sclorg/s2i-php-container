@@ -8,7 +8,8 @@ MAINTAINER SoftwareCollections.org <sclorg@redhat.com>
 EXPOSE 8080
 
 ENV PHP_VERSION=5.6 \
-    PATH=$PATH:/opt/rh/rh-php56/root/usr/bin
+    PATH=$PATH:/opt/rh/rh-php56/root/usr/bin \
+    PHP_CONFIG=/etc/opt/rh/rh-php56/php.ini
 
 LABEL io.k8s.description="Platform for building and running PHP 5.6 applications" \
       io.k8s.display-name="Apache 2.4 with PHP 5.6" \
