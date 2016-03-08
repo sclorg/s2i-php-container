@@ -2,6 +2,12 @@
 
 set -e
 
+fix-permissions () {
+  chgrp -R 0 $1
+  chmod -R g+rw $1
+}
+
+
 echo "---> Installing application source..."
 cp -Rf /tmp/src/. ./
 
