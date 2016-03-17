@@ -1,5 +1,9 @@
 #!/bin/bash
 
+
+# Export the Cgroup limits
+export_vars=$(cgroup-limits) && export $export_vars || exit 1
+
 # Default php.ini configuration values, all taken 
 # from php defaults.
 export ERROR_REPORTING=${ERROR_REPORTING:-E_ALL & ~E_NOTICE}
@@ -12,6 +16,16 @@ export SESSION_PATH=${SESSION_PATH:-/tmp/sessions}
 export SHORT_OPEN_TAG=${SHORT_OPEN_TAG:-OFF}
 # TODO should be dynamically calculated based on container memory limit/16
 export OPCACHE_MEMORY_CONSUMPTION=${OPCACHE_MEMORY_CONSUMPTION:-16M} 
+
+# In case the memory limit is set, use 10% of available memory for opcache memory
+# Users can always override the computed value using OPCACHE_MEMORY_CONSUMPTION
+# variable.
+if [[ "${MAX_MEMORY_LIMIT_IN_BYTES}" != "${MEMORY_LIMIT_IN_BYTES}" ]]; then
+  OPCACHE_MEMORY_COMPUTED="$((MEMORY_LIMIT_IN_BYTES/1024/1024/10))M"
+  export OPCACHE_MEMORY_CONSUMPTION=${OPCACHE_MEMORY_CONSUMPTION:-$OPCACHE_MEMORY_COMPUTED}
+else
+  export OPCACHE_MEMORY_CONSUMPTION=${OPCACHE_MEMORY_CONSUMPTION:-16M} 
+fi
 
 export OPCACHE_REVALIDATE_FREQ=${OPCACHE_REVALIDATE_FREQ:-2}
 
