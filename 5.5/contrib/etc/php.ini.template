@@ -226,7 +226,7 @@ engine = On
 ; Development Value: Off
 ; Production Value: Off
 ; http://www.php.net/manual/en/ini.core.php#ini.short-open-tag
-short_open_tag = On
+short_open_tag = ${SHORT_OPEN_TAG}
 
 ; Allow ASP-style <% %> tags.
 ; http://www.php.net/manual/en/ini.core.php#ini.asp-tags
