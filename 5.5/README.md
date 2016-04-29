@@ -106,6 +106,9 @@ The following environment variables set their equivalent property value in the p
 * **SESSION_PATH**
   * Location for session data files
   * Default: /tmp/sessions
+* **SHORT_OPEN_TAG**
+  * Determines whether or not PHP will recognize code between <? and ?> tags
+  * Default: ON
 
 The following environment variables set their equivalent property value in the opcache.ini file:
 * **OPCACHE_MEMORY_CONSUMPTION**

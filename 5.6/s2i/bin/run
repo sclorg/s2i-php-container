@@ -9,6 +9,7 @@ export TRACK_ERRORS=${TRACK_ERRORS:-OFF}
 export HTML_ERRORS=${HTML_ERRORS:-ON}
 export INCLUDE_PATH=${INCLUDE_PATH:-.:/opt/app-root/src:/opt/rh/rh-php56/root/usr/share/pear}
 export SESSION_PATH=${SESSION_PATH:-/tmp/sessions}
+export SHORT_OPEN_TAG=${SHORT_OPEN_TAG:-OFF}
 # TODO should be dynamically calculated based on container memory limit/16
 export OPCACHE_MEMORY_CONSUMPTION=${OPCACHE_MEMORY_CONSUMPTION:-16M} 
 

@@ -199,7 +199,7 @@ engine = On
 ; Development Value: Off
 ; Production Value: Off
 ; http://php.net/short-open-tag
-short_open_tag = Off
+short_open_tag = ${SHORT_OPEN_TAG}
 
 ; Allow ASP-style <% %> tags.
 ; http://php.net/asp-tags
