@@ -124,6 +124,23 @@ You can also override the entire directory used to load the PHP configuration by
 * **PHP_INI_SCAN_DIR**
   * Path to scan for additional ini configuration files
 
+You can override the Apache [MPM prefork](https://httpd.apache.org/docs/2.4/mod/mpm_common.html)
+settings to increase the performance for of the PHP application. In case you set
+the Cgroup limits in Docker, the image will attempt to automatically set the
+optimal values. You can override this at any time by specifying the values
+yourself:
+
+* **HTTPD_START_SERVERS**
+  * The [StartServers](https://httpd.apache.org/docs/2.4/mod/mpm_common.html#startservers)
+    directive sets the number of child server processes created on startup.
+  * Default: 8
+* **HTTPD_MAX_REQUEST_WORKERS**
+  * The [MaxRequestWorkers](https://httpd.apache.org/docs/2.4/mod/mpm_common.html#maxrequestworkers)
+    directive sets the limit on the number of simultaneous requests that will be served.
+  * `MaxRequestWorkers` was called `MaxClients` before version httpd 2.3.13.
+  * Default: 256 (this is automatically tuned by setting Cgroup limits for the container using this formula:
+    `TOTAL_MEMORY / 15MB`. The 15MB is average size of a single httpd process.
+
 Source repository layout
 ------------------------
 
