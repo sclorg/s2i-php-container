@@ -10,19 +10,19 @@ The resulting image can be run using [Docker](http://docker.io).
 
 Usage
 ---------------------
-To build a simple [php-test-app](https://github.com/openshift/sti-php/tree/master/5.5/test/test-app) application
+To build a simple [php-test-app](https://github.com/openshift/s2i-php/tree/master/5.5/test/test-app) application
 using standalone [S2I](https://github.com/openshift/source-to-image) and then run the
 resulting image with [Docker](http://docker.io) execute:
 
 *  **For RHEL based image**
     ```
-    $ s2i build https://github.com/openshift/sti-php.git --context-dir=5.5/test/test-app openshift/php-55-rhel7 php-test-app
+    $ s2i build https://github.com/openshift/s2i-php.git --context-dir=5.5/test/test-app openshift/php-55-rhel7 php-test-app
     $ docker run -p 8080:8080 php-test-app
     ```
 
 *  **For CentOS based image**
     ```
-    $ s2i build https://github.com/openshift/sti-php.git --context-dir=5.5/test/test-app openshift/php-55-centos7 php-test-app
+    $ s2i build https://github.com/openshift/s2i-php.git --context-dir=5.5/test/test-app openshift/php-55-centos7 php-test-app
     $ docker run -p 8080:8080 php-test-app
     ```
 
