@@ -32,15 +32,15 @@ To build a PHP image, choose either the CentOS or RHEL based image:
     subscribed RHEL machine.
 
     ```
-    $ git clone https://github.com/openshift/sti-php.git
-    $ cd sti-php
+    $ git clone https://github.com/openshift/s2i-php.git
+    $ cd s2i-php
     $ make build TARGET=rhel7 VERSION=5.5
     ```
 
 *  **CentOS based image**
     ```
-    $ git clone https://github.com/openshift/sti-php.git
-    $ cd sti-php
+    $ git clone https://github.com/openshift/s2i-php.git
+    $ cd s2i-php
     $ make build VERSION=5.5
     ```
 
@@ -65,7 +65,7 @@ see [usage documentation](5.5/README.md).
 Test
 ---------------------
 This repository also provides a [S2I](https://github.com/openshift/source-to-image) test framework,
-which launches tests to check functionality of a simple PHP application built on top of the sti-php image.
+which launches tests to check functionality of a simple PHP application built on top of the s2i-php image.
 
 Users can choose between testing a PHP test application based on a RHEL or CentOS image.
 
@@ -77,14 +77,14 @@ Users can choose between testing a PHP test application based on a RHEL or CentO
     subscribed RHEL machine.
 
     ```
-    $ cd sti-php
+    $ cd s2i-php
     $ make test TARGET=rhel7 VERSION=5.5
     ```
 
 *  **CentOS based image**
 
     ```
-    $ cd sti-php
+    $ cd s2i-php
     $ make test VERSION=5.5
     ```
 
