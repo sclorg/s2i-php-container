@@ -11,6 +11,11 @@ if [ -f composer.json ]; then
   # Install Composer
   php -r "readfile('https://getcomposer.org/installer');" | php
 
+  # Change the repo mirror if provided
+  if [ -n "$COMPOSER_MIRROR" ]; then
+    ./composer.phar config -g repositories.packagist composer $COMPOSER_MIRROR
+  fi
+
   # Install App dependencies using Composer
   ./composer.phar install --no-interaction --no-ansi --optimize-autoloader
 
