@@ -1,8 +1,9 @@
 #!/bin/bash
 
 export_vars=$(cgroup-limits); export $export_vars
+export DOCUMENTROOT=${DOCUMENTROOT:-/}
 
-# Default php.ini configuration values, all taken 
+# Default php.ini configuration values, all taken
 # from php defaults.
 export ERROR_REPORTING=${ERROR_REPORTING:-E_ALL & ~E_NOTICE}
 export DISPLAY_ERRORS=${DISPLAY_ERRORS:-ON}
@@ -13,7 +14,7 @@ export INCLUDE_PATH=${INCLUDE_PATH:-.:/opt/app-root/src:/opt/rh/rh-php56/root/us
 export SESSION_PATH=${SESSION_PATH:-/tmp/sessions}
 export SHORT_OPEN_TAG=${SHORT_OPEN_TAG:-OFF}
 # TODO should be dynamically calculated based on container memory limit/16
-export OPCACHE_MEMORY_CONSUMPTION=${OPCACHE_MEMORY_CONSUMPTION:-16M} 
+export OPCACHE_MEMORY_CONSUMPTION=${OPCACHE_MEMORY_CONSUMPTION:-16M}
 
 export OPCACHE_REVALIDATE_FREQ=${OPCACHE_REVALIDATE_FREQ:-2}
 
@@ -27,7 +28,7 @@ export HTTPD_START_SERVERS=${HTTPD_START_SERVERS:-8}
 export HTTPD_MAX_SPARE_SERVERS=$((HTTPD_START_SERVERS+10))
 
 if [ -n "${NO_MEMORY_LIMIT:-}" -o -z "${MEMORY_LIMIT_IN_BYTES:-}" ]; then
-  # 
+  #
   export HTTPD_MAX_REQUEST_WORKERS=${HTTPD_MAX_REQUEST_WORKERS:-256}
 else
   # A simple calculation for MaxRequestWorkers would be: Total Memory / Size Per Apache process.
@@ -42,5 +43,6 @@ else
 fi
 
 envsubst < /opt/app-root/etc/conf.d/50-mpm-tuning.conf.template > /opt/app-root/etc/conf.d/50-mpm-tuning.conf
+envsubst < /opt/app-root/etc/conf.d/00-documentroot.conf.template > /opt/app-root/etc/conf.d/00-documentroot.conf
 
 exec httpd -D FOREGROUND
