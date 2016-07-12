@@ -2,8 +2,9 @@
 
 set -e
 
+shopt -s dotglob
 echo "---> Installing application source..."
-cp -Rf /tmp/src/. ./
+mv /tmp/src/* ./
 
 if [ -f composer.json ]; then
   echo "Found 'composer.json', installing dependencies using composer.phar... "
