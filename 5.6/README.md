@@ -109,6 +109,9 @@ The following environment variables set their equivalent property value in the p
 * **SHORT_OPEN_TAG**
   * Determines whether or not PHP will recognize code between <? and ?> tags
   * Default: OFF
+* **DOCUMENTROOT**
+  * Path that defines the DocumentRoot for your application (ie. /public)
+  * Default: /
 
 The following environment variables set their equivalent property value in the opcache.ini file:
 * **OPCACHE_MEMORY_CONSUMPTION**
