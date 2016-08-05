@@ -9,6 +9,12 @@ mv /tmp/src/* ./
 if [ -f composer.json ]; then
   echo "Found 'composer.json', installing dependencies using composer.phar... "
 
+  PHP_CONFIG=/etc/opt/rh/rh-php56/php.ini
+  if [ "$(grep '^data\.timezone' $PHP_CONFIG ; echo $?)" -eq "1" ] ; then
+    # composer et al need timezone defined, php.ini will be generated at runtime
+    echo "date.timezone = GMT" >> $PHP_CONFIG
+  fi
+
   # Install Composer
   php -r "readfile('https://getcomposer.org/installer');" | php
 
