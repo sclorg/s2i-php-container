@@ -10,7 +10,7 @@ if [ -f composer.json ]; then
   echo "Found 'composer.json', installing dependencies using composer.phar... "
 
   # Install Composer
-  php -r "readfile('https://getcomposer.org/installer');" | php
+  curl https://getcomposer.org/installer | php
 
   # Change the repo mirror if provided
   if [ -n "$COMPOSER_MIRROR" ]; then
