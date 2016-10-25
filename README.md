@@ -32,15 +32,15 @@ To build a PHP image, choose either the CentOS or RHEL based image:
     subscribed RHEL machine.
 
     ```
-    $ git clone https://github.com/openshift/s2i-php.git
-    $ cd s2i-php
+    $ git clone https://github.com/sclorg/s2i-php-container.git
+    $ cd s2i-php-container
     $ make build TARGET=rhel7 VERSION=5.5
     ```
 
 *  **CentOS based image**
     ```
-    $ git clone https://github.com/openshift/s2i-php.git
-    $ cd s2i-php
+    $ git clone https://github.com/sclorg/s2i-php-container.git
+    $ cd s2i-php-container
     $ make build VERSION=5.5
     ```
 
@@ -77,14 +77,14 @@ Users can choose between testing a PHP test application based on a RHEL or CentO
     subscribed RHEL machine.
 
     ```
-    $ cd s2i-php
+    $ cd s2i-php-container
     $ make test TARGET=rhel7 VERSION=5.5
     ```
 
 *  **CentOS based image**
 
     ```
-    $ cd s2i-php
+    $ cd s2i-php-container
     $ make test VERSION=5.5
     ```
 
