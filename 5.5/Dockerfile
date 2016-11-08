@@ -17,9 +17,10 @@ LABEL io.k8s.description="Platform for building and running PHP 5.5 applications
 
 # Install Apache httpd and PHP
 RUN yum install -y centos-release-scl && \
-    INSTALL_PKGS="httpd24 php55 php55-php rh-php55-php-gmp php55-php-mysqlnd php55-php-pgsql php55-php-bcmath php55-php-devel \
+    INSTALL_PKGS="httpd24 php55 php55-php php55-php-mysqlnd php55-php-pgsql php55-php-bcmath php55-php-devel \
                   php55-php-fpm php55-php-gd php55-php-intl php55-php-ldap php55-php-mbstring php55-php-pdo \
-                  php55-php-pecl-memcache php55-php-process php55-php-soap php55-php-opcache php55-php-xml" && \
+                  php55-php-pecl-memcache php55-php-process php55-php-soap php55-php-opcache php55-php-xml \
+                  php55-php-gmp" && \
     yum install -y --setopt=tsflags=nodocs --enablerepo=centosplus $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     yum clean all -y
