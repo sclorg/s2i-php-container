@@ -15,6 +15,7 @@ Versions
 PHP versions currently supported are:
 * php-5.5
 * php-5.6
+* php-7.0
 
 RHEL versions currently supported are:
 * RHEL7
@@ -54,6 +55,9 @@ on all the supported versions of PHP.**
 
 Usage
 ---------------------------------
+
+For information about usage of Dockerfile for PHP 7.0,
+see [usage documentation](7.0/README.md).
 
 For information about usage of Dockerfile for PHP 5.6,
 see [usage documentation](5.6/README.md).
