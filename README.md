@@ -13,7 +13,6 @@ official [OpenShift Documentation](https://docs.openshift.org/latest/using_image
 Versions
 ---------------
 PHP versions currently supported are:
-* php-5.5
 * php-5.6
 * php-7.0
 
@@ -29,25 +28,25 @@ Installation
 To build a PHP image, choose either the CentOS or RHEL based image:
 *  **RHEL based image**
 
-    To build a RHEL based PHP-5.5 image, you need to run the build on a properly
+    To build a RHEL based PHP image, you need to run the build on a properly
     subscribed RHEL machine.
 
     ```
     $ git clone https://github.com/sclorg/s2i-php-container.git
     $ cd s2i-php-container
-    $ make build TARGET=rhel7 VERSION=5.5
+    $ make build TARGET=rhel7 VERSION=7.0
     ```
 
 *  **CentOS based image**
     ```
     $ git clone https://github.com/sclorg/s2i-php-container.git
     $ cd s2i-php-container
-    $ make build VERSION=5.5
+    $ make build TARGET=centos7 VERSION=7.0
     ```
 
 Alternatively, you can pull the CentOS image from Docker Hub via:
 
-    $ docker pull openshift/php-55-centos7
+    $ docker pull centos/php-70-centos7
 
 **Notice: By omitting the `VERSION` parameter, the build/test action will be performed
 on all the supported versions of PHP.**
@@ -61,10 +60,6 @@ see [usage documentation](7.0/README.md).
 
 For information about usage of Dockerfile for PHP 5.6,
 see [usage documentation](5.6/README.md).
-
-For information about usage of Dockerfile for PHP 5.5,
-see [usage documentation](5.5/README.md).
-
 
 Test
 ---------------------
@@ -82,19 +77,18 @@ Users can choose between testing a PHP test application based on a RHEL or CentO
 
     ```
     $ cd s2i-php-container
-    $ make test TARGET=rhel7 VERSION=5.5
+    $ make test TARGET=rhel7 VERSION=7.0
     ```
 
 *  **CentOS based image**
 
     ```
     $ cd s2i-php-container
-    $ make test VERSION=5.5
+    $ make test TARGET=centos7 VERSION=7.0
     ```
 
 **Notice: By omitting the `VERSION` parameter, the build/test action will be performed
-on all the supported versions of PHP. Since we currently only support version `5.5`
-you can omit this parameter.**
+on all the supported versions of PHP.**
 
 
 Repository organization
@@ -109,11 +103,10 @@ Repository organization
 
 Image name structure
 ------------------------
-##### Structure: openshift/1-2-3
 
 1. Platform name (lowercase) - php
-2. Platform version(without dots) - 55
+2. Platform version(without dots) - 70
 3. Base builder image - centos7/rhel7
 
-Examples: `openshift/php-55-centos7`, `openshift/php-55-rhel7`
+Examples: `php-70-centos7`, `php-70-rhel7`
 
