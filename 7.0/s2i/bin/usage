@@ -5,7 +5,7 @@ NAMESPACE=centos
 [[ $DISTRO =~ rhel* ]] && NAMESPACE=rhscl
 
 cat <<EOF
-This is a S2I PHP-5.6 ${DISTRO} base image:
+This is a S2I PHP-7.0 ${DISTRO} base image:
 To use it, install S2I: https://github.com/openshift/source-to-image
 
 Sample invocation:
