@@ -7,3 +7,4 @@ s%^<Directory "/opt/rh/httpd24/root/var/html"%<Directory "/opt/app-root/src"%
 s%^ErrorLog "logs/error_log"%ErrorLog "|/usr/bin/cat"%
 s%CustomLog "logs/access_log"%CustomLog "|/usr/bin/cat"%
 151s%AllowOverride None%AllowOverride All%
+s/LogFormat "%h /LogFormat "%{X-Forwarded-For}i /
