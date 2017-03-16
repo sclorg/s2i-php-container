@@ -13,7 +13,7 @@ if [ -f composer.json ]; then
   curl https://getcomposer.org/installer | php
 
   # Change the repo mirror if provided
-  if [ -n "$COMPOSER_MIRROR" ]; then
+  if [ ! -z "$COMPOSER_MIRROR" ]; then
     ./composer.phar config -g repositories.packagist composer $COMPOSER_MIRROR
   fi
 
