@@ -115,8 +115,8 @@ The following environment variables set their equivalent property value in the p
 
 The following environment variables set their equivalent property value in the opcache.ini file:
 * **OPCACHE_MEMORY_CONSUMPTION**
-  * The OPcache shared memory storage size
-  * Default: 128M
+  * The OPcache shared memory storage size in megabytes
+  * Default: 128
 * **OPCACHE_REVALIDATE_FREQ**
   * How often to check script timestamps for updates, in seconds. 0 will result in OPcache checking for updates on every request.
   * Default: 2
