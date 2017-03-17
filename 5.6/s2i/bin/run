@@ -14,7 +14,7 @@ export INCLUDE_PATH=${INCLUDE_PATH:-.:/opt/app-root/src:/opt/rh/rh-php56/root/us
 export SESSION_PATH=${SESSION_PATH:-/tmp/sessions}
 export SHORT_OPEN_TAG=${SHORT_OPEN_TAG:-OFF}
 # TODO should be dynamically calculated based on container memory limit/16
-export OPCACHE_MEMORY_CONSUMPTION=${OPCACHE_MEMORY_CONSUMPTION:-16}
+export OPCACHE_MEMORY_CONSUMPTION=${OPCACHE_MEMORY_CONSUMPTION:-128}
 
 export OPCACHE_REVALIDATE_FREQ=${OPCACHE_REVALIDATE_FREQ:-2}
 
