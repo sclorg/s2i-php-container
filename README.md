@@ -32,14 +32,14 @@ To build a PHP image, choose either the CentOS or RHEL based image:
     subscribed RHEL machine.
 
     ```
-    $ git clone https://github.com/sclorg/s2i-php-container.git
+    $ git clone --recursive https://github.com/sclorg/s2i-php-container.git
     $ cd s2i-php-container
     $ make build TARGET=rhel7 VERSION=7.0
     ```
 
 *  **CentOS based image**
     ```
-    $ git clone https://github.com/sclorg/s2i-php-container.git
+    $ git clone --recursive https://github.com/sclorg/s2i-php-container.git
     $ cd s2i-php-container
     $ make build TARGET=centos7 VERSION=7.0
     ```
