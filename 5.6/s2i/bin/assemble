@@ -7,7 +7,14 @@ echo "---> Installing application source..."
 mv /tmp/src/* ./
 
 if [ -f composer.json ]; then
-  echo "Found 'composer.json', installing dependencies using composer.phar... "
+  echo "Found 'composer.json', installing dependencies using composer.phar ..."
+
+  # Set timezone if not set
+  if [ "$(cat $PHP_CONFIG | grep timezone | grep '^date\.timezone'; echo $?)" == "1" ]; then
+	echo "Setting temporary timezone"
+	cp -v $PHP_CONFIG /tmp/php.ini
+	echo "date.timezone = GMT" >> $PHP_CONFIG
+  fi
 
   # Install Composer
   curl https://getcomposer.org/installer | php
@@ -19,6 +26,12 @@ if [ -f composer.json ]; then
 
   # Install App dependencies using Composer
   ./composer.phar install --no-interaction --no-ansi --optimize-autoloader
+
+  # Restore previous php.ini if exists
+  if [ -f /tmp/php.ini ]; then
+	echo "Restoring previous php.ini from /tmp/php.ini"
+	mv -v /tmp/php.ini $PHP_CONFIG
+  fi
 
   if [ ! -f composer.lock ]; then
     echo -e "\nConsider adding a 'composer.lock' file into your source repository.\n"
