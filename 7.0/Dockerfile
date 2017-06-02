@@ -1,7 +1,5 @@
 FROM centos/s2i-base-centos7
 
-MAINTAINER SoftwareCollections.org <sclorg@redhat.com>
-
 # This image provides an Apache+PHP environment for running PHP
 # applications.
 
@@ -10,10 +8,26 @@ EXPOSE 8080
 ENV PHP_VERSION=7.0 \
     PATH=$PATH:/opt/rh/rh-php70/root/usr/bin
 
-LABEL io.k8s.description="Platform for building and running PHP 7.0 applications" \
+ENV SUMMARY="Platform for building and running PHP $PHP_VERSION applications" \
+    DESCRIPTION="PHP $PHP_VERSION available as docker container is a base platform for \
+building and running various PHP $PHP_VERSION applications and frameworks. \
+PHP is an HTML-embedded scripting language. PHP attempts to make it easy for developers \
+to write dynamically generated web pages. PHP also offers built-in database integration \
+for several commercial and non-commercial database management systems, so writing \
+a database-enabled webpage with PHP is fairly simple. The most common use of PHP coding \
+is probably as a replacement for CGI scripts."
+
+LABEL summary="$SUMMARY" \
+      description="$DESCRIPTION" \
+      io.k8s.description="$SUMMARY" \
       io.k8s.display-name="Apache 2.4 with PHP 7.0" \
       io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,php,php70,rh-php70"
+      io.openshift.tags="builder,php,php70,rh-php70" \
+      name="centos/php-70-centos7" \
+      com.redhat.component="rh-php70-docker" \
+      version="7.0" \
+      release="1" \
+      maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 # Install Apache httpd and PHP
 RUN yum install -y centos-release-scl && \
