@@ -19,7 +19,7 @@ is probably as a replacement for CGI scripts."
 
 LABEL summary="$SUMMARY" \
       description="$DESCRIPTION" \
-      io.k8s.description="$SUMMARY" \
+      io.k8s.description="$DESCRIPTION" \
       io.k8s.display-name="Apache 2.4 with PHP 5.6" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,php,php56,rh-php56" \
