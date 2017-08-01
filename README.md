@@ -34,21 +34,21 @@ To build a PHP image, choose either the CentOS or RHEL based image:
     ```
     $ git clone --recursive https://github.com/sclorg/s2i-php-container.git
     $ cd s2i-php-container
-    $ make build TARGET=rhel7 VERSION=7.0
+    $ make build TARGET=rhel7 VERSIONS=7.0
     ```
 
 *  **CentOS based image**
     ```
     $ git clone --recursive https://github.com/sclorg/s2i-php-container.git
     $ cd s2i-php-container
-    $ make build TARGET=centos7 VERSION=7.0
+    $ make build TARGET=centos7 VERSIONS=7.0
     ```
 
 Alternatively, you can pull the CentOS image from Docker Hub via:
 
     $ docker pull centos/php-70-centos7
 
-**Notice: By omitting the `VERSION` parameter, the build/test action will be performed
+**Notice: By omitting the `VERSIONS` parameter, the build/test action will be performed
 on all the supported versions of PHP.**
 
 
@@ -77,17 +77,17 @@ Users can choose between testing a PHP test application based on a RHEL or CentO
 
     ```
     $ cd s2i-php-container
-    $ make test TARGET=rhel7 VERSION=7.0
+    $ make test TARGET=rhel7 VERSIONS=7.0
     ```
 
 *  **CentOS based image**
 
     ```
     $ cd s2i-php-container
-    $ make test TARGET=centos7 VERSION=7.0
+    $ make test TARGET=centos7 VERSIONS=7.0
     ```
 
-**Notice: By omitting the `VERSION` parameter, the build/test action will be performed
+**Notice: By omitting the `VERSIONS` parameter, the build/test action will be performed
 on all the supported versions of PHP.**
 
 
