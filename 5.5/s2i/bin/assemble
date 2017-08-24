@@ -12,11 +12,6 @@ if [ -f composer.json ]; then
   # Install Composer
   curl https://getcomposer.org/installer | php
 
-  if [ "$(ls -a /tmp/artifacts/ 2>/dev/null)" ]; then
-    echo "Restoring build artifacts"
-    mv /tmp/artifacts/* $HOME/
-  fi
-
   # Change the repo mirror if provided
   if [ -n "$COMPOSER_MIRROR" ]; then
     ./composer.phar config -g repositories.packagist composer $COMPOSER_MIRROR
