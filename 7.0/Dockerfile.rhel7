@@ -29,10 +29,13 @@ LABEL summary="$SUMMARY" \
       release="5.0"
 
 # Install Apache httpd and PHP
-# To use subscription inside container yum command has to be run first (before yum-config-manager)
-# https://access.redhat.com/solutions/1443553
+# We need to call 2 (!) yum commands before being able to enable repositories properly
+# This is a workaround for https://bugzilla.redhat.com/show_bug.cgi?id=1479388
 RUN yum repolist > /dev/null && \
+    yum install -y yum-utils && \
+    yum-config-manager --disable \* &> /dev/null && \
     yum-config-manager --enable rhel-server-rhscl-7-rpms && \
+    yum-config-manager --enable rhel-7-server-rpms && \
     yum-config-manager --enable rhel-7-server-optional-rpms && \
     INSTALL_PKGS="rh-php70 rh-php70-php rh-php70-php-mysqlnd rh-php70-php-pgsql rh-php70-php-bcmath \
                   rh-php70-php-gd rh-php70-php-intl rh-php70-php-ldap rh-php70-php-mbstring rh-php70-php-pdo \
