@@ -10,11 +10,17 @@ The resulting image can be run using [Docker](http://docker.io).
 For more information about using these images with OpenShift, please see the
 official [OpenShift Documentation](https://docs.openshift.org/latest/using_images/s2i_images/php.html).
 
+For more information about contributing, see
+[the Contribution Guidelines](https://github.com/sclorg/welcome/blob/master/contribution.md).
+For more information about concepts used in these docker images, see the
+[Landing page](https://github.com/sclorg/welcome).
+
+
 Versions
 ---------------
 PHP versions currently supported are:
-* php-5.6
-* php-7.0
+* [php-5.6](5.6)
+* [php-7.0](7.0)
 
 RHEL versions currently supported are:
 * RHEL7
@@ -90,23 +96,4 @@ Users can choose between testing a PHP test application based on a RHEL or CentO
 **Notice: By omitting the `VERSIONS` parameter, the build/test action will be performed
 on all the supported versions of PHP.**
 
-
-Repository organization
-------------------------
-* **`<php-version>`**
-
-    Dockerfile and scripts to build container images from.
-
-* **`hack/`**
-
-    Folder containing scripts which are responsible for the build and test actions performed by the `Makefile`.
-
-Image name structure
-------------------------
-
-1. Platform name (lowercase) - php
-2. Platform version(without dots) - 70
-3. Base builder image - centos7/rhel7
-
-Examples: `php-70-centos7`, `php-70-rhel7`
 
