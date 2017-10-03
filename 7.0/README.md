@@ -1,12 +1,24 @@
-PHP Docker image
+PHP 7.0 Docker image
 ================
 
-This repository contains the source for building various versions of
-the PHP application as a reproducible Docker image using
-[source-to-image](https://github.com/openshift/source-to-image).
+This container image includes PHP 7.0 as a [S2I](https://github.com/openshift/source-to-image) base image for your PHP 7.0 applications.
 Users can choose between RHEL and CentOS based builder images.
+The RHEL image is available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/php-70-rhel7)
+as registry.access.redhat.com/rhscl/php-70-rhel7.
+The CentOS image is then available on [Docker Hub](https://hub.docker.com/r/centos/php-70-centos7/)
+as centos/php-70-centos7. 
 The resulting image can be run using [Docker](http://docker.io).
 
+Description
+-----------
+
+PHP 7.0 available as docker container is a base platform for 
+building and running various PHP 7.0 applications and frameworks. 
+PHP is an HTML-embedded scripting language. PHP attempts to make it easy for developers 
+to write dynamically generated web pages. PHP also offers built-in database integration 
+for several commercial and non-commercial database management systems, so writing 
+a database-enabled webpage with PHP is fairly simple. The most common use of PHP coding 
+is probably as a replacement for CGI scripts.
 
 Usage
 ---------------------
@@ -30,53 +42,6 @@ resulting image with [Docker](http://docker.io) execute:
 ```
 $ curl 127.0.0.1:8080
 ```
-
-
-Repository organization
-------------------------
-* **`<php-version>`**
-
-    * **Dockerfile**
-
-        CentOS based Dockerfile.
-
-    * **Dockerfile.rhel7**
-
-        RHEL based Dockerfile. In order to perform build or test actions on this
-        Dockerfile you need to run the action on properly subscribed RHEL machine.
-
-    * **`s2i/bin/`**
-
-        This folder contains scripts that are run by [S2I](https://github.com/openshift/source-to-image):
-
-        *   **assemble**
-
-            Used to install the sources into the location where the application
-            will be run and prepare the application for deployment (eg. installing
-            modules using npm, etc..)
-
-        *   **run**
-
-            This script is responsible for running the application, by using the
-            application web server.
-
-    * **`contrib/`**
-
-        This folder contains a file with commonly used modules.
-
-    * **`test/`**
-
-        This folder contains the [S2I](https://github.com/openshift/source-to-image)
-        test framework with a sample PHP app.
-
-        * **`test-app/`**
-
-            A simple PHP app used for testing purposes by the [S2I](https://github.com/openshift/source-to-image) test framework.
-
-        * **run**
-
-            Script that runs the [S2I](https://github.com/openshift/source-to-image) test framework.
-
 
 Environment variables
 ---------------------
@@ -184,3 +149,10 @@ docker exec -it <CONTAINER_ID> /bin/bash
 
 After you [Docker exec](http://docker.io) into the running container, your current directory is set
 to `/opt/app-root/src`, where the source code is located.
+
+
+See also
+--------
+Dockerfile and other sources are available on https://github.com/sclorg/s2i-php-container.
+In that repository you also can find another versions of PHP environment Dockerfiles.
+Dockerfile for CentOS is called Dockerfile, Dockerfile for RHEL is called Dockerfile.rhel7.

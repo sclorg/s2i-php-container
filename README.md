@@ -97,3 +97,49 @@ Users can choose between testing a PHP test application based on a RHEL or CentO
 on all the supported versions of PHP.**
 
 
+Repository organization
+------------------------
+* **`<php-version>`**
+
+    * **Dockerfile**
+
+        CentOS based Dockerfile.
+
+    * **Dockerfile.rhel7**
+
+        RHEL based Dockerfile. In order to perform build or test actions on this
+        Dockerfile you need to run the action on properly subscribed RHEL machine.
+
+    * **`s2i/bin/`**
+
+        This folder contains scripts that are run by [S2I](https://github.com/openshift/source-to-image):
+
+        *   **assemble**
+
+            Used to install the sources into the location where the application
+            will be run and prepare the application for deployment (eg. installing
+            modules using npm, etc..)
+
+        *   **run**
+
+            This script is responsible for running the application, by using the
+            application web server.
+
+    * **`contrib/`**
+
+        This folder contains a file with commonly used modules.
+
+    * **`test/`**
+
+        This folder contains the [S2I](https://github.com/openshift/source-to-image)
+        test framework with a sample PHP app.
+
+        * **`test-app/`**
+
+            A simple PHP app used for testing purposes by the [S2I](https://github.com/openshift/source-to-image) test framework.
+
+        * **run**
+
+            Script that runs the [S2I](https://github.com/openshift/source-to-image) test framework.
+
+
