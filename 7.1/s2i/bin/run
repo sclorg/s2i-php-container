@@ -10,7 +10,7 @@ export DISPLAY_ERRORS=${DISPLAY_ERRORS:-ON}
 export DISPLAY_STARTUP_ERRORS=${DISPLAY_STARTUP_ERRORS:-OFF}
 export TRACK_ERRORS=${TRACK_ERRORS:-OFF}
 export HTML_ERRORS=${HTML_ERRORS:-ON}
-export INCLUDE_PATH=${INCLUDE_PATH:-.:/opt/app-root/src:/opt/rh/rh-php70/root/usr/share/pear}
+export INCLUDE_PATH=${INCLUDE_PATH:-.:/opt/app-root/src:/opt/rh/rh-php71/root/usr/share/pear}
 export SESSION_PATH=${SESSION_PATH:-/tmp/sessions}
 export SHORT_OPEN_TAG=${SHORT_OPEN_TAG:-OFF}
 # TODO should be dynamically calculated based on container memory limit/16
@@ -18,11 +18,11 @@ export OPCACHE_MEMORY_CONSUMPTION=${OPCACHE_MEMORY_CONSUMPTION:-128}
 
 export OPCACHE_REVALIDATE_FREQ=${OPCACHE_REVALIDATE_FREQ:-2}
 
-export PHPRC=${PHPRC:-/etc/opt/rh/rh-php70/php.ini}
-export PHP_INI_SCAN_DIR=${PHP_INI_SCAN_DIR:-/etc/opt/rh/rh-php70/php.d}
+export PHPRC=${PHPRC:-/etc/opt/rh/rh-php71/php.ini}
+export PHP_INI_SCAN_DIR=${PHP_INI_SCAN_DIR:-/etc/opt/rh/rh-php71/php.d}
 
-envsubst < /opt/app-root/etc/php.ini.template > /etc/opt/rh/rh-php70/php.ini
-envsubst < /opt/app-root/etc/php.d/10-opcache.ini.template > /etc/opt/rh/rh-php70/php.d/10-opcache.ini
+envsubst < /opt/app-root/etc/php.ini.template > /etc/opt/rh/rh-php71/php.ini
+envsubst < /opt/app-root/etc/php.d/10-opcache.ini.template > /etc/opt/rh/rh-php71/php.d/10-opcache.ini
 
 export HTTPD_START_SERVERS=${HTTPD_START_SERVERS:-8}
 export HTTPD_MAX_SPARE_SERVERS=$((HTTPD_START_SERVERS+10))
