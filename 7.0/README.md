@@ -6,14 +6,14 @@ Users can choose between RHEL and CentOS based builder images.
 The RHEL image is available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/php-70-rhel7)
 as registry.access.redhat.com/rhscl/php-70-rhel7.
 The CentOS image is then available on [Docker Hub](https://hub.docker.com/r/centos/php-70-centos7/)
-as centos/php-70-centos7. 
+as centos/php-70-centos7.
 The resulting image can be run using [Docker](http://docker.io).
 
 Description
 -----------
 
-PHP 7.0 available as docker container is a base platform for 
-building and running various PHP 7.0 applications and frameworks. 
+PHP 7.0 available as docker container is a base platform for
+building and running various PHP 7.0 applications and frameworks.
 PHP is an HTML-embedded scripting language. PHP attempts to make it easy for developers 
 to write dynamically generated web pages. PHP also offers built-in database integration 
 for several commercial and non-commercial database management systems, so writing 

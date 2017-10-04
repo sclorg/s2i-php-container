@@ -6,7 +6,7 @@ Users can choose between RHEL and CentOS based builder images.
 The RHEL image is available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/php-56-rhel7)
 as registry.access.redhat.com/rhscl/php-56-rhel7.
 The CentOS image is then available on [Docker Hub](https://hub.docker.com/r/centos/php-56-centos7/)
-as centos/php-56-centos7. 
+as centos/php-56-centos7.
 The resulting image can be run using [Docker](http://docker.io).
 
 Description

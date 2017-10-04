@@ -1,19 +1,19 @@
-PHP 7.0 Docker image
+PHP 7.1 Docker image
 ================
 
-This container image includes PHP 7.0 as a [S2I](https://github.com/openshift/source-to-image) base image for your PHP 7.0 applications.
+This container image includes PHP 7.1 as a [S2I](https://github.com/openshift/source-to-image) base image for your PHP 7.1 applications.
 Users can choose between RHEL and CentOS based builder images.
-The RHEL image is available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/php-70-rhel7)
-as registry.access.redhat.com/rhscl/php-70-rhel7.
-The CentOS image is then available on [Docker Hub](https://hub.docker.com/r/centos/php-70-centos7/)
-as centos/php-70-centos7. 
+The RHEL image is available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/php-71-rhel7)
+as registry.access.redhat.com/rhscl/php-71-rhel7.
+The CentOS image is then available on [Docker Hub](https://hub.docker.com/r/centos/php-71-centos7/)
+as centos/php-71-centos7.
 The resulting image can be run using [Docker](http://docker.io).
 
 Description
 -----------
 
-PHP 7.0 available as docker container is a base platform for 
-building and running various PHP 7.0 applications and frameworks. 
+PHP 7.1 available as docker container is a base platform for
+building and running various PHP 7.1 applications and frameworks.
 PHP is an HTML-embedded scripting language. PHP attempts to make it easy for developers 
 to write dynamically generated web pages. PHP also offers built-in database integration 
 for several commercial and non-commercial database management systems, so writing 
@@ -22,19 +22,19 @@ is probably as a replacement for CGI scripts.
 
 Usage
 ---------------------
-To build a simple [php-test-app](https://github.com/sclorg/s2i-php-container/tree/master/7.0/test/test-app) application
+To build a simple [php-test-app](https://github.com/sclorg/s2i-php-container/tree/master/7.1/test/test-app) application
 using standalone [S2I](https://github.com/openshift/source-to-image) and then run the
 resulting image with [Docker](http://docker.io) execute:
 
 *  **For RHEL based image**
     ```
-    $ s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=7.0/test/test-app rhscl/php-70-rhel7 php-test-app
+    $ s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=7.1/test/test-app rhscl/php-71-rhel7 php-test-app
     $ docker run -p 8080:8080 php-test-app
     ```
 
 *  **For CentOS based image**
     ```
-    $ s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=7.0/test/test-app centos/php-70-centos7 php-test-app
+    $ s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=7.1/test/test-app centos/php-71-centos7 php-test-app
     $ docker run -p 8080:8080 php-test-app
     ```
 
@@ -67,7 +67,7 @@ The following environment variables set their equivalent property value in the p
   * Default: ON
 * **INCLUDE_PATH**
   * Path for PHP source files
-  * Default: .:/opt/app-root/src:/opt/rh/rh-php70/root/usr/share/pear
+  * Default: .:/opt/app-root/src:/opt/rh/rh-php71/root/usr/share/pear
 * **SESSION_PATH**
   * Location for session data files
   * Default: /tmp/sessions
