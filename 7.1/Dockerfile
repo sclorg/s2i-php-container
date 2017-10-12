@@ -25,8 +25,7 @@ LABEL summary="$SUMMARY" \
       io.openshift.tags="builder,php,php71,rh-php71" \
       name="centos/php-71-centos7" \
       com.redhat.component="rh-php71-docker" \
-      version="7.1" \
-      release="1" \
+      version="1" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 # Install Apache httpd and PHP
