@@ -25,8 +25,7 @@ LABEL summary="$SUMMARY" \
       io.openshift.tags="builder,php,php71,rh-php71" \
       name="rhscl/php-71-rhel7" \
       com.redhat.component="rh-php71-docker" \
-      version="7.1" \
-      release="5.0"
+      version="1"
 
 # Install Apache httpd and PHP
 # We need to call 2 (!) yum commands before being able to enable repositories properly
