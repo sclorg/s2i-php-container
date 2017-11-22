@@ -5,7 +5,14 @@ FROM centos/s2i-base-centos7
 
 EXPOSE 8080
 
+# Description
+# This image provides an Apache 2.4 + PHP 7.1 environment for running PHP applications.
+# Exposed ports:
+# * 8080 - alternative port for http
+
 ENV PHP_VERSION=7.1 \
+    PHP_VER_SHORT=71 \
+    NAME=php \
     PATH=$PATH:/opt/rh/rh-php71/root/usr/bin
 
 ENV SUMMARY="Platform for building and running PHP $PHP_VERSION applications" \
@@ -20,13 +27,17 @@ is probably as a replacement for CGI scripts."
 LABEL summary="$SUMMARY" \
       description="$DESCRIPTION" \
       io.k8s.description="$DESCRIPTION" \
-      io.k8s.display-name="Apache 2.4 with PHP 7.1" \
+      io.k8s.display-name="Apache 2.4 with PHP $PHP_VERSION" \
       io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,php,php71,rh-php71" \
-      name="centos/php-71-centos7" \
-      com.redhat.component="rh-php71-docker" \
+      io.openshift.tags="builder,$NAME,$NAME$PHP_VER_SHORT,rh-$NAME$PHP_VER_SHORT" \
+      io.openshift.s2i.scripts-url="image:///usr/libexec/s2i" \
+      io.s2i.scripts-url="image:///usr/libexec/s2i" \
+      name="centos/$NAME-$PHP_VER_SHORT-centos7" \
+      com.redhat.component="rh-$NAME$PHP_VER_SHORT-docker" \
       version="1" \
-      maintainer="SoftwareCollections.org <sclorg@redhat.com>"
+      maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
+      help="For more information visit https://github.com/sclorg/s2i-$NAME-container" \
+      usage="s2i build <SOURCE-REPOSITORY> $NAME:7 <APP-NAME>"
 
 # Install Apache httpd and PHP
 RUN yum install -y centos-release-scl && \
