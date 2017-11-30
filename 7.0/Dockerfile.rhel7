@@ -38,7 +38,7 @@ LABEL summary="$SUMMARY" \
       release="5.0" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
       help="For more information visit https://github.com/sclorg/s2i-$NAME-container" \
-      usage="s2i build <SOURCE-REPOSITORY> $NAME:7 <APP-NAME>"
+      usage="s2i build <SOURCE-REPOSITORY> rhscl/$NAME-$PHP_VER_SHORT-rhel7:latest <APP-NAME>"
 
 # Install Apache httpd and PHP
 RUN yum install -y yum-utils && \

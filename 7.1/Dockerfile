@@ -37,7 +37,7 @@ LABEL summary="$SUMMARY" \
       version="1" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
       help="For more information visit https://github.com/sclorg/s2i-$NAME-container" \
-      usage="s2i build <SOURCE-REPOSITORY> $NAME:7 <APP-NAME>"
+      usage="s2i build <SOURCE-REPOSITORY> centos/$NAME-$PHP_VER_SHORT-centos7:latest <APP-NAME>"
 
 # Install Apache httpd and PHP
 RUN yum install -y centos-release-scl && \
