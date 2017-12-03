@@ -14,6 +14,7 @@ image_dir=$(readlink -zf ${test_dir}/..)
 
 # TODO: This should be part of the image metadata
 test_port=8080
+test_port_ssl=8443
 
 info() {
   echo -e "\n\e[1m[INFO] $@...\e[0m\n"
@@ -129,14 +130,16 @@ test_scl_usage() {
 }
 
 test_connection() {
+  local check_port=$1 ; shift
+  local check_protocol=${1:-http}
   cat $cid_file
-  info "Testing the HTTP connection (http://$(container_ip):${test_port})"
+  info "Testing the HTTP connection (${check_protocol}://$(container_ip):${check_port})"
   local max_attempts=10
   local sleep_time=1
   local attempt=1
   local result=1
   while [ $attempt -le $max_attempts ]; do
-    response_code=$(curl -s -w %{http_code} -o /dev/null http://$(container_ip):${test_port}/)
+    response_code=$(curl -s -w %{http_code} -o /dev/null -k ${check_protocol}://$(container_ip):${check_port}/)
     status=$?
     if [ $status -eq 0 ]; then
       if [ $response_code -eq 200 ]; then
@@ -160,9 +163,21 @@ test_application() {
   test_scl_usage "php --version" "7.1"
   check_result $?
 
-  test_connection
+  test_connection ${test_port}
+  check_result $?
+  test_connection ${test_port_ssl} https
   check_result $?
   cleanup_test_app
+}
+
+test_ssl() {
+  source ${image_dir}/common/test-lib.sh
+  local cert_dir=/tmp
+  local cert_base=mycert
+  ct_gen_self_signed_cert_pem ${cert_dir} ${cert_base}
+  local private_key=${cert_dir}/${cert_base}-cert-selfsigned.pem
+  local cert_file=${cert_dir}/${cert_base}-key.pem
+
 }
 
 cid_file=$(mktemp -u --suffix=.cid)
