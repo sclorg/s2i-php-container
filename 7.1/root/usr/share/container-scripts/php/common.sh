@@ -1,6 +1,26 @@
+config_httpd_conf() {
+  sed -i "s/^Listen 80/Listen 0.0.0.0:8080/" ${HTTPD_MAIN_CONF_PATH}/httpd.conf
+  sed -i "s/^User apache/User default/" ${HTTPD_MAIN_CONF_PATH}/httpd.conf
+  sed -i "s/^Group apache/Group root/" ${HTTPD_MAIN_CONF_PATH}/httpd.conf
+  sed -i "s%^DocumentRoot \"/opt/rh/httpd24/root/var/www/html\"%#DocumentRoot \"/opt/app-root/src\"%" ${HTTPD_MAIN_CONF_PATH}/httpd.conf
+  sed -i "s%^<Directory \"/opt/rh/httpd24/root/var/www/html\"%<Directory \"/opt/app-root/src\"%" ${HTTPD_MAIN_CONF_PATH}/httpd.conf
+  sed -i "s%^<Directory \"/opt/rh/httpd24/root/var/html\"%<Directory \"/opt/app-root/src\"%" ${HTTPD_MAIN_CONF_PATH}/httpd.conf
+  sed -i "s%^ErrorLog \"logs/error_log\"%ErrorLog \"|/usr/bin/cat\"%" ${HTTPD_MAIN_CONF_PATH}/httpd.conf
+  sed -i "s%CustomLog \"logs/access_log\"%CustomLog \"|/usr/bin/cat\"%" ${HTTPD_MAIN_CONF_PATH}/httpd.conf
+  sed -i "151s%AllowOverride None%AllowOverride All%" ${HTTPD_MAIN_CONF_PATH}/httpd.conf
+}
+
+config_ssl_conf() {
+  sed -i -E "s/^Listen 443/Listen 0.0.0.0:8443/" ${HTTPD_MAIN_CONF_D_PATH}/ssl.conf
+  sed -i -E "s/_default_:443/_default_:8443/" ${HTTPD_MAIN_CONF_D_PATH}/ssl.conf
+  sed -i -E "s!^(\s*CustomLog)\s+\S+!\1 |/usr/bin/cat!" ${HTTPD_MAIN_CONF_D_PATH}/ssl.conf
+  sed -i -E "s!^(\s*TransferLog)\s+\S+!\1 |/usr/bin/cat!" ${HTTPD_MAIN_CONF_D_PATH}/ssl.conf
+  sed -i -E "s!^(\s*ErrorLog)\s+\S+!\1 |/usr/bin/cat!" ${HTTPD_MAIN_CONF_D_PATH}/ssl.conf
+}
+
 config_general() {
-  sed -i -f ${APP_ROOT}/etc/httpdconf.sed /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf
-  sed -i -E -f ${APP_ROOT}/etc/sslconf.sed /opt/rh/httpd24/root/etc/httpd/conf.d/ssl.conf
+  config_httpd_conf
+  config_ssl_conf
   sed -i '/php_value session.save_path/d' /opt/rh/httpd24/root/etc/httpd/conf.d/rh-php71-php.conf
   head -n151 /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf | tail -n1 | grep "AllowOverride All" || exit 1
   echo "IncludeOptional /opt/app-root/etc/conf.d/*.conf" >> /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf
