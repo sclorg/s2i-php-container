@@ -20,8 +20,8 @@ if [ -v HTTPD_SCL ] ; then
 
   # /opt/rh/httpd24/root/var/www will be symlink to /var/www
   rm -rf /var/www
-  mv /opt/rh/httpd24/root/var/www /var/www
-  ln -s /var/www /opt/rh/httpd24/root/var/www
+  mv ${HTTPD_DATA_ORIG_PATH} /var/www
+  ln -s /var/www ${HTTPD_DATA_ORIG_PATH}
 fi
 
 mkdir -p ${HTTPD_CONFIGURATION_PATH}
