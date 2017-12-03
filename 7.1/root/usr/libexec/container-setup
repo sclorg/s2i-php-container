@@ -1,0 +1,45 @@
+#!/bin/bash
+
+set -e
+
+# In order to drop the root user, we have to make some directories world
+# writeable as OpenShift default security model is to run the container under
+# random UID.
+
+source ${CONTAINER_SCRIPTS_PATH}/common.sh
+
+# compatibility symlinks so we hide SCL paths
+if [ -v HTTPD_SCL ] ; then
+  # /opt/rh/httpd24/root/etc/httpd will be symlink to /etc/httpd
+  mv /opt/rh/httpd24/root/etc/httpd /etc/httpd
+  ln -s /etc/httpd /opt/rh/httpd24/root/etc/httpd
+
+  # /opt/rh/httpd24/root/var/run/httpd will be symlink to /var/run/httpd
+  mv /opt/rh/httpd24/root/var/run/httpd /var/run/httpd
+  ln -s /var/run/httpd /opt/rh/httpd24/root/var/run/httpd
+
+  # /opt/rh/httpd24/root/var/www will be symlink to /var/www
+  rm -rf /var/www
+  mv /opt/rh/httpd24/root/var/www /var/www
+  ln -s /var/www /opt/rh/httpd24/root/var/www
+fi
+
+mkdir -p ${HTTPD_CONFIGURATION_PATH}
+chmod -R a+rwx ${HTTPD_MAIN_CONF_PATH}
+chmod -R a+rwx ${HTTPD_MAIN_CONF_D_PATH}
+chmod -R a+r   /etc/pki/tls/certs/localhost.crt
+chmod -R a+r   /etc/pki/tls/private/localhost.key
+mkdir -p ${APP_ROOT}/etc
+chmod -R a+rwx ${APP_ROOT}/etc
+chmod -R a+rwx ${HTTPD_VAR_RUN}
+chown -R 1001:0 ${APP_ROOT}
+mkdir /tmp/sessions
+chown -R 1000:0 /tmp/sessions
+chown -R 1001:0 ${HTTPD_DATA_PATH}
+chown -R 1001:0 ${HTTPD_LOG_PATH}
+chmod -R a+rwx /etc/opt/rh/rh-php71
+
+mkdir -p ${CONTAINER_SCRIPTS_PATH}/pre-init
+
+config_general
+

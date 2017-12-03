@@ -4,6 +4,7 @@ FROM centos/s2i-base-centos7
 # applications.
 
 EXPOSE 8080
+EXPOSE 8443
 
 # Description
 # This image provides an Apache 2.4 + PHP 7.1 environment for running PHP applications.
@@ -45,10 +46,21 @@ RUN yum install -y centos-release-scl && \
     INSTALL_PKGS="rh-php71 rh-php71-php rh-php71-php-mysqlnd rh-php71-php-pgsql rh-php71-php-bcmath \
                   rh-php71-php-gd rh-php71-php-intl rh-php71-php-ldap rh-php71-php-mbstring rh-php71-php-pdo \
                   rh-php71-php-process rh-php71-php-soap rh-php71-php-opcache rh-php71-php-xml \
-                  rh-php71-php-gmp rh-php71-php-pecl-apcu" && \
+                  rh-php71-php-gmp rh-php71-php-pecl-apcu httpd24-mod_ssl" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS --nogpgcheck && \
     rpm -V $INSTALL_PKGS && \
     yum clean all -y
+
+ENV CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/php/ \
+    APP_ROOT=/opt/app-root \
+    HTTPD_CONFIGURATION_PATH=/opt/app-root/etc/httpd.d \
+    HTTPD_MAIN_CONF_PATH=/etc/httpd/conf \
+    HTTPD_MAIN_CONF_D_PATH=/etc/httpd/conf.d \
+    HTTPD_VAR_RUN=/var/run/httpd \
+    HTTPD_DATA_PATH=/var/www \
+    HTTPD_DATA_ORIG_PATH=/opt/rh/httpd24/root/var/www \
+    HTTPD_LOG_PATH=/var/log/httpd24 \
+    HTTPD_SCL=rh-php71
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
 COPY ./s2i/bin/ $STI_SCRIPTS_PATH
@@ -56,20 +68,8 @@ COPY ./s2i/bin/ $STI_SCRIPTS_PATH
 # Copy extra files to the image.
 COPY ./root/ /
 
-# In order to drop the root user, we have to make some directories world
-# writeable as OpenShift default security model is to run the container under
-# random UID.
-RUN sed -i -f /opt/app-root/etc/httpdconf.sed /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf && \
-    sed -i '/php_value session.save_path/d' /opt/rh/httpd24/root/etc/httpd/conf.d/rh-php71-php.conf && \
-    head -n151 /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf | tail -n1 | grep "AllowOverride All" || exit && \
-    echo "IncludeOptional /opt/app-root/etc/conf.d/*.conf" >> /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf && \
-    mkdir /tmp/sessions && \
-    chown -R 1001:0 /opt/app-root /tmp/sessions && \
-    chmod -R a+rwx /tmp/sessions && \
-    chmod -R ug+rwx /opt/app-root && \
-    chmod -R a+rwx /etc/opt/rh/rh-php71 && \
-    chmod -R a+rwx /opt/rh/httpd24/root/var/run/httpd && \
-    rpm-file-permissions
+# Reset permissions of filesystem to default values
+RUN /usr/libexec/container-setup && rpm-file-permissions
 
 USER 1001
 
