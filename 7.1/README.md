@@ -154,6 +154,21 @@ After you [Docker exec](http://docker.io) into the running container, your curre
 to `/opt/app-root/src`, where the source code is located.
 
 
+Extending image
+---------------
+Not only content, but also startup scripts and configuration of the image can
+be extended using [source-to-image](https://github.com/openshift/source-to-image).
+
+The structure of the application can look like this:
+
+| Folder name       | Description                |
+|-------------------|----------------------------|
+| `./httpd-cfg`     | Can contain additional Apache configuration files (`*.conf`)|
+| `./httpd-pre-init`| Can contain shell scripts (`*.sh`) that are sourced before `httpd` is started|
+| `./httpd-ssl`     | Can contain own SSL certificate (in `certs/` subdirectory) and key (in `private/` subdirectory)|
+| `./`              | Application source code |
+
+
 See also
 --------
 Dockerfile and other sources are available on https://github.com/sclorg/s2i-php-container.

@@ -51,17 +51,19 @@ RUN yum install -y centos-release-scl && \
     rpm -V $INSTALL_PKGS && \
     yum clean all -y
 
-ENV CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/php/ \
+ENV PHP_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/php/ \
     APP_ROOT=/opt/app-root \
-    DEFAULT_INCLUDE_PATH=/opt/rh/rh-php71/root/usr/share/pear \
-    HTTPD_CONFIGURATION_PATH=/opt/app-root/etc/httpd.d \
+    APP_DATA=/opt/app-root/src \
+    PHP_DEFAULT_INCLUDE_PATH=/opt/rh/rh-php71/root/usr/share/pear \
+    PHP_SYSCONF_PATH=/etc/opt/rh/rh-php71 \
+    HTTPD_CONFIGURATION_PATH=/opt/app-root/etc/conf.d \
     HTTPD_MAIN_CONF_PATH=/etc/httpd/conf \
     HTTPD_MAIN_CONF_D_PATH=/etc/httpd/conf.d \
     HTTPD_VAR_RUN=/var/run/httpd \
     HTTPD_DATA_PATH=/var/www \
     HTTPD_DATA_ORIG_PATH=/opt/rh/httpd24/root/var/www \
-    HTTPD_LOG_PATH=/var/log/httpd24 \
-    HTTPD_SCL=rh-php71
+    HTTPD_VAR_PATH=/opt/rh/httpd24/root/var \
+    SCL_ENABLED=rh-php71
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
 COPY ./s2i/bin/ $STI_SCRIPTS_PATH
