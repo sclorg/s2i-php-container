@@ -57,6 +57,7 @@ ENV PHP_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/php/ \
     APP_DATA=/opt/app-root/src \
     PHP_DEFAULT_INCLUDE_PATH=/opt/rh/rh-php70/root/usr/share/pear \
     PHP_SYSCONF_PATH=/etc/opt/rh/rh-php70 \
+    PHP_HTTPD_CONF_FILE=rh-php70-php.conf \
     HTTPD_CONFIGURATION_PATH=/opt/app-root/etc/conf.d \
     HTTPD_MAIN_CONF_PATH=/etc/httpd/conf \
     HTTPD_MAIN_CONF_D_PATH=/etc/httpd/conf.d \
