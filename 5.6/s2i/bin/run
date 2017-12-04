@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ${PHP_CONTAINER_SCRIPTS_PATH}/common.sh
+
 export_vars=$(cgroup-limits); export $export_vars
 export DOCUMENTROOT=${DOCUMENTROOT:-/}
 
@@ -10,7 +12,7 @@ export DISPLAY_ERRORS=${DISPLAY_ERRORS:-ON}
 export DISPLAY_STARTUP_ERRORS=${DISPLAY_STARTUP_ERRORS:-OFF}
 export TRACK_ERRORS=${TRACK_ERRORS:-OFF}
 export HTML_ERRORS=${HTML_ERRORS:-ON}
-export INCLUDE_PATH=${INCLUDE_PATH:-.:/opt/app-root/src:/opt/rh/rh-php56/root/usr/share/pear}
+export INCLUDE_PATH=${INCLUDE_PATH:-.:/opt/app-root/src:${PHP_DEFAULT_INCLUDE_PATH}}
 export SESSION_PATH=${SESSION_PATH:-/tmp/sessions}
 export SHORT_OPEN_TAG=${SHORT_OPEN_TAG:-OFF}
 # TODO should be dynamically calculated based on container memory limit/16
@@ -42,7 +44,7 @@ else
   echo "-> Cgroups memory limit is set, using HTTPD_MAX_REQUEST_WORKERS=${HTTPD_MAX_REQUEST_WORKERS}"
 fi
 
-envsubst < /opt/app-root/etc/conf.d/50-mpm-tuning.conf.template > /opt/app-root/etc/conf.d/50-mpm-tuning.conf
-envsubst < /opt/app-root/etc/conf.d/00-documentroot.conf.template > /opt/app-root/etc/conf.d/00-documentroot.conf
+# pre-start files
+process_extending_files ${APP_DATA}/php-pre-start/ ${PHP_CONTAINER_SCRIPTS_PATH}/pre-start/
 
 exec httpd -D FOREGROUND
