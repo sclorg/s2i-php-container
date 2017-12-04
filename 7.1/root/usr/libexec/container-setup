@@ -22,6 +22,8 @@ if [ -v SCL_ENABLED ] ; then
   rm -rf /var/www
   mv ${HTTPD_DATA_ORIG_PATH} /var/www
   ln -s /var/www ${HTTPD_DATA_ORIG_PATH}
+else
+  rm -f /opt/app-root/etc/scl_enable
 fi
 
 mkdir -p ${HTTPD_CONFIGURATION_PATH}
