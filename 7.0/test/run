@@ -14,6 +14,7 @@ image_dir=$(readlink -zf ${test_dir}/..)
 
 # TODO: This should be part of the image metadata
 test_port=8080
+test_port_ssl=8443
 
 info() {
   echo -e "\n\e[1m[INFO] $@...\e[0m\n"
@@ -129,14 +130,16 @@ test_scl_usage() {
 }
 
 test_connection() {
+  local check_port=$1 ; shift
+  local check_protocol=${1:-http}
   cat $cid_file
-  info "Testing the HTTP connection (http://$(container_ip):${test_port})"
+  info "Testing the HTTP connection (${check_protocol}://$(container_ip):${check_port})"
   local max_attempts=10
   local sleep_time=1
   local attempt=1
   local result=1
   while [ $attempt -le $max_attempts ]; do
-    response_code=$(curl -s -w %{http_code} -o /dev/null http://$(container_ip):${test_port}/)
+    response_code=$(curl -s -w %{http_code} -o /dev/null -k ${check_protocol}://$(container_ip):${check_port}/)
     status=$?
     if [ $status -eq 0 ]; then
       if [ $response_code -eq 200 ]; then
@@ -160,9 +163,31 @@ test_application() {
   test_scl_usage "php --version" "7.0"
   check_result $?
 
-  test_connection
+  test_connection ${test_port}
+  check_result $?
+  test_connection ${test_port_ssl} https
   check_result $?
   cleanup_test_app
+}
+
+test_ssl() {
+  source ${image_dir}/common/test-lib.sh
+  local cert_dir=/tmp
+  local cert_base=mycert
+  ct_gen_self_signed_cert_pem ${cert_dir} ${cert_base}
+  local private_key=${cert_dir}/${cert_base}-cert-selfsigned.pem
+  local cert_file=${cert_dir}/${cert_base}-key.pem
+
+}
+
+test_ssl_own_cert() {
+  s2i build ${s2i_args} file://${test_dir}/self-signed-ssl ${IMAGE_NAME} ${IMAGE_NAME}-test-self-signed-ssl
+  docker run -d --user=100001 ${run_args} --cidfile=${cid_file} ${IMAGE_NAME}-test-self-signed-ssl
+  test_connection ${test_port_ssl} https
+  check_result $?
+  echo | openssl s_client -showcerts -servername $(container_ip) -connect $(container_ip):${test_port_ssl} 2>/dev/null | openssl x509 -inform pem -noout -text >./servercert
+  openssl x509 -in ${test_dir}/self-signed-ssl/httpd-ssl/certs/server-cert-selfsigned.pem -inform pem -noout -text >./configcert
+  diff ./configcert ./servercert >cert.diff
 }
 
 cid_file=$(mktemp -u --suffix=.cid)
@@ -188,6 +213,11 @@ test_application
 
 # Test application with random uid
 CONTAINER_ARGS="-u 12345" test_application
+
+cleanup
+
+test_ssl_own_cert
+check_result $?
 cleanup
 
 info "All tests finished successfully."
