@@ -10,7 +10,18 @@ if [ -f composer.json ]; then
   echo "Found 'composer.json', installing dependencies using composer.phar... "
 
   # Install Composer
-  curl https://getcomposer.org/installer | php
+  TEMPFILE=$(mktemp)
+  RETRIES=6
+  for ((i=0; i<$RETRIES; i++)); do
+    echo "Downloading https://getcomposer.org/installer, attempt $((i+1))/$RETRIES"
+    curl -o $TEMPFILE https://getcomposer.org/installer && break
+    sleep 10
+  done
+  if [[ $i == $RETRIES ]]; then
+    echo "Download failed, giving up."
+    exit 1
+  fi
+  php <$TEMPFILE
 
   # Change the repo mirror if provided
   if [ -n "$COMPOSER_MIRROR" ]; then
