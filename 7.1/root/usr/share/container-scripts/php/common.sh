@@ -2,9 +2,9 @@ config_httpd_conf() {
   sed -i "s/^Listen 80/Listen 0.0.0.0:8080/" ${HTTPD_MAIN_CONF_PATH}/httpd.conf
   sed -i "s/^User apache/User default/" ${HTTPD_MAIN_CONF_PATH}/httpd.conf
   sed -i "s/^Group apache/Group root/" ${HTTPD_MAIN_CONF_PATH}/httpd.conf
-  sed -i "s%^DocumentRoot \"/opt/rh/httpd24/root/var/www/html\"%#DocumentRoot \"/opt/app-root/src\"%" ${HTTPD_MAIN_CONF_PATH}/httpd.conf
-  sed -i "s%^<Directory \"/opt/rh/httpd24/root/var/www/html\"%<Directory \"/opt/app-root/src\"%" ${HTTPD_MAIN_CONF_PATH}/httpd.conf
-  sed -i "s%^<Directory \"/opt/rh/httpd24/root/var/html\"%<Directory \"/opt/app-root/src\"%" ${HTTPD_MAIN_CONF_PATH}/httpd.conf
+  sed -i "s%^DocumentRoot \"${HTTPD_DATA_ORIG_PATH}/html\"%#DocumentRoot \"${APP_DATA}\"%" ${HTTPD_MAIN_CONF_PATH}/httpd.conf
+  sed -i "s%^<Directory \"${HTTPD_DATA_ORIG_PATH}/html\"%<Directory \"${APP_DATA}\"%" ${HTTPD_MAIN_CONF_PATH}/httpd.conf
+  sed -i "s%^<Directory \"${HTTPD_VAR_PATH}/html\"%<Directory \"${APP_DATA}\"%" ${HTTPD_MAIN_CONF_PATH}/httpd.conf
   sed -i "s%^ErrorLog \"logs/error_log\"%ErrorLog \"|/usr/bin/cat\"%" ${HTTPD_MAIN_CONF_PATH}/httpd.conf
   sed -i "s%CustomLog \"logs/access_log\"%CustomLog \"|/usr/bin/cat\"%" ${HTTPD_MAIN_CONF_PATH}/httpd.conf
   sed -i "151s%AllowOverride None%AllowOverride All%" ${HTTPD_MAIN_CONF_PATH}/httpd.conf
@@ -21,9 +21,9 @@ config_ssl_conf() {
 config_general() {
   config_httpd_conf
   config_ssl_conf
-  sed -i '/php_value session.save_path/d' /opt/rh/httpd24/root/etc/httpd/conf.d/rh-php71-php.conf
-  head -n151 /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf | tail -n1 | grep "AllowOverride All" || exit 1
-  echo "IncludeOptional /opt/app-root/etc/conf.d/*.conf" >> /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf
+  sed -i '/php_value session.save_path/d' ${HTTPD_MAIN_CONF_D_PATH}/rh-php71-php.conf
+  head -n151 ${HTTPD_MAIN_CONF_PATH}/httpd.conf | tail -n1 | grep "AllowOverride All" || exit 1
+  echo "IncludeOptional ${APP_ROOT}/etc/conf.d/*.conf" >> ${HTTPD_MAIN_CONF_PATH}/httpd.conf
 }
 
 function log_info {
@@ -98,4 +98,37 @@ function process_extending_config_files() {
     fi
   done <<<"$(get_matched_files "$custom_dir" "$default_dir" '*.conf' | sort -u)"
 }
+
+# Copy config files from application to the location where httd expects them
+# Param sets the directory where to look for files
+# This function was taken from httpd container
+process_config_files() {
+  local dir=${1:-.}
+  if [ -d ${dir}/httpd-cfg ]; then
+    echo "---> Copying httpd configuration files..."
+    if [ "$(ls -A ${dir}/httpd-cfg/*.conf)" ]; then
+      cp -v ${dir}/httpd-cfg/*.conf "${HTTPD_CONFIGURATION_PATH}"/
+      rm -rf ${dir}/httpd-cfg
+    fi
+  fi
+}
+
+# Copy SSL files provided in application source
+# This function was taken from httpd container
+process_ssl_certs() {
+  local dir=${1:-.}
+  if [ -d ${dir}/httpd-ssl/private ] && [ -d ${dir}/httpd-ssl/certs ]; then
+    echo "---> Looking for SSL certs for httpd..."
+    cp -r ${dir}/httpd-ssl ${APP_ROOT}
+    local ssl_cert="$(ls -A ${APP_ROOT}/httpd-ssl/certs/*.pem | head -n 1)"
+    local ssl_private="$(ls -A ${APP_ROOT}/httpd-ssl/private/*.pem | head -n 1)"
+    if [ -f "${ssl_cert}" ] && [ -f "${ssl_private}" ]; then
+      echo "---> Setting SSL certs for httpd..."
+      sed -i -e "s|^SSLCertificateFile .*$|SSLCertificateFile ${ssl_cert}|" ${HTTPD_MAIN_CONF_D_PATH}/ssl.conf
+      sed -i -e "s|^SSLCertificateKeyFile .*$|SSLCertificateKeyFile ${ssl_private}|" ${HTTPD_MAIN_CONF_D_PATH}/ssl.conf
+    fi
+    rm -rf ${dir}/httpd-ssl
+  fi
+}
+
 

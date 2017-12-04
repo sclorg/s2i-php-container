@@ -180,6 +180,16 @@ test_ssl() {
 
 }
 
+test_ssl_own_cert() {
+  s2i build ${s2i_args} file://${test_dir}/self-signed-ssl ${IMAGE_NAME} ${IMAGE_NAME}-test-self-signed-ssl
+  docker run -d --user=100001 ${run_args} --cidfile=${cid_file} ${IMAGE_NAME}-test-self-signed-ssl
+  test_connection ${test_port_ssl} https
+  check_result $?
+  echo | openssl s_client -showcerts -servername $(container_ip) -connect $(container_ip):${test_port_ssl} 2>/dev/null | openssl x509 -inform pem -noout -text >./servercert
+  openssl x509 -in ${test_dir}/self-signed-ssl/httpd-ssl/certs/server-cert-selfsigned.pem -inform pem -noout -text >./configcert
+  diff ./configcert ./servercert >cert.diff
+}
+
 cid_file=$(mktemp -u --suffix=.cid)
 
 # Since we built the candidate image locally, we don't want S2I attempt to pull
@@ -203,6 +213,11 @@ test_application
 
 # Test application with random uid
 CONTAINER_ARGS="-u 12345" test_application
+
+cleanup
+
+test_ssl_own_cert
+check_result $?
 cleanup
 
 info "All tests finished successfully."

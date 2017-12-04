@@ -2,7 +2,7 @@
 
 set -e
 
-source ${CONTAINER_SCRIPTS_PATH}/common.sh
+source ${PHP_CONTAINER_SCRIPTS_PATH}/common.sh
 
 shopt -s dotglob
 echo "---> Installing application source..."
@@ -48,8 +48,9 @@ if [ -f composer.json ]; then
   fi
 fi
 
-# pre-start files
-process_extending_files ${APP_DATA}/php-pre-start/ ${CONTAINER_SCRIPTS_PATH}/pre-start/
+# post-assemble files
+process_extending_files ./php-post-assemble/ ${PHP_CONTAINER_SCRIPTS_PATH}/post-assemble/
 
 # Fix source directory permissions
 fix-permissions ./
+fix-permissions ${HTTPD_CONFIGURATION_PATH}

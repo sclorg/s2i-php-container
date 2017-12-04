@@ -2,5 +2,5 @@
 
 log_info 'Processing additional arbitrary httpd configuration provided by s2i ...'
 
-process_extending_config_files ${APP_DATA}/httpd-cfg/ ${CONTAINER_SCRIPTS_PATH}/cnf/
+process_extending_config_files ${APP_DATA}/httpd-cfg/ ${PHP_CONTAINER_SCRIPTS_PATH}/httpd-cnf/
 
