@@ -156,3 +156,10 @@ See also
 Dockerfile and other sources are available on https://github.com/sclorg/s2i-php-container.
 In that repository you also can find another versions of PHP environment Dockerfiles.
 Dockerfile for CentOS is called Dockerfile, Dockerfile for RHEL is called Dockerfile.rhel7.
+
+Security Implications
+---------------------
+
+-p 8080:8080
+
+     Opens  container  port  8080  and  maps it to the same port on the Host.

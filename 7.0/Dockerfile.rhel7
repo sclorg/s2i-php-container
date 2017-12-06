@@ -5,7 +5,14 @@ FROM rhscl/s2i-base-rhel7:1
 
 EXPOSE 8080
 
+# Description
+# This image provides an Apache 2.4 + PHP 7.0 environment for running PHP applications.
+# Exposed ports:
+# * 8080 - alternative port for http
+
 ENV PHP_VERSION=7.0 \
+    PHP_VER_SHORT=70 \
+    NAME=php \
     PATH=$PATH:/opt/rh/rh-php70/root/usr/bin
 
 ENV SUMMARY="Platform for building and running PHP $PHP_VERSION applications" \
@@ -20,13 +27,18 @@ is probably as a replacement for CGI scripts."
 LABEL summary="$SUMMARY" \
       description="$DESCRIPTION" \
       io.k8s.description="$DESCRIPTION" \
-      io.k8s.display-name="Apache 2.4 with PHP 7.0" \
+      io.k8s.display-name="Apache 2.4 with PHP $PHP_VERSION" \
       io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,php,php70,rh-php70" \
-      name="rhscl/php-70-rhel7" \
-      com.redhat.component="rh-php70-docker" \
-      version="7.0" \
-      release="5.0"
+      io.openshift.tags="builder,$NAME,$NAME$PHP_VER_SHORT,rh-$NAME$PHP_VER_SHORT" \
+      io.openshift.s2i.scripts-url="image:///usr/libexec/s2i" \
+      io.s2i.scripts-url="image:///usr/libexec/s2i" \
+      name="rhscl/$NAME-$PHP_VER_SHORT-rhel7" \
+      com.redhat.component="rh-$NAME$PHP_VER_SHORT-docker" \
+      version="$PHP_VERSION" \
+      release="5.0" \
+      maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
+      help="For more information visit https://github.com/sclorg/s2i-$NAME-container" \
+      usage="s2i build <SOURCE-REPOSITORY> rhscl/$NAME-$PHP_VER_SHORT-rhel7:latest <APP-NAME>"
 
 # Install Apache httpd and PHP
 RUN yum install -y yum-utils && \
