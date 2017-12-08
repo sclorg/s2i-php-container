@@ -15,7 +15,7 @@ if [ -f composer.json ]; then
   for ((i=0; i<$RETRIES; i++)); do
 
     if [ -n "$COMPOSER_INSTALLER" ]; then
-      $COMPOSER_INSTALLER="https://getcomposer.org/installer"
+      export COMPOSER_INSTALLER="https://getcomposer.org/installer"
     fi
 
     echo "Downloading $COMPOSER_INSTALLER, attempt $((i+1))/$RETRIES"
