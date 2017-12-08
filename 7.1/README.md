@@ -109,10 +109,14 @@ yourself:
   * Default: 256 (this is automatically tuned by setting Cgroup limits for the container using this formula:
     `TOTAL_MEMORY / 15MB`. The 15MB is average size of a single httpd process.
 
+    * **COMPOSER_INSTALLER**
+      * Overrides the default URL for downloading Composer from https://getcomposer.org/installer. Useful in disconnected environments.
+
   You can use a custom composer repository mirror URL to download packages instead of the default 'packagist.org':
 
     * **COMPOSER_MIRROR**
       * Adds a custom composer repository mirror URL to composer configuration. Note: This only affects packages listed in composer.json.
+
 
 Source repository layout
 ------------------------
