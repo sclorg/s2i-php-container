@@ -113,6 +113,9 @@ yourself:
 
     * **COMPOSER_MIRROR**
       * Adds a custom composer repository mirror URL to composer configuration. Note: This only affects packages listed in composer.json.
+    * **COMPOSER_INSTALLER**
+      * Overrides the default URL for downloading Composer of https://getcomposer.org/installer. Useful in disconnected environments.
+
 
 Source repository layout
 ------------------------
