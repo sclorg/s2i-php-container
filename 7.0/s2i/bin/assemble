@@ -14,7 +14,7 @@ if [ -f composer.json ]; then
   RETRIES=6
   for ((i=0; i<$RETRIES; i++)); do
 
-    if [ -n "$COMPOSER_INSTALLER" ]; then
+    if [ -z "$COMPOSER_INSTALLER" ]; then
       export COMPOSER_INSTALLER="https://getcomposer.org/installer"
     fi
 
