@@ -11,7 +11,7 @@ THISDIR=$(dirname ${BASH_SOURCE[0]})
 source ${THISDIR}/test-lib.sh
 source ${THISDIR}/test-lib-openshift.sh
 
-set -exo nounset
+set -eo nounset
 
 test -n "${IMAGE_NAME-}" || false 'make sure $IMAGE_NAME is defined'
 test -n "${VERSION-}" || false 'make sure $VERSION is defined'
