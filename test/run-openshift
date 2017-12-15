@@ -11,12 +11,25 @@ THISDIR=$(dirname ${BASH_SOURCE[0]})
 source ${THISDIR}/test-lib.sh
 source ${THISDIR}/test-lib-openshift.sh
 
+# TODO: branch should be changed to master, once code in example app
+# stabilizes on with referencing latest version
+BRANCH_TO_TEST=ver-7.1
+
 set -eo nounset
 
 test -n "${IMAGE_NAME-}" || false 'make sure $IMAGE_NAME is defined'
 test -n "${VERSION-}" || false 'make sure $VERSION is defined'
 
 ct_os_cluster_up
-# TODO: Can we make the build against examples inside the same PR?
+
+# test local app
 ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/sclorg/s2i-php-container.git" ${VERSION}/test/test-app "Test PHP passed"
-ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/openshift/cakephp-ex.git" . 'Welcome to your CakePHP application on OpenShift'
+
+ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/hhorak/cakephp-ex.git#${BRANCH_TO_TEST}" . 'Welcome to your CakePHP application on OpenShift'
+
+ct_os_test_template_app ${IMAGE_NAME} \
+                        https://raw.githubusercontent.com/hhorak/cakephp-ex/${BRANCH_TO_TEST}/openshift/templates/cakephp.json \
+                        php \
+                        'Welcome to your CakePHP application on OpenShift' \
+                        8080 http 200 "-p SOURCE_REPOSITORY_REF=master -p PHP_VERSION=${VERSION}"
+
