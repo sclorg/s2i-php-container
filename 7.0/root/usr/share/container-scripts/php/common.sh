@@ -119,9 +119,9 @@ process_ssl_certs() {
   local dir=${1:-.}
   if [ -d ${dir}/httpd-ssl/private ] && [ -d ${dir}/httpd-ssl/certs ]; then
     echo "---> Looking for SSL certs for httpd..."
-    cp -r ${dir}/httpd-ssl ${HTTPD_APP_ROOT}
-    local ssl_cert="$(ls -A ${HTTPD_APP_ROOT}/httpd-ssl/certs/*.pem | head -n 1)"
-    local ssl_private="$(ls -A ${HTTPD_APP_ROOT}/httpd-ssl/private/*.pem | head -n 1)"
+    cp -r ${dir}/httpd-ssl ${APP_ROOT}
+    local ssl_cert="$(ls -A ${APP_ROOT}/httpd-ssl/certs/*.pem | head -n 1)"
+    local ssl_private="$(ls -A ${APP_ROOT}/httpd-ssl/private/*.pem | head -n 1)"
     if [ -f "${ssl_cert}" ] ; then
       # do sed for SSLCertificateFile and SSLCertificateKeyFile
       echo "---> Setting SSL cert file for httpd..."
