@@ -33,6 +33,7 @@ LABEL summary="$SUMMARY" \
       com.redhat.component="$NAME" \
       version="$VERSION" \
       release="$RELEASE" \
+      usage="s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=/7.1/test/test-app $FGC/$NAME sample-server" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 # Install Apache httpd and PHP
@@ -45,12 +46,11 @@ RUN INSTALL_PKGS="php php-mysqlnd php-bcmath \
     yum clean all -y
 
 ENV PHP_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/php/ \
-    APP_ROOT=/opt/app-root \
-    APP_DATA=/opt/app-root/src \
+    APP_DATA=${APP_ROOT}/src \
     PHP_DEFAULT_INCLUDE_PATH=/usr/share/pear \
     PHP_SYSCONF_PATH=/etc/ \
     PHP_HTTPD_CONF_FILE=php.conf \
-    HTTPD_CONFIGURATION_PATH=/opt/app-root/etc/conf.d \
+    HTTPD_CONFIGURATION_PATH=${APP_ROOT}/etc/conf.d \
     HTTPD_MAIN_CONF_PATH=/etc/httpd/conf \
     HTTPD_MAIN_CONF_D_PATH=/etc/httpd/conf.d \
     HTTPD_VAR_RUN=/var/run/httpd \
