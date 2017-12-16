@@ -25,20 +25,20 @@ for several commercial and non-commercial database management systems, so writin
 a database-enabled webpage with PHP is fairly simple. The most common use of PHP coding \
 is probably as a replacement for CGI scripts."
 
-LABEL summary="$SUMMARY" \
-      description="$DESCRIPTION" \
-      io.k8s.description="$DESCRIPTION" \
-      io.k8s.display-name="Apache 2.4 with PHP $PHP_VERSION" \
+LABEL summary="${SUMMARY}" \
+      description="${DESCRIPTION}" \
+      io.k8s.description="${DESCRIPTION}" \
+      io.k8s.display-name="Apache 2.4 with PHP ${PHP_VERSION}" \
       io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,$NAME,$NAME$PHP_VER_SHORT,rh-$NAME$PHP_VER_SHORT" \
+      io.openshift.tags="builder,${NAME},${NAME}${PHP_VER_SHORT},rh-${NAME}${PHP_VER_SHORT}" \
       io.openshift.s2i.scripts-url="image:///usr/libexec/s2i" \
       io.s2i.scripts-url="image:///usr/libexec/s2i" \
-      name="centos/$NAME-$PHP_VER_SHORT-centos7" \
-      com.redhat.component="rh-$NAME$PHP_VER_SHORT-docker" \
-      version="1" \
-      maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
-      help="For more information visit https://github.com/sclorg/s2i-$NAME-container" \
-      usage="s2i build <SOURCE-REPOSITORY> centos/$NAME-$PHP_VER_SHORT-centos7:latest <APP-NAME>"
+      name="centos/${NAME}-${PHP_VER_SHORT}-centos7" \
+      com.redhat.component="rh-${NAME}${PHP_VER_SHORT}-docker" \
+      version="${PHP_VERSION}" \
+      help="For more information visit https://github.com/sclorg/s2i-${NAME}-container" \
+      usage="s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=${PHP_VERSION}/test/test-app centos/${NAME}-${PHP_VER_SHORT}-centos7 sample-server" \
+      maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 # Install Apache httpd and PHP
 RUN yum install -y centos-release-scl && \
@@ -52,12 +52,11 @@ RUN yum install -y centos-release-scl && \
     yum clean all -y
 
 ENV PHP_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/php/ \
-    APP_ROOT=/opt/app-root \
-    APP_DATA=/opt/app-root/src \
+    APP_DATA=${APP_ROOT}/src \
     PHP_DEFAULT_INCLUDE_PATH=/opt/rh/rh-php71/root/usr/share/pear \
     PHP_SYSCONF_PATH=/etc/opt/rh/rh-php71 \
     PHP_HTTPD_CONF_FILE=rh-php71-php.conf \
-    HTTPD_CONFIGURATION_PATH=/opt/app-root/etc/conf.d \
+    HTTPD_CONFIGURATION_PATH=${APP_ROOT}/etc/conf.d \
     HTTPD_MAIN_CONF_PATH=/etc/httpd/conf \
     HTTPD_MAIN_CONF_D_PATH=/etc/httpd/conf.d \
     HTTPD_VAR_RUN=/var/run/httpd \
