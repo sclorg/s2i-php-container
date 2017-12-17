@@ -27,9 +27,11 @@ ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/sclorg/s2i-php-container.gi
 
 ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/hhorak/cakephp-ex.git#${BRANCH_TO_TEST}" . 'Welcome to your CakePHP application on OpenShift'
 
-ct_os_test_template_app ${IMAGE_NAME} \
+# cakephp template does not work with version 5.6
+if [[ "${VERSION}" > "5.6" ]] ; then
+  ct_os_test_template_app ${IMAGE_NAME} \
                         https://raw.githubusercontent.com/hhorak/cakephp-ex/${BRANCH_TO_TEST}/openshift/templates/cakephp.json \
                         php \
                         'Welcome to your CakePHP application on OpenShift' \
-                        8080 http 200 "-p SOURCE_REPOSITORY_REF=master -p PHP_VERSION=${VERSION}"
-
+                        8080 http 200 "-p SOURCE_REPOSITORY_REF=${BRANCH_TO_TEST} -p SOURCE_REPOSITORY_URL=https://github.com/hhorak/cakephp-ex.git -p PHP_VERSION=${VERSION}"
+fi
