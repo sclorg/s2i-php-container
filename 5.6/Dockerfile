@@ -30,16 +30,16 @@ LABEL summary="$SUMMARY" \
       io.k8s.description="$DESCRIPTION" \
       io.k8s.display-name="Apache 2.4 with PHP $PHP_VERSION" \
       io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,$NAME,$NAME$PHP_VER_SHORT,rh-$NAME$PHP_VER_SHORT" \
+      io.openshift.tags="builder,$NAME,${NAME}${PHP_VER_SHORT},rh-${NAME}${PHP_VER_SHORT}" \
       io.openshift.s2i.scripts-url="image:///usr/libexec/s2i" \
       io.s2i.scripts-url="image:///usr/libexec/s2i" \
-      name="centos/$NAME-$PHP_VER_SHORT-centos7" \
-      com.redhat.component="rh-$NAME$PHP_VER_SHORT-docker" \
-      version="$VERSION" \
+      name="centos/${NAME}-${PHP_VER_SHORT}-centos7" \
+      com.redhat.component="rh-${NAME}${PHP_VER_SHORT}-docker" \
+      version="$PHP_VERSION" \
       release="1" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
-      help="For more information visit https://github.com/sclorg/s2i-$NAME-container" \
-      usage="s2i build <SOURCE-REPOSITORY> centos/$NAME-$PHP_VER_SHORT-centos7:latest <APP-NAME>"
+      help="For more information visit https://github.com/sclorg/s2i-${NAME}-container" \
+      usage="s2i build <SOURCE-REPOSITORY> centos/${NAME}-${PHP_VER_SHORT}-centos7:latest <APP-NAME>"
 
 # Install Apache httpd and PHP
 RUN yum install -y centos-release-scl && \
