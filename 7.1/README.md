@@ -68,6 +68,9 @@ The following environment variables set their equivalent property value in the p
 * **INCLUDE_PATH**
   * Path for PHP source files
   * Default: .:/opt/app-root/src:/opt/rh/rh-php71/root/usr/share/pear
+* **SESSION_HANDLER**
+  * Method for saving sessions
+  * Default: files
 * **SESSION_PATH**
   * Location for session data files
   * Default: /tmp/sessions
