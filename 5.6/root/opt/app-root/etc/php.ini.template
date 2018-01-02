@@ -1386,7 +1386,7 @@ session.use_strict_mode = 0
 session.use_cookies = 1
 
 ; http://php.net/session.cookie-secure
-;session.cookie_secure =
+session.cookie_secure = ${SESSION_COOKIE_SECURE}
 
 ; This option forces PHP to fetch and use a cookie for storing and maintaining
 ; the session id. We encourage this operation as it's very helpful in combating
@@ -1397,7 +1397,7 @@ session.use_only_cookies = 1
 
 ; Name of the session (used as cookie name).
 ; http://php.net/session.name
-session.name = PHPSESSID
+session.name = ${SESSION_NAME}
 
 ; Initialize session on request startup.
 ; http://php.net/session.auto-start
@@ -1413,11 +1413,11 @@ session.cookie_path = /
 
 ; The domain for which the cookie is valid.
 ; http://php.net/session.cookie-domain
-session.cookie_domain =
+session.cookie_domain = ${SESSION_COOKIE_DOMAIN}
 
 ; Whether or not to add the httpOnly flag to the cookie, which makes it inaccessible to browser scripting languages such as JavaScript.
 ; http://php.net/session.cookie-httponly
-session.cookie_httponly =
+session.cookie_httponly = ${SESSION_COOKIE_HTTPONLY}
 
 ; Handler used to serialize data.  php is the standard serializer of PHP.
 ; http://php.net/session.serialize-handler
