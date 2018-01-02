@@ -21,7 +21,7 @@ config_ssl_conf() {
 config_general() {
   config_httpd_conf
   config_ssl_conf
-  sed -i '/php_value session.save_path/d' ${HTTPD_MAIN_CONF_D_PATH}/${PHP_HTTPD_CONF_FILE}
+  sed -i '/php_value session.save_/d' ${HTTPD_MAIN_CONF_D_PATH}/${PHP_HTTPD_CONF_FILE}
   head -n151 ${HTTPD_MAIN_CONF_PATH}/httpd.conf | tail -n1 | grep "AllowOverride All" || exit 1
   echo "IncludeOptional ${APP_ROOT}/etc/conf.d/*.conf" >> ${HTTPD_MAIN_CONF_PATH}/httpd.conf
 }
