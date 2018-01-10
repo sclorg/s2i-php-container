@@ -68,9 +68,24 @@ The following environment variables set their equivalent property value in the p
 * **INCLUDE_PATH**
   * Path for PHP source files
   * Default: .:/opt/app-root/src:/opt/rh/rh-php70/root/usr/share/pear
+* **SESSION_NAME**
+  * Name of the session
+  * Default: PHPSESSID
+* **SESSION_HANDLER**
+  * Method for saving sessions
+  * Default: files
 * **SESSION_PATH**
   * Location for session data files
   * Default: /tmp/sessions
+* **SESSION_COOKIE_DOMAIN**
+  * The domain for which the cookie is valid.
+  * Default: 
+* **SESSION_COOKIE_HTTPONLY**
+  * Whether or not to add the httpOnly flag to the cookie
+  * Default: 0
+* **SESSION_COOKIE_SECURE**
+  * Specifies whether cookies should only be sent over secure connections.
+  * Default: Off
 * **SHORT_OPEN_TAG**
   * Determines whether or not PHP will recognize code between <? and ?> tags
   * Default: OFF
