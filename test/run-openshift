@@ -19,6 +19,8 @@ set -eo nounset
 
 test -n "${IMAGE_NAME-}" || false 'make sure $IMAGE_NAME is defined'
 test -n "${VERSION-}" || false 'make sure $VERSION is defined'
+test -n "${OS-}" || false 'make sure $OS is defined'
+istag="php:$VERSION"
 
 ct_os_cluster_up
 
@@ -35,3 +37,9 @@ if [[ "${VERSION}" > "5.6" ]] ; then
                         'Welcome to your CakePHP application on OpenShift' \
                         8080 http 200 "-p SOURCE_REPOSITORY_REF=${BRANCH_TO_TEST} -p SOURCE_REPOSITORY_URL=https://github.com/hhorak/cakephp-ex.git -p PHP_VERSION=${VERSION}"
 fi
+
+# test image update with s2i
+ct_os_test_image_update "$IMAGE_NAME" "$istag" \
+                        'ct_test_response "http://<IP>:8080" "200" "Test PHP passed"' \
+                        "$istag~https://github.com/sclorg/s2i-php-container.git" \
+                        --context-dir="$VERSION/test/test-app"
