@@ -35,7 +35,7 @@ LABEL summary="${SUMMARY}" \
       io.s2i.scripts-url="image:///usr/libexec/s2i" \
       name="centos/${NAME}-${PHP_VER_SHORT}-centos7" \
       com.redhat.component="rh-${NAME}${PHP_VER_SHORT}-docker" \
-      version="${PHP_VERSION}" \
+      version="1" \
       help="For more information visit https://github.com/sclorg/s2i-${NAME}-container" \
       usage="s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=${PHP_VERSION}/test/test-app centos/${NAME}-${PHP_VER_SHORT}-centos7 sample-server" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
