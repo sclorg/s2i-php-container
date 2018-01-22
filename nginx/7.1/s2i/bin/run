@@ -1,0 +1,37 @@
+#!/bin/bash
+
+export_vars=$(cgroup-limits); export $export_vars
+export DOCUMENTROOT=${DOCUMENTROOT:-/}
+
+# Default php.ini configuration values, all taken
+# from php defaults.
+export ERROR_REPORTING=${ERROR_REPORTING:-E_ALL & ~E_NOTICE}
+export DISPLAY_ERRORS=${DISPLAY_ERRORS:-ON}
+export DISPLAY_STARTUP_ERRORS=${DISPLAY_STARTUP_ERRORS:-OFF}
+export TRACK_ERRORS=${TRACK_ERRORS:-OFF}
+export HTML_ERRORS=${HTML_ERRORS:-ON}
+export INCLUDE_PATH=${INCLUDE_PATH:-.:/opt/app-root/src:${PHP_DEFAULT_INCLUDE_PATH}}
+export SESSION_NAME=${SESSION_NAME:-PHPSESSID}
+export SESSION_HANDLER=${SESSION_HANDLER:-files}
+export SESSION_PATH=${SESSION_PATH:-/tmp/sessions}
+export SESSION_COOKIE_DOMAIN=${SESSION_COOKIE_DOMAIN:-}
+export SESSION_COOKIE_HTTPONLY=${SESSION_COOKIE_HTTPONLY:-}
+export SESSION_COOKIE_SECURE=${SESSION_COOKIE_SECURE:-0}
+export SHORT_OPEN_TAG=${SHORT_OPEN_TAG:-OFF}
+
+# TODO should be dynamically calculated based on container memory limit/16
+export OPCACHE_MEMORY_CONSUMPTION=${OPCACHE_MEMORY_CONSUMPTION:-128}
+
+export OPCACHE_REVALIDATE_FREQ=${OPCACHE_REVALIDATE_FREQ:-2}
+
+export PHPRC=${PHPRC:-${PHP_SYSCONF_PATH}/php.ini}
+export PHP_INI_SCAN_DIR=${PHP_INI_SCAN_DIR:-${PHP_SYSCONF_PATH}/php.d}
+
+envsubst < /opt/app-root/etc/php.ini.template > ${PHP_SYSCONF_PATH}/php.ini
+envsubst < /opt/app-root/etc/php.d/10-opcache.ini.template > ${PHP_SYSCONF_PATH}/php.d/10-opcache.ini
+
+envsubst < /opt/app-root/etc/conf.d/php-fpm/pool.conf.template > /etc/php-fpm.d/www.conf
+envsubst < /opt/app-root/etc/conf.d/php-fpm/fpm.conf.template > /etc/php-fpm.conf
+envsubst < /opt/app-root/etc/conf.d/nginx/servers/default.template > /opt/app-root/etc/conf.d/nginx/servers/default
+
+exec /opt/app-root/services.sh

@@ -1,0 +1,38 @@
+#!/bin/bash
+
+set -e
+
+echo "---> Installing application source..."
+cp -Rf /tmp/src/. ./
+
+if [ -f composer.json ]; then
+  echo "Found 'composer.json', installing dependencies using composer.phar... "
+
+  # Install Composer
+  php -r "readfile('https://getcomposer.org/installer');" | php
+
+  # Install App dependencies using Composer
+  ./composer.phar install --no-interaction --no-ansi --optimize-autoloader
+
+  if [ ! -f composer.lock ]; then
+    echo -e "\nConsider adding a 'composer.lock' file into your source repository.\n"
+  fi
+fi
+
+if [ -f package.json ]; then
+  echo "Found 'package.json', installing dependencies using npm... "
+
+  # Install npm dependancies
+  npm install
+fi
+
+if [ -f Gruntfile.js ]; then
+  echo "Found 'Gruntfile.js', installing dependencies using grunt... "
+
+  # Install grunt dependancies
+  node_modules/grunt/bin/grunt
+fi
+
+
+# Fix source directory permissions
+fix-permissions ./

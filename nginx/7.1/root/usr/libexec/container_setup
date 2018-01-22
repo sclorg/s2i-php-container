@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -e
+
+# In order to drop the root user, we have to make some directories world
+# writeable as OpenShift default security model is to run the container under
+# random UID.
+
+mkdir /tmp/sessions
+chown -R 1000:0 /tmp/sessions
+chmod -R a+rwx ${PHP_SYSCONF_PATH}
+chown -R 1001:0 ${APP_ROOT}
+
+mkdir -p /var/lib/nginx && \
+mkdir -p /var/log/nginx && \
+touch /var/log/nginx/error.log && \
+touch /var/log/nginx/access.log && \
+chown -R 1001:0 /var/log/nginx && \
+chown -R 1001:0 /var/lib/nginx && \
+chmod -R a+rwx /tmp/sessions && \
+chmod -R a+rwx /var/log/nginx && \
+chmod -R a+rwx /var/lib/nginx && \
+chmod -R ug+rwx /var/log/nginx && \
+chmod -R ug+rwx /var/lib/nginx && \
+chmod -R ug+rwx /opt/app-root && \
+chmod +x /opt/app-root/services.sh
+
+mkdir -p ${PHP_CONTAINER_SCRIPTS_PATH}/pre-init

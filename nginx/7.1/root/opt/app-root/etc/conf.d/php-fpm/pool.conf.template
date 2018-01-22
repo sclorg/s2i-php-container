@@ -1,0 +1,35 @@
+[www]
+
+listen = 127.0.0.1:9000
+listen.allowed_clients = 127.0.0.1
+
+pm = dynamic
+
+pm.max_children = 50
+
+pm.start_servers = 5
+
+pm.min_spare_servers = 5
+
+pm.max_spare_servers = 35
+
+ping.path = /ping
+
+ping.response = pong
+
+access.log = /tmp/www.access.log
+
+clear_env = no
+
+
+slowlog = /tmp/www-slow.log
+
+php_admin_value[error_log] = /tmp/www-error.log
+php_admin_flag[log_errors] = on
+php_admin_value[memory_limit] = 256M
+
+; Set data paths to directories owned by process user
+php_value[session.save_handler] = files
+php_value[session.save_path]    = /tmp/sessions
+php_value[soap.wsdl_cache_dir]  = /tmp/fpm/wsdlcache
+php_value[opcache.file_cache]  = /tmp/fpm/opcache
