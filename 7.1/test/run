@@ -129,6 +129,18 @@ test_scl_usage() {
   fi
 }
 
+test_session() {
+  local check_port=$1 ; shift
+  local check_protocol=${1:-http}
+  cat $cid_file
+  info "Testing PHP session"
+  response=$(curl -s -k ${check_protocol}://$(container_ip):${check_port}/session_test.php)
+  if [ "${response}" != "Passed" ]; then
+    echo "ERROR starting PHP session. Test app returned: '${response}'"
+    return 1
+  fi
+}
+
 test_connection() {
   local check_port=$1 ; shift
   local check_protocol=${1:-http}
@@ -161,6 +173,9 @@ test_application() {
   wait_for_cid
 
   test_scl_usage "php --version" "7.1"
+  check_result $?
+
+  test_session ${test_port}
   check_result $?
 
   test_connection ${test_port}
