@@ -1,0 +1,7 @@
+FROM registry.fedoraproject.org/fedora:27
+
+RUN dnf install -y dnf-plugins-core && \
+    dnf copr enable -y ttomecek/conu && \
+    dnf install -y python3-conu python3-pytest https://kojipkgs.fedoraproject.org//packages/source-to-image/1.1.7/1.fc28/x86_64/source-to-image-1.1.7-1.fc28.x86_64.rpm && \
+dnf clean all
+
