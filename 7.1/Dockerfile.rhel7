@@ -35,17 +35,14 @@ LABEL summary="${SUMMARY}" \
       io.s2i.scripts-url="image:///usr/libexec/s2i" \
       name="rhscl/${NAME}-${PHP_VER_SHORT}-rhel7" \
       com.redhat.component="rh-${NAME}${PHP_VER_SHORT}-docker" \
-      version="${PHP_VERSION}" \
+      version="1" \
       help="For more information visit https://github.com/sclorg/s2i-${NAME}-container" \
       usage="s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=${PHP_VERSION}/test/test-app rhscl/${NAME}-${PHP_VER_SHORT}-rhel7 sample-server" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 # Install Apache httpd and PHP
 RUN yum install -y yum-utils && \
-    yum-config-manager --disable \* &> /dev/null && \
-    yum-config-manager --enable rhel-server-rhscl-7-rpms && \
-    yum-config-manager --enable rhel-7-server-rpms && \
-    yum-config-manager --enable rhel-7-server-optional-rpms && \
+    prepare-yum-repositories rhel-server-rhscl-7-rpms && \
     INSTALL_PKGS="rh-php71 rh-php71-php rh-php71-php-mysqlnd rh-php71-php-pgsql rh-php71-php-bcmath \
                   rh-php71-php-gd rh-php71-php-intl rh-php71-php-ldap rh-php71-php-mbstring rh-php71-php-pdo \
                   rh-php71-php-process rh-php71-php-soap rh-php71-php-opcache rh-php71-php-xml \
