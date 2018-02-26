@@ -1,0 +1,98 @@
+{
+  "kind": "ImageStream",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "php",
+    "annotations": {
+      "openshift.io/display-name": "PHP"
+    }
+  },
+  "spec": {
+    "tags": [
+      {
+        "name": "latest",
+        "annotations": {
+          "openshift.io/display-name": "PHP (Latest)",
+          "openshift.io/provider-display-name": "Red Hat, Inc.",
+          "description": "Build and run PHP applications on RHEL 7. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-php-container/blob/master/7.1/README.md.\n\nWARNING: By selecting this tag, your application will automatically update to use the latest version of PHP available on OpenShift, including major versions updates.",
+          "iconClass": "icon-php",
+          "tags": "builder,php",
+          "supports":"php",
+          "sampleRepo": "https://github.com/openshift/cakephp-ex.git"
+        },
+        "from": {
+          "kind": "ImageStreamTag",
+          "name": "7.1"
+        }
+      },
+      {
+        "name": "5.5",
+        "annotations": {
+          "openshift.io/display-name": "PHP 5.5",
+          "openshift.io/provider-display-name": "Red Hat, Inc.",
+          "description": "Build and run PHP 5.5 applications on RHEL 7. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-php-container/blob/master/5.5/README.md.",
+          "iconClass": "icon-php",
+          "tags": "hidden,builder,php",
+          "supports":"php:5.5,php",
+          "version": "5.5",
+          "sampleRepo": "https://github.com/openshift/cakephp-ex.git"
+        },
+        "from": {
+          "kind": "DockerImage",
+          "name": "registry.access.redhat.com/openshift3/php-55-rhel7:latest"
+        }
+      },
+      {
+        "name": "5.6",
+        "annotations": {
+          "openshift.io/display-name": "PHP 5.6",
+          "openshift.io/provider-display-name": "Red Hat, Inc.",
+          "description": "Build and run PHP 5.6 applications on RHEL 7. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-php-container/blob/master/5.6/README.md.",
+          "iconClass": "icon-php",
+          "tags": "builder,php",
+          "supports":"php:5.6,php",
+          "version": "5.6",
+          "sampleRepo": "https://github.com/openshift/cakephp-ex.git"
+        },
+        "from": {
+          "kind": "DockerImage",
+          "name": "registry.access.redhat.com/rhscl/php-56-rhel7:latest"
+        }
+      },
+      {
+        "name": "7.0",
+        "annotations": {
+          "openshift.io/display-name": "PHP 7.0",
+          "openshift.io/provider-display-name": "Red Hat, Inc.",
+          "description": "Build and run PHP 7.0 applications on RHEL 7. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-php-container/blob/master/7.0/README.md.",
+          "iconClass": "icon-php",
+          "tags": "builder,php",
+          "supports":"php:7.0,php",
+          "version": "7.0",
+          "sampleRepo": "https://github.com/openshift/cakephp-ex.git"
+        },
+        "from": {
+          "kind": "DockerImage",
+          "name": "registry.access.redhat.com/rhscl/php-70-rhel7:latest"
+        }
+      },
+      {
+        "name": "7.1",
+        "annotations": {
+          "openshift.io/display-name": "PHP 7.1",
+          "openshift.io/provider-display-name": "Red Hat, Inc.",
+          "description": "Build and run PHP 7.1 applications on RHEL 7. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-php-container/blob/master/7.1/README.md.",
+          "iconClass": "icon-php",
+          "tags": "builder,php",
+          "supports":"php:7.1,php",
+          "version": "7.1",
+          "sampleRepo": "https://github.com/openshift/cakephp-ex.git"
+        },
+        "from": {
+          "kind": "DockerImage",
+          "name": "registry.access.redhat.com/rhscl/php-71-rhel7:latest"
+        }
+      }
+    ]
+  }
+}
