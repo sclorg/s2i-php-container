@@ -17,7 +17,7 @@ ENV PHP_VERSION=7.0 \
     PATH=$PATH:/opt/rh/rh-php70/root/usr/bin
 
 ENV SUMMARY="Platform for building and running PHP $PHP_VERSION applications" \
-    DESCRIPTION="PHP $PHP_VERSION available as docker container is a base platform for \
+    DESCRIPTION="PHP $PHP_VERSION available as container is a base platform for \
 building and running various PHP $PHP_VERSION applications and frameworks. \
 PHP is an HTML-embedded scripting language. PHP attempts to make it easy for developers \
 to write dynamically generated web pages. PHP also offers built-in database integration \
