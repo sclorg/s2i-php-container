@@ -12,7 +12,7 @@ The resulting image can be run using [Docker](http://docker.io).
 Description
 -----------
 
-PHP 7.1 available as docker container is a base platform for
+PHP 7.1 available as container is a base platform for
 building and running various PHP 7.1 applications and frameworks.
 PHP is an HTML-embedded scripting language. PHP attempts to make it easy for developers 
 to write dynamically generated web pages. PHP also offers built-in database integration 
