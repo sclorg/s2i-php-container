@@ -23,6 +23,9 @@
         "from": {
           "kind": "ImageStreamTag",
           "name": "7.1"
+        },
+        "referencePolicy": {
+          "type": "Local"
         }
       },
       {
@@ -40,6 +43,9 @@
         "from": {
           "kind": "DockerImage",
           "name": "docker.io/openshift/php-55-centos7:latest"
+        },
+        "referencePolicy": {
+          "type": "Local"
         }
       },
       {
@@ -49,7 +55,7 @@
           "openshift.io/provider-display-name": "Red Hat, Inc.",
           "description": "Build and run PHP 5.6 applications on CentOS 7. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-php-container/blob/master/5.6/README.md.",
           "iconClass": "icon-php",
-          "tags": "builder,php",
+          "tags": "hidden,builder,php",
           "supports":"php:5.6,php",
           "version": "5.6",
           "sampleRepo": "https://github.com/openshift/cakephp-ex.git"
@@ -57,6 +63,9 @@
         "from": {
           "kind": "DockerImage",
           "name": "docker.io/centos/php-56-centos7:latest"
+        },
+        "referencePolicy": {
+          "type": "Local"
         }
       },
       {
@@ -74,6 +83,9 @@
         "from": {
           "kind": "DockerImage",
           "name": "docker.io/centos/php-70-centos7:latest"
+        },
+        "referencePolicy": {
+          "type": "Local"
         }
       },
       {
@@ -91,6 +103,9 @@
         "from": {
           "kind": "DockerImage",
           "name": "docker.io/centos/php-71-centos7:latest"
+        },
+        "referencePolicy": {
+          "type": "Local"
         }
       }
     ]
