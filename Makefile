@@ -1,7 +1,7 @@
 # Include common Makefile code.
 BASE_IMAGE_NAME = php
-VERSIONS = 5.6 7.0 7.1
-OPENSHIFT_NAMESPACES = 5.5
+VERSIONS = 7.0 7.1
+OPENSHIFT_NAMESPACES = 
 
 # HACK:  Ensure that 'git pull' for old clones doesn't cause confusion.
 # New clones should use '--recursive'.
