@@ -186,8 +186,9 @@ The structure of the application can look like this:
 | Folder name       | Description                |
 |-------------------|----------------------------|
 | `./httpd-cfg`     | Can contain additional Apache configuration files (`*.conf`)|
-| `./httpd-pre-init`| Can contain shell scripts (`*.sh`) that are sourced before `httpd` is started|
 | `./httpd-ssl`     | Can contain own SSL certificate (in `certs/` subdirectory) and key (in `private/` subdirectory)|
+| `./php-pre-start`| Can contain shell scripts (`*.sh`) that are sourced before `httpd` is started|
+| `./php-post-assemble`| Can contain shell scripts (`*.sh`) that are sourced at the end of `assemble` script|
 | `./`              | Application source code |
 
 
