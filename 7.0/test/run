@@ -12,6 +12,8 @@ IMAGE_NAME=${IMAGE_NAME-centos/php-70-centos-candidate}
 test_dir="$(readlink -zf $(dirname "${BASH_SOURCE[0]}"))"
 image_dir=$(readlink -zf ${test_dir}/..)
 
+source "${test_dir}/test-lib.sh"
+
 # TODO: This should be part of the image metadata
 test_port=8080
 test_port_ssl=8443
@@ -186,7 +188,6 @@ test_application() {
 }
 
 test_ssl() {
-  source ${image_dir}/common/test-lib.sh
   local cert_dir=/tmp
   local cert_base=mycert
   ct_gen_self_signed_cert_pem ${cert_dir} ${cert_base}
@@ -228,6 +229,10 @@ test_application
 
 # Test application with random uid
 CONTAINER_ARGS="-u 12345" test_application
+
+echo "Testing npm availibility"
+ct_npm_works
+check_result $?
 
 cleanup
 
