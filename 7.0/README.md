@@ -20,6 +20,11 @@ for several commercial and non-commercial database management systems, so writin
 a database-enabled webpage with PHP is fairly simple. The most common use of PHP coding 
 is probably as a replacement for CGI scripts.
 
+This container image includes an npm utility, so users can use it to install JavaScript
+modules for their web applications. There is no guarantee for any specific npm or nodejs
+version, that is included in the image; those versions can be changed anytime and
+the nodejs itself is included just to make the npm work.
+
 Usage
 ---------------------
 To build a simple [php-test-app](https://github.com/sclorg/s2i-php-container/tree/master/7.0/test/test-app) application
