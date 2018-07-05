@@ -1,0 +1,53 @@
+{
+  "kind": "ImageStream",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "php",
+    "annotations": {
+      "openshift.io/display-name": "PHP"
+    }
+  },
+  "spec": {
+    "tags": [
+      {
+        "name": "latest",
+        "annotations": {
+          "openshift.io/display-name": "PHP (Latest)",
+          "openshift.io/provider-display-name": "Red Hat, Inc.",
+          "description": "Build and run PHP applications on RHEL 7. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-php-container/blob/master/7.1/README.md.\n\nWARNING: By selecting this tag, your application will automatically update to use the latest version of PHP available on OpenShift, including major versions updates.",
+          "iconClass": "icon-php",
+          "tags": "builder,php,ppc64le",
+          "supports":"php",
+          "sampleRepo": "https://github.com/openshift/cakephp-ex.git"
+        },
+        "from": {
+          "kind": "ImageStreamTag",
+          "name": "7.1"
+        },
+        "referencePolicy": {
+          "type": "Local"
+        }
+      },
+      {
+        "name": "7.1",
+        "annotations": {
+          "openshift.io/display-name": "PHP 7.1",
+          "openshift.io/provider-display-name": "Red Hat, Inc.",
+          "description": "Build and run PHP 7.1 applications on RHEL 7. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-php-container/blob/master/7.1/README.md.",
+          "iconClass": "icon-php",
+          "tags": "builder,php,ppc64le",
+          "supports":"php:7.1,php",
+          "version": "7.1",
+          "sampleRepo": "https://github.com/openshift/cakephp-ex.git"
+        },
+        "from": {
+          "kind": "DockerImage",
+          "name": "registry.redhat.io/rhscl/php-71-rhel7:latest"
+        },
+        "referencePolicy": {
+          "type": "Local"
+        }
+      }
+    ]
+  }
+}
