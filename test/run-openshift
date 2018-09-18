@@ -11,9 +11,9 @@ THISDIR=$(dirname ${BASH_SOURCE[0]})
 source ${THISDIR}/test-lib.sh
 source ${THISDIR}/test-lib-openshift.sh
 
-# TODO: branch should be changed to master, once code in example app
-# stabilizes on with referencing latest version
-BRANCH_TO_TEST=ver-7.1
+# change the branch to a different value if a new change in the example
+# app needs to be tested
+BRANCH_TO_TEST=master
 
 set -eo nounset
 
@@ -51,19 +51,23 @@ ct_os_cluster_up
 # test local app
 ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/sclorg/s2i-php-container.git" ${VERSION}/test/test-app "Test PHP passed"
 
-ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/hhorak/cakephp-ex.git#${BRANCH_TO_TEST}" . 'Welcome to your CakePHP application on OpenShift'
+ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/sclorg/cakephp-ex.git#${BRANCH_TO_TEST}" . 'Welcome to your CakePHP application on OpenShift'
 
 # cakephp template does not work with version 5.6
 if [[ "${VERSION}" > "5.6" ]] ; then
   ct_os_test_template_app ${IMAGE_NAME} \
-                        https://raw.githubusercontent.com/hhorak/cakephp-ex/${BRANCH_TO_TEST}/openshift/templates/cakephp.json \
+                        https://raw.githubusercontent.com/sclorg/cakephp-ex/${BRANCH_TO_TEST}/openshift/templates/cakephp.json \
                         php \
                         'Welcome to your CakePHP application on OpenShift' \
-                        8080 http 200 "-p SOURCE_REPOSITORY_REF=${BRANCH_TO_TEST} -p SOURCE_REPOSITORY_URL=https://github.com/hhorak/cakephp-ex.git -p PHP_VERSION=${VERSION}"
+                        8080 http 200 "-p SOURCE_REPOSITORY_REF=${BRANCH_TO_TEST} -p SOURCE_REPOSITORY_URL=https://github.com/sclorg/cakephp-ex.git -p PHP_VERSION=${VERSION} -p NAME=php-testing"
 fi
 
 # test image update with s2i
-ct_os_test_image_update "$IMAGE_NAME" "$istag" \
+case "$OS" in
+  rhel7) old_image=rhscl/php-${VERSION/./}-rhel7 ;;
+  *) old_image=centos/php-${VERSION/./}-centos7 ;;
+esac
+ct_os_test_image_update "$IMAGE_NAME" "${IMAGE_NAME/localhost\//}" "$istag" \
                         'ct_test_response "http://<IP>:8080" "200" "Test PHP passed"' \
                         "$istag~https://github.com/sclorg/s2i-php-container.git" \
                         --context-dir="$VERSION/test/test-app"
