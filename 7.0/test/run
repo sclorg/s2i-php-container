@@ -35,7 +35,7 @@ container_ip() {
 }
 
 run_s2i_build() {
-  s2i build ${s2i_args} file://${test_dir}/test-app ${IMAGE_NAME} ${IMAGE_NAME}-testapp
+  ct_s2i_build_as_df file://${test_dir}/test-app ${IMAGE_NAME} ${IMAGE_NAME}-testapp ${s2i_args}
 }
 
 prepare() {
@@ -101,7 +101,7 @@ wait_for_cid() {
 
 test_s2i_usage() {
   info "Testing 's2i usage'"
-  s2i usage ${s2i_args} ${IMAGE_NAME} &>/dev/null
+  ct_s2i_usage ${IMAGE_NAME} ${s2i_args} &>/dev/null
 }
 
 test_docker_run_usage() {
@@ -197,7 +197,7 @@ test_ssl() {
 }
 
 test_ssl_own_cert() {
-  s2i build ${s2i_args} file://${test_dir}/self-signed-ssl ${IMAGE_NAME} ${IMAGE_NAME}-test-self-signed-ssl
+  ct_s2i_build_as_df file://${test_dir}/self-signed-ssl ${IMAGE_NAME} ${IMAGE_NAME}-test-self-signed-ssl ${s2i_args}
   docker run -d --user=100001 ${run_args} --cidfile=${cid_file} ${IMAGE_NAME}-test-self-signed-ssl
   test_connection ${test_port_ssl} https
   check_result $?
@@ -228,7 +228,7 @@ check_result $?
 test_application
 
 # Test application with random uid
-CONTAINER_ARGS="-u 12345" test_application
+CONTAINER_ARGS="--user 12345" test_application
 
 echo "Testing npm availibility"
 ct_npm_works
