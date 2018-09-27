@@ -18,7 +18,7 @@
           "iconClass": "icon-php",
           "tags": "builder,php",
           "supports":"php",
-          "sampleRepo": "https://github.com/openshift/cakephp-ex.git"
+          "sampleRepo": "https://github.com/sclorg/cakephp-ex.git"
         },
         "from": {
           "kind": "ImageStreamTag",
@@ -38,7 +38,7 @@
           "tags": "hidden,builder,php",
           "supports":"php:5.5,php",
           "version": "5.5",
-          "sampleRepo": "https://github.com/openshift/cakephp-ex.git"
+          "sampleRepo": "https://github.com/sclorg/cakephp-ex.git"
         },
         "from": {
           "kind": "DockerImage",
@@ -58,7 +58,7 @@
           "tags": "hidden,builder,php",
           "supports":"php:5.6,php",
           "version": "5.6",
-          "sampleRepo": "https://github.com/openshift/cakephp-ex.git"
+          "sampleRepo": "https://github.com/sclorg/cakephp-ex.git"
         },
         "from": {
           "kind": "DockerImage",
@@ -78,7 +78,7 @@
           "tags": "builder,php",
           "supports":"php:7.0,php",
           "version": "7.0",
-          "sampleRepo": "https://github.com/openshift/cakephp-ex.git"
+          "sampleRepo": "https://github.com/sclorg/cakephp-ex.git"
         },
         "from": {
           "kind": "DockerImage",
@@ -98,7 +98,7 @@
           "tags": "builder,php",
           "supports":"php:7.1,php",
           "version": "7.1",
-          "sampleRepo": "https://github.com/openshift/cakephp-ex.git"
+          "sampleRepo": "https://github.com/sclorg/cakephp-ex.git"
         },
         "from": {
           "kind": "DockerImage",
