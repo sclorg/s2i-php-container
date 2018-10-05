@@ -65,9 +65,11 @@ fi
 # test image update with s2i
 case "$OS" in
   rhel7) old_image=rhscl/php-${VERSION/./}-rhel7 ;;
+# Fedora image isn't in registry yet
+#  fedora) old_image=${IMAGE_NAME/localhost\//}
   *) old_image=centos/php-${VERSION/./}-centos7 ;;
 esac
-ct_os_test_image_update "$IMAGE_NAME" "${IMAGE_NAME/localhost\//}" "$istag" \
+ct_os_test_image_update "$IMAGE_NAME" "${old_image}" "$istag" \
                         'ct_test_response "http://<IP>:8080" "200" "Test PHP passed"' \
                         "$istag~https://github.com/sclorg/s2i-php-container.git" \
                         --context-dir="$VERSION/test/test-app"
