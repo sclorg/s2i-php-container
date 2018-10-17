@@ -73,6 +73,9 @@ The following environment variables set their equivalent property value in the p
 * **INCLUDE_PATH**
   * Path for PHP source files
   * Default: .:/opt/app-root/src:/opt/rh/rh-php71/root/usr/share/pear
+* **PHP_MEMORY_LIMIT**
+  * Memory Limit
+  * Default: 128M
 * **SESSION_NAME**
   * Name of the session
   * Default: PHPSESSID
