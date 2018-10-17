@@ -11,6 +11,7 @@ export DISPLAY_STARTUP_ERRORS=${DISPLAY_STARTUP_ERRORS:-OFF}
 export TRACK_ERRORS=${TRACK_ERRORS:-OFF}
 export HTML_ERRORS=${HTML_ERRORS:-ON}
 export INCLUDE_PATH=${INCLUDE_PATH:-.:/opt/app-root/src:/opt/rh/php55/root/usr/share/pear}
+export PHP_MEMORY_LIMIT=${PHP_MEMORY_LIMIT:-128M}
 export SESSION_PATH=${SESSION_PATH:-/tmp/sessions}
 export SHORT_OPEN_TAG=${SHORT_OPEN_TAG:-ON}
 # TODO should be dynamically calculated based on container memory limit/16
