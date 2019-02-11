@@ -1,23 +1,19 @@
-PHP 7.2 container image
+PHP 7.1 Docker image
 ================
 
-This container image includes PHP 7.2 as a [S2I](https://github.com/openshift/source-to-image) base image for your PHP 7.2 applications.
+This container image includes PHP 7.1 as a [S2I](https://github.com/openshift/source-to-image) base image for your PHP 7.1 applications.
 Users can choose between RHEL and CentOS based builder images.
-The RHEL7 image is available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/php-72-rhel7)
-as registry.access.redhat.com/rhscl/php-72-rhel7 and the RHEL8 image is available in
-the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhel8/php-72)
-as registry.access.redhat.com/rhel8/php-72.
-The CentOS 7 image is available on [Docker Hub](https://hub.docker.com/r/centos/php-72-centos7/)
-as centos/php-72-centos7.
-After CentOS 8 is be released the image will be available on [Docker Hub](https://hub.docker.com/r/centos/php-72-centos8/)
-as centos/php-72-centos8.
+The RHEL image is available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/php-71-rhel7)
+as registry.access.redhat.com/rhscl/php-71-rhel7.
+The CentOS image is then available on [Docker Hub](https://hub.docker.com/r/centos/php-71-centos7/)
+as centos/php-71-centos7.
 The resulting image can be run using [Docker](http://docker.io).
 
 Description
 -----------
 
-PHP 7.2 available as container is a base platform for
-building and running various PHP 7.2 applications and frameworks.
+PHP 7.1 available as container is a base platform for
+building and running various PHP 7.1 applications and frameworks.
 PHP is an HTML-embedded scripting language. PHP attempts to make it easy for developers 
 to write dynamically generated web pages. PHP also offers built-in database integration 
 for several commercial and non-commercial database management systems, so writing 
@@ -31,25 +27,19 @@ the nodejs itself is included just to make the npm work.
 
 Usage
 ---------------------
-To build a simple [php-test-app](https://github.com/sclorg/s2i-php-container/tree/master/7.2/test/test-app) application
+To build a simple [php-test-app](https://github.com/sclorg/s2i-php-container/tree/master/7.1/test/test-app) application
 using standalone [S2I](https://github.com/openshift/source-to-image) and then run the
 resulting image with [Docker](http://docker.io) execute:
 
-*  **For RHEL7 based image**
+*  **For RHEL based image**
     ```
-    $ s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=7.2/test/test-app rhel7/php-72 php-test-app
-    $ docker run -p 8080:8080 php-test-app
-    ```
-
-*  **For RHEL8 based image**
-    ```
-    $ s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=7.2/test/test-app rhel8/php-72 php-test-app
+    $ s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=7.1/test/test-app rhscl/php-71-rhel7 php-test-app
     $ docker run -p 8080:8080 php-test-app
     ```
 
 *  **For CentOS based image**
     ```
-    $ s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=7.2/test/test-app centos/php-72-centos7 php-test-app
+    $ s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=7.1/test/test-app centos/php-71-centos7 php-test-app
     $ docker run -p 8080:8080 php-test-app
     ```
 
@@ -82,7 +72,7 @@ The following environment variables set their equivalent property value in the p
   * Default: ON
 * **INCLUDE_PATH**
   * Path for PHP source files
-  * Default: .:/opt/app-root/src:/usr/share/pear
+  * Default: .:/opt/app-root/src:/opt/rh/rh-php71/root/usr/share/pear
 * **PHP_MEMORY_LIMIT**
   * Memory Limit
   * Default: 128M
@@ -209,8 +199,7 @@ See also
 --------
 Dockerfile and other sources are available on https://github.com/sclorg/s2i-php-container.
 In that repository you also can find another versions of PHP environment Dockerfiles.
-Dockerfile for CentOS is called Dockerfile, Dockerfile for RHEL7 is called Dockerfile.rhel7
-and Dockerfile for RHEL8 is called Dockerfile.rhel8.
+Dockerfile for CentOS is called Dockerfile, Dockerfile for RHEL is called Dockerfile.rhel7.
 
 Security Implications
 ---------------------

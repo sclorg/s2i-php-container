@@ -6,8 +6,7 @@
 # IMAGE_NAME specifies a name of the candidate image used for testing.
 # The image has to be available before this script is executed.
 #
-test -n "${IMAGE_NAME-}" || false 'make sure $IMAGE_NAME is defined'
-test -n "${VERSION-}" || false 'make sure $VERSION is defined'
+IMAGE_NAME=${IMAGE_NAME-centos/php-71-centos-candidate}
 
 # TODO: Make command compatible for Mac users
 test_dir="$(readlink -zf $(dirname "${BASH_SOURCE[0]}"))"
@@ -175,7 +174,7 @@ test_application() {
   # Wait for the container to write it's CID file
   wait_for_cid
 
-  test_scl_usage "php --version" "$VERSION"
+  test_scl_usage "php --version" "7.1"
   check_result $?
 
   test_session ${test_port}

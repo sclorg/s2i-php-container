@@ -1,4 +1,4 @@
-FROM registry.fedoraproject.org/f29/s2i-base:latest
+FROM registry.fedoraproject.org/f27/s2i-base:latest
 
 # This image provides an Apache+PHP environment for running PHP
 # applications.
@@ -6,7 +6,7 @@ FROM registry.fedoraproject.org/f29/s2i-base:latest
 EXPOSE 8080
 EXPOSE 8443
 
-ENV PHP_VERSION=7.2 \
+ENV PHP_VERSION=7.1 \
     PATH=$PATH:/usr/bin
 
 ENV SUMMARY="Platform for building and running PHP $PHP_VERSION applications" \
@@ -26,17 +26,17 @@ ENV NAME=php \
 LABEL summary="$SUMMARY" \
       description="$DESCRIPTION" \
       io.k8s.description="$DESCRIPTION" \
-      io.k8s.display-name="Apache 2.4 with PHP $PHP_VERSION" \
+      io.k8s.display-name="Apache 2.4 with PHP 7.1" \
       io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,php,php72,rh-php72" \
+      io.openshift.tags="builder,php,php71,rh-php71" \
       name="$FGC/$NAME" \
       com.redhat.component="$NAME" \
       version="$VERSION" \
-      usage="s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=/$PHP_VERSION/test/test-app $FGC/$NAME sample-server" \
+      usage="s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=/7.1/test/test-app $FGC/$NAME sample-server" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 # Install Apache httpd and PHP
-RUN INSTALL_PKGS="php php-mysqlnd php-bcmath php-json \
+RUN INSTALL_PKGS="php php-mysqlnd php-bcmath \
                   php-gd php-intl php-ldap php-mbstring php-pdo \
                   php-process php-soap php-opcache php-xml \
                   php-gmp php-pecl-apcu mod_ssl hostname" && \

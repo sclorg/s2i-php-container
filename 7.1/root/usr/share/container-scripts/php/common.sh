@@ -1,9 +1,3 @@
-if head "/etc/redhat-release" | grep -q "^Red Hat Enterprise Linux release 8"; then
-  HTTPCONF_LINENO=154
-else
-  HTTPCONF_LINENO=151
-fi
-
 config_httpd_conf() {
   sed -i "s/^Listen 80/Listen 0.0.0.0:8080/" ${HTTPD_MAIN_CONF_PATH}/httpd.conf
   sed -i "s/^User apache/User default/" ${HTTPD_MAIN_CONF_PATH}/httpd.conf
@@ -13,7 +7,7 @@ config_httpd_conf() {
   sed -i "s%^<Directory \"${HTTPD_VAR_PATH}/html\"%<Directory \"${APP_DATA}\"%" ${HTTPD_MAIN_CONF_PATH}/httpd.conf
   sed -i "s%^ErrorLog \"logs/error_log\"%ErrorLog \"|/usr/bin/cat\"%" ${HTTPD_MAIN_CONF_PATH}/httpd.conf
   sed -i "s%CustomLog \"logs/access_log\"%CustomLog \"|/usr/bin/cat\"%" ${HTTPD_MAIN_CONF_PATH}/httpd.conf
-  sed -i "${HTTPCONF_LINENO}s%AllowOverride None%AllowOverride All%" ${HTTPD_MAIN_CONF_PATH}/httpd.conf
+  sed -i "151s%AllowOverride None%AllowOverride All%" ${HTTPD_MAIN_CONF_PATH}/httpd.conf
 }
 
 config_ssl_conf() {
@@ -24,17 +18,11 @@ config_ssl_conf() {
   sed -i -E "s!^(\s*ErrorLog)\s+\S+!\1 |/usr/bin/cat!" ${HTTPD_MAIN_CONF_D_PATH}/ssl.conf
 }
 
-config_modules_conf() {
-  # overwrite default rhel-8 mpm mode
-  echo "LoadModule mpm_prefork_module modules/mod_mpm_prefork.so" > "${HTTPD_MODULES_CONF_D_PATH}/00-mpm.conf"
-}
-
 config_general() {
   config_httpd_conf
   config_ssl_conf
-  config_modules_conf
   sed -i '/php_value session.save_/d' ${HTTPD_MAIN_CONF_D_PATH}/${PHP_HTTPD_CONF_FILE}
-  head -n${HTTPCONF_LINENO} ${HTTPD_MAIN_CONF_PATH}/httpd.conf | tail -n1 | grep "AllowOverride All" || exit 1
+  head -n151 ${HTTPD_MAIN_CONF_PATH}/httpd.conf | tail -n1 | grep "AllowOverride All" || exit 1
   echo "IncludeOptional ${APP_ROOT}/etc/conf.d/*.conf" >> ${HTTPD_MAIN_CONF_PATH}/httpd.conf
 }
 

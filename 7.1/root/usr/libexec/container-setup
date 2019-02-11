@@ -26,10 +26,6 @@ else
   rm -f /opt/app-root/etc/scl_enable
 fi
 
-if head "/etc/redhat-release" | grep -q "^Red Hat Enterprise Linux release 8"; then
-    /usr/libexec/httpd-ssl-gencerts
-fi
-
 mkdir -p ${HTTPD_CONFIGURATION_PATH}
 chmod -R a+rwx ${HTTPD_MAIN_CONF_PATH}
 chmod -R a+rwx ${HTTPD_MAIN_CONF_D_PATH}
