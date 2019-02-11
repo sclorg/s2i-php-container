@@ -21,6 +21,7 @@ Versions
 PHP versions currently supported are:
 * [php-7.0](7.0)
 * [php-7.1](7.1)
+* [php-7.2](7.2)
 
 RHEL versions currently supported are:
 * RHEL7
@@ -34,11 +35,11 @@ Installation
 To build a PHP image, choose either the CentOS or RHEL based image:
 *  **RHEL based image**
 
-    These images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/php-71-rhel7).
+    These images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/php-72-rhel7).
     To download it run:
 
     ```
-    $ docker pull registry.access.redhat.com/rhscl/php-71-rhel7
+    $ docker pull registry.access.redhat.com/rhscl/php-72-rhel7
     ```
 
     To build a RHEL based PHP image, you need to run the build on a properly
@@ -47,17 +48,17 @@ To build a PHP image, choose either the CentOS or RHEL based image:
     ```
     $ git clone --recursive https://github.com/sclorg/s2i-php-container.git
     $ cd s2i-php-container
-    $ make build TARGET=rhel7 VERSIONS=7.1
+    $ make build TARGET=rhel7 VERSIONS=7.2
     ```
 
 *  **CentOS based image**
     ```
     $ git clone --recursive https://github.com/sclorg/s2i-php-container.git
     $ cd s2i-php-container
-    $ make build TARGET=centos7 VERSIONS=7.1
+    $ make build TARGET=centos7 VERSIONS=7.2
     ```
 
-Alternatively, you can pull the CentOS image from Docker Hub via:
+Alternatively, you can pull the CentOS 7.1 (7.2 not currently available) image from Docker Hub via:
 
     $ docker pull centos/php-71-centos7
 
@@ -67,6 +68,9 @@ on all the supported versions of PHP.**
 
 Usage
 ---------------------------------
+
+For information about usage of Dockerfile for PHP 7.2,
+see [usage documentation](7.2/README.md).
 
 For information about usage of Dockerfile for PHP 7.1,
 see [usage documentation](7.1/README.md).
@@ -90,14 +94,14 @@ Users can choose between testing a PHP test application based on a RHEL or CentO
 
     ```
     $ cd s2i-php-container
-    $ make test TARGET=rhel7 VERSIONS=7.1
+    $ make test TARGET=rhel7 VERSIONS=7.2
     ```
 
 *  **CentOS based image**
 
     ```
     $ cd s2i-php-container
-    $ make test TARGET=centos7 VERSIONS=7.1
+    $ make test TARGET=centos7 VERSIONS=7.2
     ```
 
 **Notice: By omitting the `VERSIONS` parameter, the build/test action will be performed
