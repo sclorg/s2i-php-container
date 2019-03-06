@@ -37,7 +37,7 @@ resulting image with [Docker](http://docker.io) execute:
 
 *  **For RHEL7 based image**
     ```
-    $ s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=7.2/test/test-app rhel7/php-72 php-test-app
+    $ s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=7.2/test/test-app rhscl/php-72-rhel7 php-test-app
     $ docker run -p 8080:8080 php-test-app
     ```
 
@@ -82,7 +82,8 @@ The following environment variables set their equivalent property value in the p
   * Default: ON
 * **INCLUDE_PATH**
   * Path for PHP source files
-  * Default: .:/opt/app-root/src:/usr/share/pear
+  * Default: .:/opt/app-root/src:/opt/rh/rh-php72/root/usr/share/pear (EL7)
+  * Default: .:/opt/app-root/src:/usr/share/pear (EL8, Fedora)
 * **PHP_MEMORY_LIMIT**
   * Memory Limit
   * Default: 128M
