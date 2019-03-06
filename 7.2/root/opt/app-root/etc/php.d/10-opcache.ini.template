@@ -14,7 +14,7 @@ opcache.memory_consumption=${OPCACHE_MEMORY_CONSUMPTION}
 opcache.interned_strings_buffer=8
 
 ; The maximum number of keys (scripts) in the OPcache hash table.
-; Only numbers between 200 and 100000 are allowed.
+; Only numbers between 200 and 1000000 are allowed.
 opcache.max_accelerated_files=4000
 
 ; The maximum percentage of "wasted" memory until a restart is scheduled.
@@ -43,6 +43,7 @@ opcache.revalidate_freq=${OPCACHE_REVALIDATE_FREQ}
 ;opcache.save_comments=1
 
 ; If enabled, a fast shutdown sequence is used for the accelerated code
+; Depending on the used Memory Manager this may cause some incompatibilities.
 ;opcache.fast_shutdown=0
 
 ; Allow file existence override (file_exists, etc.) performance feature.
