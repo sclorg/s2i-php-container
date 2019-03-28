@@ -3,11 +3,12 @@ PHP 7.1 Docker image
 
 This container image includes PHP 7.1 as a [S2I](https://github.com/openshift/source-to-image) base image for your PHP 7.1 applications.
 Users can choose between RHEL and CentOS based builder images.
-The RHEL image is available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/php-71-rhel7)
-as registry.access.redhat.com/rhscl/php-71-rhel7.
-The CentOS image is then available on [Docker Hub](https://hub.docker.com/r/centos/php-71-centos7/)
-as centos/php-71-centos7.
-The resulting image can be run using [Docker](http://docker.io).
+The RHEL images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/),
+the CentOS images are available on [Docker Hub](https://hub.docker.com/r/centos/),
+and the Fedora images are available in [Fedora Registry](https://registry.fedoraproject.org/).
+The resulting image can be run using [podman](https://github.com/containers/libpod).
+
+Note: while the examples in this README are calling `podman`, you can replace any such calls by `docker` with the same arguments
 
 Description
 -----------
@@ -27,20 +28,18 @@ the nodejs itself is included just to make the npm work.
 
 Usage
 ---------------------
-To build a simple [php-test-app](https://github.com/sclorg/s2i-php-container/tree/master/7.1/test/test-app) application
-using standalone [S2I](https://github.com/openshift/source-to-image) and then run the
-resulting image with [Docker](http://docker.io) execute:
+For this, we will assume that you are using the `rhscl/php-71-rhel7 image`, available via `php:7.1` imagestream tag in Openshift.
+Building a simple [php-test-app](https://github.com/sclorg/s2i-php-container/tree/master/7.1/test/test-app) application
+in Openshift can be achieved with the following step:
 
-*  **For RHEL based image**
     ```
-    $ s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=7.1/test/test-app rhscl/php-71-rhel7 php-test-app
-    $ docker run -p 8080:8080 php-test-app
+    oc new-app php:7.1~https://github.com/sclorg/s2i-php-container.git --context-dir=7.1/test/test-app/
     ```
 
-*  **For CentOS based image**
+The same application can also be built using the standalone [S2I](https://github.com/openshift/source-to-image) application on systems that have it available:
+
     ```
-    $ s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=7.1/test/test-app centos/php-71-centos7 php-test-app
-    $ docker run -p 8080:8080 php-test-app
+    $ s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=7.1/test/test-app/ rhscl/php-71-rhel7 php-sample-app
     ```
 
 **Accessing the application:**
@@ -117,7 +116,7 @@ You can also override the entire directory used to load the PHP configuration by
 
 You can override the Apache [MPM prefork](https://httpd.apache.org/docs/2.4/mod/mpm_common.html)
 settings to increase the performance for of the PHP application. In case you set
-the Cgroup limits in Docker, the image will attempt to automatically set the
+some Cgroup limits, the image will attempt to automatically set the
 optimal values. You can override this at any time by specifying the values
 yourself:
 
@@ -164,18 +163,18 @@ However, if these files exist they will affect the behavior of the build process
 Hot deploy
 ---------------------
 
-In order to immediately pick up changes made in your application source code, you need to run your built image with the `OPCACHE_REVALIDATE_FREQ=0` environment variable passed to the [Docker](http://docker.io) `-e` run flag:
+In order to immediately pick up changes made in your application source code, you need to run your built image with the `OPCACHE_REVALIDATE_FREQ=0` environment variable passed to [Podman](https://github.com/containers/libpod) `-e` run flag:
 
 ```
-$ docker run -e OPCACHE_REVALIDATE_FREQ=0 -p 8080:8080 php-app
+$ podman run -e OPCACHE_REVALIDATE_FREQ=0 -p 8080:8080 php-app
 ```
 
-To change your source code in running container, use Docker's [exec](http://docker.io) command:
+To change your source code in running container, use Podman's [exec](https://github.com/containers/libpod)) command:
 ```
-docker exec -it <CONTAINER_ID> /bin/bash
+podman exec -it <CONTAINER_ID> /bin/bash
 ```
 
-After you [Docker exec](http://docker.io) into the running container, your current directory is set
+After you [Podman exec](https://github.com/containers/libpod) into the running container, your current directory is set
 to `/opt/app-root/src`, where the source code is located.
 
 
@@ -198,8 +197,9 @@ The structure of the application can look like this:
 See also
 --------
 Dockerfile and other sources are available on https://github.com/sclorg/s2i-php-container.
-In that repository you also can find another versions of PHP environment Dockerfiles.
-Dockerfile for CentOS is called Dockerfile, Dockerfile for RHEL is called Dockerfile.rhel7.
+In that repository you also can find another versions of Python environment Dockerfiles.
+Dockerfile for CentOS is called `Dockerfile`, Dockerfile for RHEL7 is called `Dockerfile.rhel7`,
+for RHEL8 it's `Dockerfile.rhel8` and the Fedora Dockerfile is called Dockerfile.fedora.
 
 Security Implications
 ---------------------
