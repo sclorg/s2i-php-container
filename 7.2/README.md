@@ -50,7 +50,7 @@ $ curl 127.0.0.1:8080
 Environment variables
 ---------------------
 
-To set these environment variables, you can place them as a key value pair into a `.sti/environment`
+To set these environment variables, you can place them as a key value pair into a `.s2i/environment`
 file inside your source code repository.
 
 The following environment variables set their equivalent property value in the php.ini file:
