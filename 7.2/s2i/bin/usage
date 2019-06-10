@@ -13,5 +13,5 @@ Sample invocation:
 s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=/7.2/test/test-app/ ${NAMESPACE}/php-72-${DISTRO}7 php-test-app
 
 You can then run the resulting image via:
-docker run -p 8080:8080 php-test-app
+podman run -p 8080:8080 php-test-app
 EOF
