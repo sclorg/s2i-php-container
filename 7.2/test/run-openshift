@@ -1,1 +1,1 @@
-run-openshift-local-cluster
+../../test/run-openshift
