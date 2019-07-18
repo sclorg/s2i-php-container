@@ -48,7 +48,7 @@ RUN yum install -y centos-release-scl && \
                   rh-php56-php-pecl-xdebug rh-php56-php-gmp httpd24-mod_ssl" && \
     yum install -y --setopt=tsflags=nodocs --enablerepo=centosplus $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
-    yum clean all -y
+    yum -y clean all --enablerepo='*'
 
 ENV PHP_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/php/ \
     APP_DATA=${APP_ROOT}/src \
