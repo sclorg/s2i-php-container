@@ -1,15 +1,14 @@
 FROM centos/s2i-base-centos7
 
-# This image provides an Apache+PHP environment for running PHP
+# This image provides an PHP-FPM environment for running PHP
 # applications.
 
-EXPOSE 8080
-EXPOSE 8443
+EXPOSE 9000
 
 # Description
-# This image provides an Apache 2.4 + PHP 7.2 environment for running PHP applications.
+# This image provides an PHP 7.2 environment for running PHP applications.
 # Exposed ports:
-# * 8080 - alternative port for http
+# * 9000 - FastCGI Port
 
 ENV PHP_VERSION=7.2 \
     PHP_VER_SHORT=72 \
@@ -28,8 +27,8 @@ is probably as a replacement for CGI scripts."
 LABEL summary="${SUMMARY}" \
       description="${DESCRIPTION}" \
       io.k8s.description="${DESCRIPTION}" \
-      io.k8s.display-name="Apache 2.4 with PHP ${PHP_VERSION}" \
-      io.openshift.expose-services="8080:http" \
+      io.k8s.display-name="PHP-FPM ${PHP_VERSION}" \
+      io.openshift.expose-services="9000:fastcgi" \
       io.openshift.tags="builder,${NAME},${NAME}${PHP_VER_SHORT},rh-${NAME}${PHP_VER_SHORT}" \
       io.openshift.s2i.scripts-url="image:///usr/libexec/s2i" \
       io.s2i.scripts-url="image:///usr/libexec/s2i" \
@@ -45,7 +44,7 @@ RUN yum install -y centos-release-scl && \
     INSTALL_PKGS="rh-php72 rh-php72-php rh-php72-php-mysqlnd rh-php72-php-pgsql rh-php72-php-bcmath \
                   rh-php72-php-gd rh-php72-php-intl rh-php72-php-ldap rh-php72-php-mbstring rh-php72-php-pdo \
                   rh-php72-php-process rh-php72-php-soap rh-php72-php-opcache rh-php72-php-xml \
-                  rh-php72-php-gmp rh-php72-php-pecl-apcu httpd24-mod_ssl" && \
+                  rh-php72-php-gmp rh-php72-php-pecl-apcu rh-php72-php-fpm" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS --nogpgcheck && \
     rpm -V $INSTALL_PKGS && \
     yum -y clean all --enablerepo='*'
