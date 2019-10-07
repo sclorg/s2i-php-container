@@ -51,8 +51,15 @@ ServerName "${SERVERNAME}"
 
 ```
 
+Se puede poner en archivos separados con la extension ".conf" o bien en el mismo archivo "00-documentroot.conf" uno en cada línea, quedándonos "00-documentroot.conf" de la siguiente forma:
 
 
+
+```
+DocumentRoot "/opt/app-root/src${DOCUMENTROOT}"
+ServerName "${SERVERNAME}"
+
+```
 
 
 
