@@ -62,7 +62,21 @@ ENV PHP_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/php/ \
     HTTPD_DATA_PATH=/var/www \
     HTTPD_DATA_ORIG_PATH=/opt/rh/httpd24/root/var/www \
     HTTPD_VAR_PATH=/opt/rh/httpd24/root/var \
-    SCL_ENABLED=rh-php72
+    SCL_ENABLED=rh-php72 \
+
+##### Adds
+    SERVERNAME=${SERVERNAME:-www.ejemplo.com}
+
+
+## instalamos wp-cli
+RUN set -x && cd /tmp && \
+  curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
+  php wp-cli.phar --info && \
+  chmod +x wp-cli.phar && \
+  mv wp-cli.phar /usr/local/bin/wp && \
+  wp --info 
+
+#####
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
 COPY ./s2i/bin/ $STI_SCRIPTS_PATH
