@@ -44,6 +44,19 @@ SERVERNAME=${SERVERNAME:-www.ejemplo.com}
 
 Recordar que al generar el contenedor debemos darle el valor apropiado a la variable "SERVERNAME".
 
+Para que se refleje en el archivo de configuración añadimos el archivo "/home/emilio/cloud/aws/wordpress_openshift/crear_imagenes/php_base/s2i-php-container/7.2/root/usr/share/container-scripts/php/httpd-cnf/00-servername.conf" con el siguiente contenido:
+
+```
+ServerName "${SERVERNAME}"
+
+```
+
+
+
+
+
+
+
 #### El problema AH10034
 
 Nos dice que apache NPM (multiprocessing module) no admite prefork. El error no parace insalvable ya que nos comenta que seguirá trabajando con http1.1.
@@ -78,3 +91,49 @@ $ sudo apachectl reset
 
 ```
 
+## Vamos a compilar la imagen
+
+```
+
+$ cd /home/emilio/cloud/aws/wordpress_openshift/crear_imagenes/php_base/s2i-php-container
+
+
+$  make build TARGET=centos7 VERSIONS=7.2
+
+
+$ docker images
+
+REPOSITORY                                                          TAG                 IMAGE ID            CREATED             SIZE
+<none>                                                              <none>              7cb682102a12        54 seconds ago      648MB
+
+
+
+$ docker tag 7cb682102a12 docker-registry-default.apps.srv.world/openshift/php-72-wp:0
+
+
+
+$ docker images
+REPOSITORY                                                          TAG                 IMAGE ID            CREATED             SIZE
+docker-registry-default.apps.srv.world/openshift/php-72-wp          0                   7cb682102a12        7 minutes ago       648MB
+
+$ oc whoami -t
+vhMuYk91Jot2VnJuPwnqAL4zjSRbzPhMxy-jXnkUI3A
+
+
+
+$ docker login -u dev https://docker-registry-default.apps.srv.world
+Password: 
+WARNING! Your password will be stored unencrypted in /home/emilio/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+
+
+$ docker push docker-registry-default.apps.srv.world/openshift/php-72-wp:0
+
+
+
+$ oc new-app php-72-wp:0~https://github.com/samyunodos/s2i-php-container/#php-72-wp --context-dir=test/test-app --name=mi-prueba --strategy=source
+
+```
