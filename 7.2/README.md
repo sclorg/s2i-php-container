@@ -1,7 +1,7 @@
-PHP 7.3 container image
+PHP 7.2 container image
 ================
 
-This container image includes PHP 7.3 as a [S2I](https://github.com/openshift/source-to-image) base image for your PHP 7.3 applications.
+This container image includes PHP 7.2 as a [S2I](https://github.com/openshift/source-to-image) base image for your PHP 7.2 applications.
 Users can choose between RHEL and CentOS based builder images.
 The RHEL images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/),
 the CentOS images are available on [Docker Hub](https://hub.docker.com/r/centos/),
@@ -13,8 +13,8 @@ Note: while the examples in this README are calling `podman`, you can replace an
 Description
 -----------
 
-PHP 7.3 available as container is a base platform for
-building and running various PHP 7.3 applications and frameworks.
+PHP 7.2 available as container is a base platform for
+building and running various PHP 7.2 applications and frameworks.
 PHP is an HTML-embedded scripting language. PHP attempts to make it easy for developers 
 to write dynamically generated web pages. PHP also offers built-in database integration 
 for several commercial and non-commercial database management systems, so writing 
@@ -28,18 +28,18 @@ the nodejs itself is included just to make the npm work.
 
 Usage
 ---------------------
-For this, we will assume that you are using the `rhscl/php-73-rhel7 image`, available via `php:7.3` imagestream tag in Openshift.
-Building a simple [php-test-app](https://github.com/sclorg/s2i-php-container/tree/master/7.3/test/test-app) application
+For this, we will assume that you are using the `rhscl/php-72-rhel7 image`, available via `php:7.2` imagestream tag in Openshift.
+Building a simple [php-test-app](https://github.com/sclorg/s2i-php-container/tree/master/7.2/test/test-app) application
 in Openshift can be achieved with the following step:
 
     ```
-    oc new-app php:7.3~https://github.com/sclorg/s2i-php-container.git --context-dir=7.3/test/test-app/
+    oc new-app php:7.2~https://github.com/sclorg/s2i-php-container.git --context-dir=7.2/test/test-app/
     ```
 
 The same application can also be built using the standalone [S2I](https://github.com/openshift/source-to-image) application on systems that have it available:
 
     ```
-    $ s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=7.3/test/test-app/ rhscl/php-73-rhel7 php-sample-app
+    $ s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=7.2/test/test-app/ rhscl/php-72-rhel7 php-sample-app
     ```
 
 **Accessing the application:**
@@ -71,7 +71,7 @@ The following environment variables set their equivalent property value in the p
   * Default: ON
 * **INCLUDE_PATH**
   * Path for PHP source files
-  * Default: .:/opt/app-root/src:/opt/rh/rh-php73/root/usr/share/pear (EL7)
+  * Default: .:/opt/app-root/src:/opt/rh/rh-php72/root/usr/share/pear (EL7)
   * Default: .:/opt/app-root/src:/usr/share/pear (EL8, Fedora)
 * **PHP_MEMORY_LIMIT**
   * Memory Limit

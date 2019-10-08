@@ -20,6 +20,7 @@ Versions
 ---------------
 PHP versions currently supported are:
 * [php-7.2](7.2)
+* [php-7.3](7.3)
 
 RHEL versions currently supported are:
 * RHEL7
@@ -37,7 +38,7 @@ To build a PHP image, choose either the CentOS or RHEL based image:
     To download it run:
 
     ```
-    $ podman pull registry.access.redhat.com/rhscl/php-72-rhel7
+    $ podman pull registry.access.redhat.com/rhscl/php-73-rhel7
     ```
 
     To build a RHEL based PHP image, you need to run the build on a properly
@@ -46,19 +47,19 @@ To build a PHP image, choose either the CentOS or RHEL based image:
     ```
     $ git clone --recursive https://github.com/sclorg/s2i-php-container.git
     $ cd s2i-php-container
-    $ make build TARGET=rhel7 VERSIONS=7.2
+    $ make build TARGET=rhel7 VERSIONS=7.3
     ```
 
 *  **CentOS based image**
     ```
     $ git clone --recursive https://github.com/sclorg/s2i-php-container.git
     $ cd s2i-php-container
-    $ make build TARGET=centos7 VERSIONS=7.2
+    $ make build TARGET=centos7 VERSIONS=7.3
     ```
 
 Alternatively, you can pull the CentOS image from Docker Hub via:
 
-    $ podman pull centos/php-72-centos7
+    $ podman pull centos/php-73-centos7
 
 Note: while the installation steps are calling `podman`, you can replace any such calls by `docker` with the same arguments.
 
@@ -68,6 +69,8 @@ on all the supported versions of PHP.**
 
 Usage
 ---------------------------------
+For information about usage of Dockerfile for PHP 7.3,
+see [usage documentation](7.3/README.md).
 
 For information about usage of Dockerfile for PHP 7.2,
 see [usage documentation](7.2/README.md).
@@ -88,14 +91,14 @@ Users can choose between testing a PHP test application based on a RHEL or CentO
 
     ```
     $ cd s2i-php-container
-    $ make test TARGET=rhel7 VERSIONS=7.2
+    $ make test TARGET=rhel7 VERSIONS=7.3
     ```
 
 *  **CentOS based image**
 
     ```
     $ cd s2i-php-container
-    $ make test TARGET=centos7 VERSIONS=7.2
+    $ make test TARGET=centos7 VERSIONS=7.3
     ```
 
 **Notice: By omitting the `VERSIONS` parameter, the build/test action will be performed

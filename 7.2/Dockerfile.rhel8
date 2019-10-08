@@ -7,12 +7,12 @@ EXPOSE 8080
 EXPOSE 8443
 
 # Description
-# This image provides an Apache 2.4 + PHP 7.3 environment for running PHP applications.
+# This image provides an Apache 2.4 + PHP 7.2 environment for running PHP applications.
 # Exposed ports:
 # * 8080 - alternative port for http
 
-ENV PHP_VERSION=7.3 \
-    PHP_VER_SHORT=73 \
+ENV PHP_VERSION=7.2 \
+    PHP_VER_SHORT=72 \
     NAME=php
 
 ENV SUMMARY="Platform for building and running PHP $PHP_VERSION applications" \
