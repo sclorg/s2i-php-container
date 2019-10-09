@@ -205,6 +205,46 @@ $ docker exec -u 0 -it k00 bash
 $ docker exec -u 0  --privileged -it k00 bash
 
 
+
+bash-4.2# systemctl enable rh-php72-php-fpm.service
+Created symlink /etc/systemd/system/multi-user.target.wants/rh-php72-php-fpm.service, pointing to /usr/lib/systemd/system/rh-php72-php-fpm.service.
+bash-4.2# systemctl start rh-php72-php-fpm.service
+
+
+rror. Self-hosted.
+
+After much weeping and gnashing of teeth I found the culprit. I had not modified /etc/httpd/conf.d/php.conf.
+
+Here are the full steps:
+
+Code:
+
+yum install centos-release-scl
+yum install rh-php72 rh-php72-php rh-php72-php-fpm rh-php72-php-mysqlnd
+
+Edit /etc/httpd/conf.d/php.conf:
+
+Code:
+
+# SetHandler application/x-httpd-php
+# This is the default with php 5.4
+#<FilesMatch \.php$>
+#    SetHandler application/x-httpd-php
+#</FilesMatch>
+
+# This is the default for php7
+<FilesMatch \.php$>
+  SetHandler "proxy:fcgi://127.0.0.1:9000"
+</FilesMatch>
+
+Code:
+
+systemctl enable rh-php72-php-fpm.service
+systemctl start rh-php72-php-fpm.service
+scl enable rh-php72 bash
+systemctl restart httpd
+
+
 ```
 
 
