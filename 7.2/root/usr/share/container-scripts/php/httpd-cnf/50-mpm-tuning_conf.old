@@ -1,4 +1,4 @@
-<IfModule mpm_event_module>
+<IfModule mpm_prefork_module>
     # This value should mirror what is set in MinSpareServers.
     StartServers          ${HTTPD_START_SERVERS}
     MinSpareServers       ${HTTPD_START_SERVERS}
