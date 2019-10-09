@@ -68,7 +68,7 @@ ServerName "${SERVERNAME}"
 
 Nos dice que apache NPM (multiprocessing module) no admite prefork. El error no parace insalvable ya que nos comenta que seguirá trabajando con http1.1.
 
-Para solucionar este problema vamos a desactivar http2  aunque sería más interesante cambiar a otro worker que si diera apoyo. 
+Para solucionar este problema vamos a desactivar http2  aunque sería más interesante cambiar a otro mpm que si diera apoyo. 
 
 
 Para activar:
@@ -98,6 +98,22 @@ $ sudo apachectl reset
 
 ```
 
+Para ello vamos a intentar cambiar al mpm "event". Para ello vamos ha hacer los cambios en los archivos siguientes:
+
+- En "s2i-php-container/7.2/root/usr/share/container-scripts/php/common.sh". 
+	Comentamos la línea:
+	
+	# echo "LoadModule mpm_prefork_module modules/mod_mpm_prefork.so" > "${HTTPD_MODULES_CONF_D_PATH}/00-mpm.conf"
+	
+	Y añadimos:
+	
+	echo "LoadModule mpm_event_module modules/mod_mpm_event.so" > "${HTTPD_MODULES_CONF_D_PATH}/00-mpm.conf".
+    
+- En "s2i-php-container/7.2/root/usr/share/container-scripts/php/httpd-cnf/50-mpm-tunning.cof", que es dónde nos configura el mpm por defecto prefork, le cambiamos la extesión del archivo y no nos cargará dicha configuración:
+
+  s2i-php-container/7.2/root/usr/share/container-scripts/php/httpd-cnf/50-mpm-tunning_conf.old
+    
+
 ## Vamos a compilar la imagen
 
 ```
@@ -110,7 +126,7 @@ $  make build TARGET=centos7 VERSIONS=7.2
 
 $ docker images
 
-REPOSITORY                                                          TAG                 IMAGE ID            CREATED             SIZE
+REPOSITORY                                                         TAG                 IMAGE ID            CREATED             SIZE
 <none>                                                              <none>              7cb682102a12        54 seconds ago      648MB
 
 
@@ -143,4 +159,45 @@ $ docker push docker-registry-default.apps.srv.world/openshift/php-72-wp:0
 
 $ oc new-app php-72-wp:0~https://github.com/samyunodos/s2i-php-container/#php-72-wp --context-dir=test/test-app --name=mi-prueba --strategy=source
 
+
 ```
+
+O para trabajar en  local:
+
+```
+$ s2i build git@github.com:samyunodos/s2i-php-container.git --ref=php-72-wp --context-dir=test/test-app docker-registry-default.apps.srv.world/openshift/php-72-wp:0  mi-prueba --loglevel=5
+
+
+$ docker run -d  --name k00 mi-prueba
+
+$ docker exec -it k00 bash o
+
+## Como root
+
+$ docker exec -u 0 -it k00 bash
+
+$ docker exec -u 0  --privileged -it k00 bash
+
+
+```
+
+
+bash-4.2$ cat /etc/httpd/conf.modules.d/00-mpm.conf 
+# Select the MPM module which should be used by uncommenting exactly
+# one of the following LoadModule lines:
+
+# prefork MPM: Implements a non-threaded, pre-forking web server
+# See: http://httpd.apache.org/docs/2.4/mod/prefork.html
+LoadModule mpm_prefork_module modules/mod_mpm_prefork.so
+
+# worker MPM: Multi-Processing Module implementing a hybrid
+# multi-threaded multi-process web server
+# See: http://httpd.apache.org/docs/2.4/mod/worker.html
+#
+#LoadModule mpm_worker_module modules/mod_mpm_worker.so
+
+# event MPM: A variant of the worker MPM with the goal of consuming
+# threads only for connections with active processing
+# See: http://httpd.apache.org/docs/2.4/mod/event.html
+#
+#LoadModule mpm_event_module modules/mod_mpm_event.so
