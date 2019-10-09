@@ -141,6 +141,7 @@ También podemos consultar las características en http://:172.0.0.2:8080
 
 ## Vamos a compilar la imagen
 
+
 ```
 
 $ cd /home/emilio/cloud/aws/wordpress_openshift/crear_imagenes/php_base/s2i-php-container
