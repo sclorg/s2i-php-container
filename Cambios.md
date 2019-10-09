@@ -109,10 +109,35 @@ Para ello vamos a intentar cambiar al mpm "event". Para ello vamos ha hacer los 
 	
 	echo "LoadModule mpm_event_module modules/mod_mpm_event.so" > "${HTTPD_MODULES_CONF_D_PATH}/00-mpm.conf".
     
+    Pero como la variable "${HTTPD_MODULES_CONF_D_PATH}" no la lee bien, especificamos el path:
+    
+    echo "LoadModule mpm_event_module modules/mod_mpm_event.so" > "/etc/httpd/conf.modules.d/00-mpm.conf"
+    
+    
+    
 - En "s2i-php-container/7.2/root/usr/share/container-scripts/php/httpd-cnf/50-mpm-tunning.cof", que es dónde nos configura el mpm por defecto prefork, le cambiamos la extesión del archivo y no nos cargará dicha configuración:
 
   s2i-php-container/7.2/root/usr/share/container-scripts/php/httpd-cnf/50-mpm-tunning_conf.old
     
+Con posterioridad configuraremos event adecuadamente. Para comprobar en la imagen compilada como vemos en el apartado siguiente:
+
+```
+bash-4.2$ apachectl -V
+Server version: Apache/2.4.34 (Red Hat)
+Server built:   Apr 17 2019 11:29:35
+Server's Module Magic Number: 20120211:79
+Server loaded:  APR 1.4.8, APR-UTIL 1.5.2
+Compiled using: APR 1.4.8, APR-UTIL 1.5.2
+Architecture:   64-bit
+Server MPM:     event
+  threaded:     yes (fixed thread count)
+    forked:     yes (variable process count)
+Server compiled with....
+
+```
+
+
+También podemos consultar las características en http://:172.0.0.2:8080
 
 ## Vamos a compilar la imagen
 
@@ -168,7 +193,7 @@ O para trabajar en  local:
 $ s2i build git@github.com:samyunodos/s2i-php-container.git --ref=php-72-wp --context-dir=test/test-app docker-registry-default.apps.srv.world/openshift/php-72-wp:0  mi-prueba --loglevel=5
 
 
-$ docker run -d  --name k00 mi-prueba
+$ docker run -d  --name k00 -p 8080:8080 mi-prueba
 
 $ docker exec -it k00 bash o
 
