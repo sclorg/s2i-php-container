@@ -67,7 +67,7 @@ ENV PHP_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/php/ \
 ##### Adds
     SERVERNAME=${SERVERNAME:-www.ejemplo.com}
 
-scl enable rh-php72-php-fpm.service -- systemctl start  rh-php72-php-fpm.service
+RUN scl enable rh-php72-php-fpm.service -- systemctl start  rh-php72-php-fpm.service
 
 ## instalamos wp-cli
 RUN set -x && cd /tmp && \
