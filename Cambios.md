@@ -211,6 +211,13 @@ Created symlink /etc/systemd/system/multi-user.target.wants/rh-php72-php-fpm.ser
 bash-4.2# systemctl start rh-php72-php-fpm.service
 
 
+
+systemctl list-unit-files --type=service | grep php-fpm
+
+
+
+/etc/scl/conf/rh-php72-php-fpm.service!
+
 rror. Self-hosted.
 
 After much weeping and gnashing of teeth I found the culprit. I had not modified /etc/httpd/conf.d/php.conf.
@@ -246,6 +253,9 @@ systemctl restart httpd
 
 
 ```
+
+oc new-build https://github.com/samyunodos/s2i-php-container --context-dir=7.2 --name=mi-prueba4 --strategy=docker 
+
 
 
 bash-4.2$ cat /etc/httpd/conf.modules.d/00-mpm.conf 

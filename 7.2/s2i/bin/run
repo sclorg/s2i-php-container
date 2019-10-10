@@ -54,4 +54,4 @@ fi
 # pre-start files
 process_extending_files ${APP_DATA}/php-pre-start/ ${PHP_CONTAINER_SCRIPTS_PATH}/pre-start/
 
-exec httpd -D FOREGROUND
+exec /bin/bash -c 'php-fpm && httpd -D FOREGROUND'

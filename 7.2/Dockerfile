@@ -5,6 +5,7 @@ FROM centos/s2i-base-centos7
 
 EXPOSE 8080
 EXPOSE 8443
+EXPOSE 9000
 
 # Description
 # This image provides an Apache 2.4 + PHP 7.2 environment for running PHP applications.
@@ -41,8 +42,10 @@ LABEL summary="${SUMMARY}" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 # Install Apache httpd and PHP
-RUN yum install -y centos-release-scl && \
-    INSTALL_PKGS="rh-php72 rh-php72-php-fpm rh-php72-php rh-php72-php-mysqlnd rh-php72-php-pgsql rh-php72-php-bcmath \
+RUN yum-config-manager --add-repo=https://copr.fedoraproject.org/coprs/rhscl/centos-release-scl/repo/epel-7/rhscl-centos-release-scl-epel-7.repo && \
+    yum install -y yum-utils centos-release-scl && \
+    prepare-yum-repositories rhel-server-rhscl-7-rpms && \
+    INSTALL_PKGS="rh-php72  rh-php72-php rh-php72-php-fpm rh-php72-php-mysqlnd rh-php72-php-pgsql rh-php72-php-bcmath \
                   rh-php72-php-gd rh-php72-php-intl rh-php72-php-ldap rh-php72-php-mbstring rh-php72-php-pdo \
                   rh-php72-php-process rh-php72-php-soap rh-php72-php-opcache rh-php72-php-xml \
                   rh-php72-php-gmp rh-php72-php-pecl-apcu httpd24-mod_ssl" && \
@@ -87,6 +90,19 @@ COPY ./root/ /
 
 # Reset permissions of filesystem to default values
 RUN /usr/libexec/container-setup && rpm-file-permissions
+
+
+RUN sed -i '/LoadModule mpm_prefork_module/s/^/#/g' /etc/httpd/conf.modules.d/00-mpm.conf && \
+    sed -i '/#LoadModule mpm_event_module/s/^#//g' /etc/httpd/conf.modules.d/00-mpm.conf && \
+    echo "<FilesMatch \.php$>" >> /etc/httpd/conf.d/rh-php72-php.conf && \
+    echo '  SetHandler "proxy:fcgi://127.0.0.1:9000"' >> /etc/httpd/conf.d/rh-php72-php.conf && \
+    echo "</FilesMatch>" >> /etc/httpd/conf.d/rh-php72-php.conf && \
+    chmod -R a+rwx /etc/opt/rh/rh-php${PHP_VER_SHORT}/php.d && \
+    chmod a+rw /etc/opt/rh/rh-php${PHP_VER_SHORT}/php.ini && \
+    chmod a+rwx /var/opt/rh/rh-php${PHP_VER_SHORT}/run/php-fpm && \
+    sed -i '/listen.allowed_clients/s/^/;/g' /etc/opt/rh/rh-php72/php-fpm.d/www.conf
+
+
 
 USER 1001
 
