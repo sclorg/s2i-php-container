@@ -277,3 +277,34 @@ LoadModule mpm_prefork_module modules/mod_mpm_prefork.so
 # See: http://httpd.apache.org/docs/2.4/mod/event.html
 #
 #LoadModule mpm_event_module modules/mod_mpm_event.so
+
+
+bash-4.2$ ls -la /var/opt/rh/rh-php72/lib/php        
+total 20
+drwxr-xr-x. 5 root root   4096 Oct 10 10:34 .
+drwxr-xr-x. 6 root root   4096 Oct 10 10:34 ..
+drwxrwx---. 2 root apache 4096 Nov 16  2018 opcache
+drwxrwx---. 2 root apache 4096 Nov 16  2018 session
+drwxrwx---. 2 root apache 4096 Nov 16  2018 wsdlcache
+
+
+bash-4.2# ls -al /var/opt/rh/rh-php72/lib/php/
+total 20
+drwxr-xr-x. 5 root root   4096 Oct 10 10:34 .
+drwxr-xr-x. 6 root root   4096 Oct 10 10:34 ..
+drwxrwx---. 2 root apache 4096 Nov 16  2018 opcache
+drwxrwx---. 2 root apache 4096 Nov 16  2018 session
+drwxrwx---. 2 root apache 4096 Nov 16  2018 wsdlcache
+bash-4.2# ls -al /var/opt/rh/rh-php72/lib/php/session/
+total 8
+drwxrwx---. 2 root apache 4096 Nov 16  2018 .
+drwxr-xr-x. 5 root root   4096 Oct 10 10:34 ..
+bash-4.2# chmod 777 /var/opt/rh/rh-php72/lib/php -R
+bash-4.2# ls -al /var/opt/rh/rh-php72/lib/php/session/
+total 16
+drwxrwxrwx. 1 root    apache 4096 Oct 10 11:25 .
+drwxrwxrwx. 1 root    root   4096 Oct 10 10:34 ..
+-rw-------. 1 default root      0 Oct 10 11:25 sess_987a5d92a591a7efd6fbf8555a4c06f0
+bash-4.2# ls /tmp/sessions/
+bash-4.2# 
+

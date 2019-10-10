@@ -100,6 +100,7 @@ RUN sed -i '/LoadModule mpm_prefork_module/s/^/#/g' /etc/httpd/conf.modules.d/00
     chmod -R a+rwx /etc/opt/rh/rh-php${PHP_VER_SHORT}/php.d && \
     chmod a+rw /etc/opt/rh/rh-php${PHP_VER_SHORT}/php.ini && \
     chmod a+rwx /var/opt/rh/rh-php${PHP_VER_SHORT}/run/php-fpm && \
+    chmod -R a+rwx /var/opt/rh/rh-php${PHP_VER_SHORT}/lib/php && \
     sed -i '/listen.allowed_clients/s/^/;/g' /etc/opt/rh/rh-php72/php-fpm.d/www.conf
 
 
