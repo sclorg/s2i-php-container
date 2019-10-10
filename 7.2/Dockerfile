@@ -60,7 +60,7 @@ ENV PHP_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/php/ \
     PHP_HTTPD_CONF_FILE=rh-php72-php.conf \
     HTTPD_CONFIGURATION_PATH=${APP_ROOT}/etc/conf.d \
     HTTPD_MAIN_CONF_PATH=/etc/httpd/conf \
-    HTTPD_MAIN_CONF_D_PATH=/etc/httpd/conf \
+    HTTPD_MAIN_CONF_D_PATH=/etc/httpd/conf.d \
     HTTPD_VAR_RUN=/var/run/httpd \
     HTTPD_DATA_PATH=/var/www \
     HTTPD_DATA_ORIG_PATH=/opt/rh/httpd24/root/var/www \
@@ -92,16 +92,16 @@ COPY ./root/ /
 RUN /usr/libexec/container-setup && rpm-file-permissions
 
 
-RUN sed -i '/LoadModule mpm_prefork_module/s/^/#/g' /etc/httpd/conf.modules.d/00-mpm.conf && \
-    sed -i '/#LoadModule mpm_event_module/s/^#//g' /etc/httpd/conf.modules.d/00-mpm.conf && \
-    echo "<FilesMatch \.php$>" >> /etc/httpd/conf.d/rh-php72-php.conf && \
-    echo '  SetHandler "proxy:fcgi://127.0.0.1:9000"' >> /etc/httpd/conf.d/rh-php72-php.conf && \
-    echo "</FilesMatch>" >> /etc/httpd/conf.d/rh-php72-php.conf && \
-    chmod -R a+rwx /etc/opt/rh/rh-php${PHP_VER_SHORT}/php.d && \
-    chmod a+rw /etc/opt/rh/rh-php${PHP_VER_SHORT}/php.ini && \
-    chmod a+rwx /var/opt/rh/rh-php${PHP_VER_SHORT}/run/php-fpm && \
-    chmod -R a+rwx /var/opt/rh/rh-php${PHP_VER_SHORT}/lib/php && \
-    sed -i '/listen.allowed_clients/s/^/;/g' /etc/opt/rh/rh-php72/php-fpm.d/www.conf
+# RUN sed -i '/LoadModule mpm_prefork_module/s/^/#/g' /etc/httpd/conf.modules.d/00-mpm.conf && \
+#     sed -i '/#LoadModule mpm_event_module/s/^#//g' /etc/httpd/conf.modules.d/00-mpm.conf && \
+#     echo "<FilesMatch \.php$>" >> /etc/httpd/conf.d/rh-php72-php.conf && \
+#     echo '  SetHandler "proxy:fcgi://127.0.0.1:9000"' >> /etc/httpd/conf.d/rh-php72-php.conf && \
+#     echo "</FilesMatch>" >> /etc/httpd/conf.d/rh-php72-php.conf && \
+#     chmod -R a+rwx /etc/opt/rh/rh-php${PHP_VER_SHORT}/php.d && \
+#     chmod a+rw /etc/opt/rh/rh-php${PHP_VER_SHORT}/php.ini && \
+#     chmod a+rwx /var/opt/rh/rh-php${PHP_VER_SHORT}/run/php-fpm && \
+#     chmod -R a+rwx /var/opt/rh/rh-php${PHP_VER_SHORT}/lib/php && \
+#     sed -i '/listen.allowed_clients/s/^/;/g' /etc/opt/rh/rh-php72/php-fpm.d/www.conf
 
 
 
