@@ -69,9 +69,6 @@ ENV PHP_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/php/ \
 
 RUN systemctl enable rh-php72-php-fpm
 
-
-RUN systemctl start rh-php72-php-fpm
-
 ## instalamos wp-cli
 RUN set -x && cd /tmp && \
   curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
