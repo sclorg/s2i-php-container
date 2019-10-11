@@ -24,6 +24,16 @@ config_ssl_conf() {
   sed -i -E "s!^(\s*ErrorLog)\s+\S+!\1 |/usr/bin/cat!" ${HTTPD_MAIN_CONF_D_PATH}/ssl.conf
 }
 
+config_rh_php_72_php_conf(){
+    echo "<FilesMatch \.php$>" >> /etc/httpd/conf.d/rh-php72-php.conf 
+    echo '  SetHandler "proxy:fcgi://127.0.0.1:9000"' >> /etc/httpd/conf.d/rh-php72-php.conf
+    echo "</FilesMatch>" >> /etc/httpd/conf.d/rh-php72-php.conf 
+}
+
+config_www_conf() {
+    sed -i '/listen.allowed_clients/s/^/;/g' /etc/opt/rh/rh-php72/php-fpm.d/www.conf
+}
+
 config_modules_conf() {
   # overwrite default rhel-8 mpm mode
     # echo "LoadModule mpm_prefork_module modules/mod_mpm_prefork.so" > "${HTTPD_MODULES_CONF_D_PATH}/00-mpm.conf"
@@ -34,6 +44,8 @@ config_general() {
   config_httpd_conf
   config_ssl_conf
   config_modules_conf
+  config_rh_php_72_php_conf
+  config_www_conf
   sed -i '/php_value session.save_/d' ${HTTPD_MAIN_CONF_D_PATH}/${PHP_HTTPD_CONF_FILE}
   head -n${HTTPCONF_LINENO} ${HTTPD_MAIN_CONF_PATH}/httpd.conf | tail -n1 | grep "AllowOverride All" || exit 1
   echo "IncludeOptional ${APP_ROOT}/etc/conf.d/*.conf" >> ${HTTPD_MAIN_CONF_PATH}/httpd.conf
