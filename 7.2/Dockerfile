@@ -95,5 +95,4 @@ RUN /usr/libexec/container-setup && rpm-file-permissions
 USER 1001
 
 # Set the default CMD to print the usage of the language image
-#CMD $STI_SCRIPTS_PATH/usage
-CMD [ "/bin/bash" ]
+CMD $STI_SCRIPTS_PATH/usage
