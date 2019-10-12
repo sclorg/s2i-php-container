@@ -1,0 +1,78 @@
+{
+  "apiVersion": "build.openshift.io/v1",
+  "kind": "BuildConfig",
+  "metadata": {
+    "annotations": {
+      "openshift.io/generated-by": "OpenShiftNewBuild"
+    },
+    "creationTimestamp": "2019-10-12T05:50:23Z",
+    "labels": {
+      "build": "php72-fpm-s2i"
+    },
+    "name": "php72-fpm-s2i",
+    "namespace": "crear-imagen-php72-fpm-s2i",
+    "resourceVersion": "2349600",
+    "selfLink": "/apis/build.openshift.io/v1/namespaces/crear-imagen-php72-fpm-s2i/buildconfigs/php72-fpm-s2i",
+    "uid": "2f0234e8-ecb4-11e9-84c9-52540077f329"
+  },
+  "spec": {
+    "failedBuildsHistoryLimit": 5,
+    "nodeSelector": null,
+    "output": {
+      "to": {
+        "kind": "ImageStreamTag",
+        "name": "php72-fpm-s2i:latest"
+      }
+    },
+    "postCommit": {
+    },
+    "resources": {
+    },
+    "runPolicy": "Serial",
+    "source": {
+      "contextDir": "7.2",
+      "git": {
+        "ref": "php72-fpm-s2i",
+        "uri": "https://github.com/samyunodos/s2i-php-container.git"
+      },
+      "type": "Git"
+    },
+    "strategy": {
+      "dockerStrategy": {
+        "forcePull": true,
+        "from": {
+          "kind": "ImageStreamTag",
+          "name": "s2i-base-centos7:latest"
+        }
+      },
+      "type": "Docker"
+    },
+    "successfulBuildsHistoryLimit": 5,
+    "triggers": [
+      {
+        "github": {
+          "secret": "xdlwMqxFiVkfR9fBiIaV"
+        },
+        "type": "GitHub"
+      },
+      {
+        "generic": {
+          "secret": "F-ilfroO9PAhjTRSWX67"
+        },
+        "type": "Generic"
+      },
+      {
+        "type": "ConfigChange"
+      },
+      {
+        "imageChange": {
+          "lastTriggeredImageID": "centos/s2i-base-centos7@sha256:7f7d3a845bf3e6d3809a519d2127426d7f76286cd4ef3d39856ddc9efdce9c56"
+        },
+        "type": "ImageChange"
+      }
+    ]
+  },
+  "status": {
+    "lastVersion": 1
+  }
+}

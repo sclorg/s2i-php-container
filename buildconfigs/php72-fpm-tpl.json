@@ -1,0 +1,353 @@
+{
+  "kind": "Template",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "php72-fpm-tpl",
+    "annotations": {
+      "openshift.io/display-name": "php72-fpm-s2i-tpl",
+      "description": "Nos crea una imagen a partir de s2i-php-container con el mpm event y instalando Fsst CGI (rh-php-fpm).  Para compilar sólo la imagen-builder primera .... ",
+      "tags": "php72-fpm-s2i, s2i-php-container",
+      "iconClass": "icon-php"
+    }
+  },
+  "parameters": [
+    {
+      "name": "IMAGE_STREAM",
+      "description": "NOmbre de la imagen stream.",
+      "value": "php72-fpm"
+    },
+    {
+      "name": "SOURCE_REPOSITORY_URL_1",
+      "description": "Nombre del repositorio source.",
+      "value": "https://github.com/samyunodos/s2i-php-container.git"
+    },
+    {
+      "name": "SOURCE_REPOSITORY_1_TAG",
+      "description": "The tagged version of the source repository to use.",
+      "value": "php72-wp-s2i"
+    },
+    {
+      "description": "The password for the database user.",
+      "name": "DOCKER_REGISTER",
+      "value": "docker-registry.default.svc:5000"
+    }
+  ],
+  "objects": [
+    {
+      "apiVersion": "v1",
+      "kind": "Secret",
+      "metadata": {
+        "name": "secret-php72-fpm-s2i",
+        "anotations": {
+          "description": "Web Hook Secret Key."
+        },
+        "labels": {
+          "app": "${IMAGE_STREAM}",
+          "build": "${IMAGE_STREAM}-s2i"
+        }
+      },
+      "type": "Opaque",
+      "data": {
+        "WebHookSecretKey": "dGVzdA=="
+      }
+    },
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${IMAGE_STREAM}-s2i",
+        "labels": {
+          "app": "${IMAGE_STREAM}",
+          "build": "${IMAGE_STREAM}-s2i"
+        }
+      }
+    },
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${IMAGE_STREAM}-img",
+        "labels": {
+          "app": "${IMAGE_STREAM}",
+          "build": "${IMAGE_STREAM}-img"
+        }
+      }
+    },
+    {
+      "apiVersion": "build.openshift.io/v1",
+      "kind": "BuildConfig",
+      "metadata": {
+        "labels": {
+          "app": "${IMAGE_STREAM}",
+          "build": "${IMAGE_STREAM}-s2i"
+        },
+        "name": "${IMAGE_STREAM}-s2i",
+        "namespace": "php72-fpm"
+      },
+      "spec": {
+        "failedBuildsHistoryLimit": 5,
+        "nodeSelector": null,
+        "output": {
+          "to": {
+            "kind": "ImageStreamTag",
+            "name": "${IMAGE_STREAM}-s2i:latest"
+          }
+        },
+        "postCommit": {
+        },
+        "resources": {
+        },
+        "runPolicy": "Serial",
+        "source": {
+          "contextDir": "7.2",
+          "git": {
+            "ref": "php72-fpm-s2i",
+            "uri": "https://github.com/samyunodos/s2i-php-container.git"
+          },
+          "type": "Git"
+        },
+        "strategy": {
+          "dockerStrategy": {
+            "forcePull": true,
+            "from": {
+              "kind": "DockerImage",
+              "name": "docker.io/centos/s2i-base-centos7:latest"
+            }
+          },
+          "type": "Docker"
+        },
+        "triggers": [
+          {
+            "github": {
+              "secret": "xdlwMqxFiVkfR9fBiIaV",
+              "secretReference": {
+                "name": "secret-php72-fpm-s2i"
+              }
+            },
+            "type": "GitHub"
+          },
+          {
+            "generic": {
+              "secret": "F-ilfroO9PAhjTRSWX67"
+            },
+            "type": "Generic"
+          },
+          {
+            "type": "ConfigChange"
+          },
+          {
+            "imageChange": {
+              "type": "ImageChange"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Secret",
+      "metadata": {
+        "name": "secret-php72-fpm-img",
+        "anotations": {
+          "description": "Web Hook Secret Key."
+        },
+        "labels": {
+          "app": "${IMAGE_STREAM}",
+          "build": "${IMAGE_STREAM}-img"
+        }
+      },
+      "type": "Opaque",
+      "data": {
+        "WebHookSecretKey": "YW1pZ28ubWlvLjEK"
+      }
+    },
+    {
+      "apiVersion": "build.openshift.io/v1",
+      "kind": "BuildConfig",
+      "metadata": {
+        "labels": {
+          "app": "${IMAGE_STREAM}",
+          "build": "${IMAGE_STREAM}-img"
+        },
+        "name": "${IMAGE_STREAM}-img",
+        "namespace": "php72-fpm"
+      },
+      "spec": {
+        "failedBuildsHistoryLimit": 5,
+        "nodeSelector": null,
+        "output": {
+          "to": {
+            "kind": "ImageStreamTag",
+            "name": "${IMAGE_STREAM}-img:latest"
+          }
+        },
+        "postCommit": {
+        },
+        "resources": {
+        },
+        "runPolicy": "Serial",
+        "source": {
+          "contextDir": "test/test-app",
+          "git": {
+            "ref": "php72-fpm-s2i",
+            "uri": "https://github.com/samyunodos/s2i-php-container.git"
+          },
+          "type": "Git"
+        },
+        "strategy": {
+          "sourceStrategy": {
+            "from": {
+              "kind": "ImageStreamTag",
+              "namespace": "php72-fpm",
+              "name": "${IMAGE_STREAM}-s2i:latest"
+            }
+          },
+          "type": "Source"
+        },
+        "triggers": [
+          {
+            "github": {
+              "secret": "xdlwMqxFiVkfR9fBiIaV",
+              "secretReference": {
+                "name": "secret-php72-fpm-img"
+              }
+            },
+            "type": "GitHub"
+          },
+          {
+            "generic": {
+              "secret": "F-ilfroO9PAhjTRSWX67"
+            },
+            "type": "Generic"
+          },
+          {
+            "type": "ConfigChange"
+          },
+          {
+            "imageChange": {
+              "type": "ImageChange"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "labels": {
+          "app": "${IMAGE_STREAM}-img"
+        },
+        "name": "${IMAGE_STREAM}-img",
+        "namespace": "php72-fpm"
+      },
+      "spec": {
+        "ports": [
+          {
+            "name": "8080-tcp",
+            "port": 8080,
+            "protocol": "TCP",
+            "targetPort": 8080
+          },
+          {
+            "name": "8443-tcp",
+            "port": 8443,
+            "protocol": "TCP",
+            "targetPort": 8443
+          }
+        ],
+        "selector": {
+          "app": "${IMAGE_STREAM}-img",
+          "deploymentconfig": "${IMAGE_STREAM}-img"
+        },
+        "sessionAffinity": "None",
+        "type": "ClusterIP"
+      }
+    },
+    {
+      "apiVersion": "apps.openshift.io/v1",
+      "kind": "DeploymentConfig",
+      "metadata": {
+        "generation": 2,
+        "labels": {
+          "app": "${IMAGE_STREAM}-img"
+        },
+        "name": "${IMAGE_STREAM}-img",
+        "namespace": "php72-fpm"
+      },
+      "spec": {
+        "replicas": 1,
+        "revisionHistoryLimit": 10,
+        "selector": {
+          "app": "${IMAGE_STREAM}-img",
+          "deploymentconfig": "${IMAGE_STREAM}-img"
+        },
+        "strategy": {
+          "type": "Rolling"
+        },
+        "template": {
+          "metadata": {
+            "creationTimestamp": null,
+            "labels": {
+              "app": "${IMAGE_STREAM}-img",
+              "deploymentconfig": "${IMAGE_STREAM}-img"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "image": "${DOCKER_REGISTER}/php72-fpm/${IMAGE_STREAM}-img:latest",
+                "imagePullPolicy": "Always",
+                "name": "${IMAGE_STREAM}-img",
+                "ports": [
+                  {
+                    "containerPort": 8443,
+                    "protocol": "TCP"
+                  },
+                  {
+                    "containerPort": 8080,
+                    "protocol": "TCP"
+                  }
+                ],
+                "resources": {
+                }
+              }
+            ],
+            "dnsPolicy": "ClusterFirst",
+            "restartPolicy": "Always",
+            "schedulerName": "default-scheduler",
+            "securityContext": {
+            },
+            "terminationGracePeriodSeconds": 30
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "route.openshift.io/v1",
+      "kind": "Route",
+      "metadata": {
+        "annotations": {
+          "openshift.io/host.generated": "true"
+        },
+        "labels": {
+          "app": "${IMAGE_STREAM}-img"
+        },
+        "name": "${IMAGE_STREAM}-img",
+        "namespace": "php72-fpm"
+      },
+      "spec": {
+        "host": "php72-fpm-img-php72-fpm.apps.srv.world",
+        "port": {
+          "targetPort": "8080-tcp"
+        },
+        "to": {
+          "kind": "Service",
+          "name": "${IMAGE_STREAM}-img",
+          "weight": 100
+        },
+        "wildcardPolicy": "None"
+      }
+    }
+  ]
+}
