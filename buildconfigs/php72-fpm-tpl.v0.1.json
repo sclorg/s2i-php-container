@@ -101,7 +101,7 @@
         "source": {
           "contextDir": "7.2",
           "git": {
-            "ref": "php72-fpm-s2i",
+            "ref": "php72-fpm",
             "uri": "https://github.com/samyunodos/s2i-php-container.git"
           },
           "type": "Git"
@@ -189,7 +189,7 @@
         "source": {
           "contextDir": "test/test-app",
           "git": {
-            "ref": "php72-fpm-s2i",
+            "ref": "php72-fpm",
             "uri": "https://github.com/samyunodos/s2i-php-container.git"
           },
           "type": "Git"
