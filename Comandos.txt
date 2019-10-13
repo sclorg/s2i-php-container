@@ -30,3 +30,6 @@ Forwarding                    https://031bfeca.ngrok.io -> https://ctrl.srv.worl
                                                                                 
 Connections                   ttl     opn     rt1     rt5     p50     p90       
                               0       0       0.00    0.00    0.00    0.00
+
+
+amigo
