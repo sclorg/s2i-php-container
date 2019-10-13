@@ -1,0 +1,76 @@
+{
+    "apiVersion": "build.openshift.io/v1",
+    "kind": "BuildConfig",
+    "metadata": {
+        "annotations": {
+            "openshift.io/generated-by": "OpenShiftNewApp"
+        },
+        "creationTimestamp": "2019-10-12T05:54:34Z",
+        "labels": {
+            "app": "php72-fpm-test"
+        },
+        "name": "php72-fpm-test",
+        "namespace": "crear-imagen-php72-fpm-s2i",
+        "resourceVersion": "2350163",
+        "selfLink": "/apis/build.openshift.io/v1/namespaces/crear-imagen-php72-fpm-s2i/buildconfigs/php72-fpm-test",
+        "uid": "c4adc53c-ecb4-11e9-84c9-52540077f329"
+    },
+    "spec": {
+        "failedBuildsHistoryLimit": 5,
+        "nodeSelector": null,
+        "output": {
+            "to": {
+                "kind": "ImageStreamTag",
+                "name": "php72-fpm-test:latest"
+            }
+        },
+        "postCommit": {},
+        "resources": {},
+        "runPolicy": "Serial",
+        "source": {
+            "contextDir": "test/test-app",
+            "git": {
+                "ref": "php72-fpm-s2i",
+                "uri": "https://github.com/samyunodos/s2i-php-container.git"
+            },
+            "type": "Git"
+        },
+        "strategy": {
+            "sourceStrategy": {
+                "from": {
+                    "kind": "ImageStreamTag",
+                    "name": "php72-fpm-s2i:latest",
+                    "namespace": "crear-imagen-php72-fpm-s2i"
+                }
+            },
+            "type": "Source"
+        },
+        "successfulBuildsHistoryLimit": 5,
+        "triggers": [
+            {
+                "github": {
+                    "secret": "gVWFuVOmi-N7MOqe53ir"
+                },
+                "type": "GitHub"
+            },
+            {
+                "generic": {
+                    "secret": "0KMA8KvT_5tCoRnLnFDI"
+                },
+                "type": "Generic"
+            },
+            {
+                "type": "ConfigChange"
+            },
+            {
+                "imageChange": {
+                    "lastTriggeredImageID": "docker-registry.default.svc:5000/crear-imagen-php72-fpm-s2i/php72-fpm-s2i@sha256:dd9d39f426e413b5dda83b5b99eac8e92c0b18fe8fae7a31d58d8d01f26106d1"
+                },
+                "type": "ImageChange"
+            }
+        ]
+    },
+    "status": {
+        "lastVersion": 1
+    }
+}
