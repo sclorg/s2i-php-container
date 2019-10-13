@@ -7,7 +7,6 @@ EXPOSE 8080
 EXPOSE 8443
 EXPOSE 9000
 
-
 # Description
 # This image provides an Apache 2.4 + PHP 7.2 environment for running PHP applications.
 # Exposed ports:

@@ -130,9 +130,7 @@
             "type": "ConfigChange"
           },
           {
-            "imageChange": {
-              "type": "ImageChange"
-            }
+            "type": "ImageChange"
           }
         ]
       }
@@ -229,9 +227,7 @@
             "type": "ConfigChange"
           },
           {
-            "imageChange": {
-              "type": "ImageChange"
-            }
+            "type": "ImageChange"
           }
         ]
       }
