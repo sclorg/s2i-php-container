@@ -5,7 +5,6 @@ FROM centos/s2i-base-centos7
 
 EXPOSE 8080
 EXPOSE 8443
-EXPOSE 9000
 
 # Description
 # This image provides an Apache 2.4 + PHP 7.2 environment for running PHP applications.
@@ -50,7 +49,6 @@ RUN yum install -y centos-release-scl && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS --nogpgcheck && \
     rpm -V $INSTALL_PKGS && \
     yum -y clean all --enablerepo='*'
-    
 
 ENV PHP_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/php/ \
     APP_DATA=${APP_ROOT}/src \
