@@ -47,6 +47,14 @@ chown -R 1001:0 /tmp/sessions
 chown -R 1001:0 ${HTTPD_DATA_PATH}
 chmod -R a+rwx ${PHP_SYSCONF_PATH}
 
+
+mkdir /tmp/wsdlcache
+chmod -R a+rwx /tmp/wsdlcache
+chown -R 1001:0 /tmp/wsdlcache
+mkdir /tmp/opcache
+chmod -R a+rwx /tmp/opcache
+chown -R 1001:0 /tmp/opcache
+
 chmod -R a+rwx /etc/opt/rh/rh-php${PHP_VER_SHORT}/php.d
 chmod a+rw /etc/opt/rh/rh-php${PHP_VER_SHORT}/php.ini
 chmod a+rwx /var/opt/rh/rh-php${PHP_VER_SHORT}/run/php-fpm

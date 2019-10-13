@@ -356,7 +356,7 @@
         "namespace": "php72-fpm"
       },
       "spec": {
-        "host": "php72-fpm-img-php72-fpm.apps.srv.world",
+        "host": "php72-fpm.apps.ctrl.srv.world",
         "port": {
           "targetPort": "8080-tcp"
         },
