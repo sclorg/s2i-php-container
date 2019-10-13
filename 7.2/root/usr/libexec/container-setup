@@ -39,7 +39,7 @@ chown -R 1001:0 /etc/pki/tls/certs/localhost.crt
 chown -R 1001:0 /etc/pki/tls/private/localhost.key
 mkdir -p ${APP_ROOT}/etc
 chmod -R a+rwx ${APP_ROOT}/etc
-# chmod -R a+rwx ${HTTPD_VAR_RUN}
+chmod -R a+rwx ${HTTPD_VAR_RUN}
 chown -R 1001:0 ${APP_ROOT}
 mkdir /tmp/sessions
 chmod -R a+rwx /tmp/sessions
