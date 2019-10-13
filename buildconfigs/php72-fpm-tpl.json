@@ -198,7 +198,8 @@
           "sourceStrategy": {
             "from": {
               "kind": "ImageStreamTag",
-              "name": "${DOCKER_REGISTER}/php72-fpm/${IMAGE_STREAM}-s2i:latest"
+              "namespace": "php72-fpm",
+              "name": "${IMAGE_STREAM}-s2i:latest"
             }
           },
           "type": "Source"
@@ -228,6 +229,124 @@
             }
           }
         ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "labels": {
+          "app": "${IMAGE_STREAM}-img"
+        },
+        "name": "${IMAGE_STREAM}-img",
+        "namespace": "php72-fpm"
+      },
+      "spec": {
+        "ports": [
+          {
+            "name": "8080-tcp",
+            "port": 8080,
+            "protocol": "TCP",
+            "targetPort": 8080
+          },
+          {
+            "name": "8443-tcp",
+            "port": 8443,
+            "protocol": "TCP",
+            "targetPort": 8443
+          }
+        ],
+        "selector": {
+          "app": "${IMAGE_STREAM}-img",
+          "deploymentconfig": "${IMAGE_STREAM}-img"
+        },
+        "sessionAffinity": "None",
+        "type": "ClusterIP"
+      }
+    },
+    {
+      "apiVersion": "apps.openshift.io/v1",
+      "kind": "DeploymentConfig",
+      "metadata": {
+        "generation": 2,
+        "labels": {
+          "app": "${IMAGE_STREAM}-img"
+        },
+        "name": "${IMAGE_STREAM}-img",
+        "namespace": "php72-fpm"
+      },
+      "spec": {
+        "replicas": 1,
+        "revisionHistoryLimit": 10,
+        "selector": {
+          "app": "${IMAGE_STREAM}-img",
+          "deploymentconfig": "${IMAGE_STREAM}-img"
+        },
+        "strategy": {
+          "type": "Rolling"
+        },
+        "template": {
+          "metadata": {
+            "creationTimestamp": null,
+            "labels": {
+              "app": "${IMAGE_STREAM}-img",
+              "deploymentconfig": "${IMAGE_STREAM}-img"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "image": "${DOCKER_REGISTER}/php72-fpm/${IMAGE_STREAM}-img:latest",
+                "imagePullPolicy": "Always",
+                "name": "${IMAGE_STREAM}-img",
+                "ports": [
+                  {
+                    "containerPort": 8443,
+                    "protocol": "TCP"
+                  },
+                  {
+                    "containerPort": 8080,
+                    "protocol": "TCP"
+                  }
+                ],
+                "resources": {
+                }
+              }
+            ],
+            "dnsPolicy": "ClusterFirst",
+            "restartPolicy": "Always",
+            "schedulerName": "default-scheduler",
+            "securityContext": {
+            },
+            "terminationGracePeriodSeconds": 30
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "route.openshift.io/v1",
+      "kind": "Route",
+      "metadata": {
+        "annotations": {
+          "openshift.io/host.generated": "true"
+        },
+        "labels": {
+          "app": "${IMAGE_STREAM}-img"
+        },
+        "name": "${IMAGE_STREAM}-img",
+        "namespace": "php72-fpm"
+      },
+      "spec": {
+        "host": "php72-fpm-img-php72-fpm.apps.srv.world",
+        "port": {
+          "targetPort": "8080-tcp"
+        },
+        "to": {
+          "kind": "Service",
+          "name": "${IMAGE_STREAM}-img",
+          "weight": 100
+        },
+        "wildcardPolicy": "None"
       }
     }
   ]

@@ -1,0 +1,15 @@
+$ oc new-app php72-fpm-s2i:latest~'https://github.com/samyunodos/s2i-php-container#php72-fpm-s2i' --context-dir='test/test-app' --strategy=source --name=php72-fpm-img
+
+$ oc new-app php72-fpm-s2i:latest~'https://github.com/samyunodos/s2i-php-container#php72-fpm-s2i' --context-dir='test/test-app' --strategy=source --name=php72-fpm-img
+
+$ oc new-build 'https://github.com/samyunodos/s2i-php-container#php72-wp' --context-dir='7.2' --strategy='docker' --name='mi-php-s2i-5'
+
+$ oc new-app php72-fpm-s2i:latest~'https://github.com/samyunodos/s2i-php-container#php72-fpm-s2i' --context-dir='test/test-app' --strategy=source --name=php72-fpm-img
+
+$ oc delete all --all -n php72-fpm
+
+$ oc process -f buildconfigs/php72-fpm-tpl.json | oc create -f -
+
+$ oc expose service docker-registry -n default
+
+$ oc import-image php72-fpm/php72-fpm-img:latest --from=docker-registry-default.apps.ctrl.srv.world

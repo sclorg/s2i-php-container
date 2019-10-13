@@ -1,0 +1,44 @@
+{
+    "apiVersion": "v1",
+    "kind": "Service",
+    "metadata": {
+        "annotations": {
+            "openshift.io/generated-by": "OpenShiftNewApp"
+        },
+        "creationTimestamp": "2019-10-12T19:44:11Z",
+        "labels": {
+            "app": "php72-fpm-img"
+        },
+        "name": "php72-fpm-img",
+        "namespace": "php72-fpm",
+        "resourceVersion": "2392476",
+        "selfLink": "/api/v1/namespaces/php72-fpm/services/php72-fpm-img",
+        "uid": "aa0f82fa-ed28-11e9-a181-525400ff760c"
+    },
+    "spec": {
+        "clusterIP": "172.30.141.182",
+        "ports": [
+            {
+                "name": "8080-tcp",
+                "port": 8080,
+                "protocol": "TCP",
+                "targetPort": 8080
+            },
+            {
+                "name": "8443-tcp",
+                "port": 8443,
+                "protocol": "TCP",
+                "targetPort": 8443
+            }
+        ],
+        "selector": {
+            "app": "php72-fpm-img",
+            "deploymentconfig": "php72-fpm-img"
+        },
+        "sessionAffinity": "None",
+        "type": "ClusterIP"
+    },
+    "status": {
+        "loadBalancer": {}
+    }
+}

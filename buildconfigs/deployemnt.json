@@ -1,0 +1,133 @@
+{
+    "apiVersion": "apps.openshift.io/v1",
+    "kind": "DeploymentConfig",
+    "metadata": {
+        "annotations": {
+            "openshift.io/generated-by": "OpenShiftNewApp"
+        },
+        "creationTimestamp": "2019-10-12T19:59:30Z",
+        "generation": 2,
+        "labels": {
+            "app": "php72-fpm-img"
+        },
+        "name": "php72-fpm-img",
+        "namespace": "php72-fpm",
+        "resourceVersion": "2394874",
+        "selfLink": "/apis/apps.openshift.io/v1/namespaces/php72-fpm/deploymentconfigs/php72-fpm-img",
+        "uid": "cdb9097c-ed2a-11e9-a181-525400ff760c"
+    },
+    "spec": {
+        "replicas": 1,
+        "revisionHistoryLimit": 10,
+        "selector": {
+            "app": "php72-fpm-img",
+            "deploymentconfig": "php72-fpm-img"
+        },
+        "strategy": {
+            "activeDeadlineSeconds": 21600,
+            "resources": {},
+            "rollingParams": {
+                "intervalSeconds": 1,
+                "maxSurge": "25%",
+                "maxUnavailable": "25%",
+                "timeoutSeconds": 600,
+                "updatePeriodSeconds": 1
+            },
+            "type": "Rolling"
+        },
+        "template": {
+            "metadata": {
+                "annotations": {
+                    "openshift.io/generated-by": "OpenShiftNewApp"
+                },
+                "creationTimestamp": null,
+                "labels": {
+                    "app": "php72-fpm-img",
+                    "deploymentconfig": "php72-fpm-img"
+                }
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "image": "docker-registry.default.svc:5000/php72-fpm/php72-fpm-img@sha256:cec7a01de800075af41a61d0ececdb891fcc6ed7a19d893e0778de6434c20659",
+                        "imagePullPolicy": "Always",
+                        "name": "php72-fpm-img",
+                        "ports": [
+                            {
+                                "containerPort": 8443,
+                                "protocol": "TCP"
+                            },
+                            {
+                                "containerPort": 8080,
+                                "protocol": "TCP"
+                            }
+                        ],
+                        "resources": {},
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File"
+                    }
+                ],
+                "dnsPolicy": "ClusterFirst",
+                "restartPolicy": "Always",
+                "schedulerName": "default-scheduler",
+                "securityContext": {},
+                "terminationGracePeriodSeconds": 30
+            }
+        },
+        "test": false,
+        "triggers": [
+            {
+                "type": "ConfigChange"
+            },
+            {
+                "imageChangeParams": {
+                    "automatic": true,
+                    "containerNames": [
+                        "php72-fpm-img"
+                    ],
+                    "from": {
+                        "kind": "ImageStreamTag",
+                        "name": "php72-fpm-img:latest",
+                        "namespace": "php72-fpm"
+                    },
+                    "lastTriggeredImage": "docker-registry.default.svc:5000/php72-fpm/php72-fpm-img@sha256:cec7a01de800075af41a61d0ececdb891fcc6ed7a19d893e0778de6434c20659"
+                },
+                "type": "ImageChange"
+            }
+        ]
+    },
+    "status": {
+        "availableReplicas": 1,
+        "conditions": [
+            {
+                "lastTransitionTime": "2019-10-12T20:00:31Z",
+                "lastUpdateTime": "2019-10-12T20:00:31Z",
+                "message": "Deployment config has minimum availability.",
+                "status": "True",
+                "type": "Available"
+            },
+            {
+                "lastTransitionTime": "2019-10-12T20:00:25Z",
+                "lastUpdateTime": "2019-10-12T20:00:32Z",
+                "message": "replication controller \"php72-fpm-img-1\" successfully rolled out",
+                "reason": "NewReplicationControllerAvailable",
+                "status": "True",
+                "type": "Progressing"
+            }
+        ],
+        "details": {
+            "causes": [
+                {
+                    "type": "ConfigChange"
+                }
+            ],
+            "message": "config change"
+        },
+        "latestVersion": 1,
+        "observedGeneration": 2,
+        "readyReplicas": 1,
+        "replicas": 1,
+        "unavailableReplicas": 0,
+        "updatedReplicas": 1
+    }
+}

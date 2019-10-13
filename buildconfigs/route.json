@@ -1,0 +1,46 @@
+{
+    "apiVersion": "route.openshift.io/v1",
+    "kind": "Route",
+    "metadata": {
+        "annotations": {
+            "openshift.io/host.generated": "true"
+        },
+        "creationTimestamp": "2019-10-12T19:46:41Z",
+        "labels": {
+            "app": "php72-fpm-img"
+        },
+        "name": "php72-fpm-img",
+        "namespace": "php72-fpm",
+        "resourceVersion": "2392869",
+        "selfLink": "/apis/route.openshift.io/v1/namespaces/php72-fpm/routes/php72-fpm-img",
+        "uid": "033e6bf2-ed29-11e9-a181-525400ff760c"
+    },
+    "spec": {
+        "host": "php72-fpm-img-php72-fpm.apps.srv.world",
+        "port": {
+            "targetPort": "8080-tcp"
+        },
+        "to": {
+            "kind": "Service",
+            "name": "php72-fpm-img",
+            "weight": 100
+        },
+        "wildcardPolicy": "None"
+    },
+    "status": {
+        "ingress": [
+            {
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2019-10-12T19:46:41Z",
+                        "status": "True",
+                        "type": "Admitted"
+                    }
+                ],
+                "host": "php72-fpm-img-php72-fpm.apps.srv.world",
+                "routerName": "router",
+                "wildcardPolicy": "None"
+            }
+        ]
+    }
+}
