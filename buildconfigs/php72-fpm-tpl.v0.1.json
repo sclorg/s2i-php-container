@@ -4,9 +4,9 @@
   "metadata": {
     "name": "php72-fpm-tpl",
     "annotations": {
-      "openshift.io/display-name": "php72-fpm-tpl",
+      "openshift.io/display-name": "php72-fpm-s2i-tpl",
       "description": "Nos crea una imagen a partir de s2i-php-container con el mpm event y instalando Fsst CGI (rh-php-fpm).  Para compilar sólo la imagen-builder primera .... ",
-      "tags": "php72-fpm, s2i-php-container",
+      "tags": "php72-fpm-s2i, s2i-php-container",
       "iconClass": "icon-php"
     }
   },
@@ -101,7 +101,7 @@
         "source": {
           "contextDir": "7.2",
           "git": {
-            "ref": "php72-fpm",
+            "ref": "php72-fpm-s2i",
             "uri": "https://github.com/samyunodos/s2i-php-container.git"
           },
           "type": "Git"
@@ -189,7 +189,7 @@
         "source": {
           "contextDir": "test/test-app",
           "git": {
-            "ref": "php72-fpm",
+            "ref": "php72-fpm-s2i",
             "uri": "https://github.com/samyunodos/s2i-php-container.git"
           },
           "type": "Git"
