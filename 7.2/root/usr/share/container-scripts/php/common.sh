@@ -37,9 +37,7 @@ config_fpm() {
     echo '  SetHandler "proxy:fcgi://127.0.0.1:9000"' >> /etc/httpd/conf.d/rh-php72-php.conf 
     echo "</FilesMatch>" >> /etc/httpd/conf.d/rh-php72-php.conf
     sed -i '/listen.allowed_clients/s/^/;/g' /etc/opt/rh/rh-php72/php-fpm.d/www.conf
-    php_value[session.save_path]    = /var/opt/rh/rh-php72/lib/php/session
-    php_value[soap.wsdl_cache_dir]  = /var/opt/rh/rh-php72/lib/php/wsdlcache
-    ;php_value[opcache.file_cache]  = /var/opt/rh/rh-php72/lib/php/opcache
+    
     sed -i '/^.*session.save_path.*$/d' /etc/opt/rh/rh-php72/php-fpm.d/www.conf
     sed -i '/^.*soap.wsdl_cache_dir.*$/d' /etc/opt/rh/rh-php72/php-fpm.d/www.conf
     sed -i '/^.*opcache.file_cache.*$/d' /etc/opt/rh/rh-php72/php-fpm.d/www.conf
