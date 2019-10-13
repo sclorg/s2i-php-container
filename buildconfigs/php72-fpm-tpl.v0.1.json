@@ -285,6 +285,11 @@
         "strategy": {
           "type": "Rolling"
         },
+        "triggers": [
+          {
+            "type": "ConfigChange"
+          }
+        ],
         "template": {
           "metadata": {
             "creationTimestamp": null,
