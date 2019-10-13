@@ -1,0 +1,1720 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "annotations": {
+                    "openshift.io/build.name": "php72-fpm-img-1",
+                    "openshift.io/scc": "privileged"
+                },
+                "creationTimestamp": "2019-10-13T14:46:19Z",
+                "labels": {
+                    "openshift.io/build.name": "php72-fpm-img-1"
+                },
+                "name": "php72-fpm-img-1-build",
+                "namespace": "php72-fpm",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "build.openshift.io/v1",
+                        "controller": true,
+                        "kind": "Build",
+                        "name": "php72-fpm-img-1",
+                        "uid": "37691c96-edc8-11e9-aabc-525400d89ef8"
+                    }
+                ],
+                "resourceVersion": "2464699",
+                "selfLink": "/api/v1/namespaces/php72-fpm/pods/php72-fpm-img-1-build",
+                "uid": "376ce980-edc8-11e9-aabc-525400d89ef8"
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "args": [
+                            "--loglevel=0"
+                        ],
+                        "command": [
+                            "openshift-sti-build"
+                        ],
+                        "env": [
+                            {
+                                "name": "BUILD",
+                                "value": "{\"kind\":\"Build\",\"apiVersion\":\"build.openshift.io/v1\",\"metadata\":{\"name\":\"php72-fpm-img-1\",\"namespace\":\"php72-fpm\",\"selfLink\":\"/apis/build.openshift.io/v1/namespaces/php72-fpm/builds/php72-fpm-img-1\",\"uid\":\"37691c96-edc8-11e9-aabc-525400d89ef8\",\"resourceVersion\":\"2464545\",\"creationTimestamp\":\"2019-10-13T14:46:19Z\",\"labels\":{\"app\":\"php72-fpm\",\"build\":\"php72-fpm-img\",\"buildconfig\":\"php72-fpm-img\",\"openshift.io/build-config.name\":\"php72-fpm-img\",\"openshift.io/build.start-policy\":\"Serial\"},\"annotations\":{\"openshift.io/build-config.name\":\"php72-fpm-img\",\"openshift.io/build.number\":\"1\"},\"ownerReferences\":[{\"apiVersion\":\"build.openshift.io/v1\",\"kind\":\"BuildConfig\",\"name\":\"php72-fpm-img\",\"uid\":\"fa01e329-edc7-11e9-aabc-525400d89ef8\",\"controller\":true}]},\"spec\":{\"serviceAccount\":\"builder\",\"source\":{\"type\":\"Git\",\"git\":{\"uri\":\"https://github.com/samyunodos/s2i-php-container.git\",\"ref\":\"php72-fpm\"},\"contextDir\":\"test/test-app\"},\"strategy\":{\"type\":\"Source\",\"sourceStrategy\":{\"from\":{\"kind\":\"DockerImage\",\"name\":\"docker-registry.default.svc:5000/php72-fpm/php72-fpm-s2i@sha256:c98dd004a37f107fedeb05fcd5b0f88a63cc07160e9c6480183c3aa293ffbe07\"},\"pullSecret\":{\"name\":\"builder-dockercfg-cttwr\"}}},\"output\":{\"to\":{\"kind\":\"DockerImage\",\"name\":\"docker-registry.default.svc:5000/php72-fpm/php72-fpm-img:latest\"},\"pushSecret\":{\"name\":\"builder-dockercfg-cttwr\"}},\"resources\":{},\"postCommit\":{},\"nodeSelector\":null,\"triggeredBy\":[{\"message\":\"Build configuration change\"}]},\"status\":{\"phase\":\"New\",\"outputDockerImageReference\":\"docker-registry.default.svc:5000/php72-fpm/php72-fpm-img:latest\",\"config\":{\"kind\":\"BuildConfig\",\"namespace\":\"php72-fpm\",\"name\":\"php72-fpm-img\"},\"output\":{}}}\n"
+                            },
+                            {
+                                "name": "SOURCE_REPOSITORY",
+                                "value": "https://github.com/samyunodos/s2i-php-container.git"
+                            },
+                            {
+                                "name": "SOURCE_URI",
+                                "value": "https://github.com/samyunodos/s2i-php-container.git"
+                            },
+                            {
+                                "name": "SOURCE_CONTEXT_DIR",
+                                "value": "test/test-app"
+                            },
+                            {
+                                "name": "SOURCE_REF",
+                                "value": "php72-fpm"
+                            },
+                            {
+                                "name": "ALLOWED_UIDS",
+                                "value": "1-"
+                            },
+                            {
+                                "name": "DROP_CAPS",
+                                "value": "KILL,MKNOD,SETGID,SETUID"
+                            },
+                            {
+                                "name": "PUSH_DOCKERCFG_PATH",
+                                "value": "/var/run/secrets/openshift.io/push"
+                            },
+                            {
+                                "name": "PULL_DOCKERCFG_PATH",
+                                "value": "/var/run/secrets/openshift.io/pull"
+                            }
+                        ],
+                        "image": "docker.io/openshift/origin-docker-builder:v3.11.0",
+                        "imagePullPolicy": "IfNotPresent",
+                        "name": "sti-build",
+                        "resources": {},
+                        "securityContext": {
+                            "privileged": true
+                        },
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "FallbackToLogsOnError",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/tmp/build",
+                                "name": "buildworkdir"
+                            },
+                            {
+                                "mountPath": "/var/run/docker.sock",
+                                "name": "docker-socket"
+                            },
+                            {
+                                "mountPath": "/var/run/crio/crio.sock",
+                                "name": "crio-socket"
+                            },
+                            {
+                                "mountPath": "/var/run/secrets/openshift.io/push",
+                                "name": "builder-dockercfg-cttwr-push",
+                                "readOnly": true
+                            },
+                            {
+                                "mountPath": "/var/run/secrets/openshift.io/pull",
+                                "name": "builder-dockercfg-cttwr-pull",
+                                "readOnly": true
+                            },
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "builder-token-2dhgh",
+                                "readOnly": true
+                            }
+                        ]
+                    }
+                ],
+                "dnsPolicy": "ClusterFirst",
+                "imagePullSecrets": [
+                    {
+                        "name": "builder-dockercfg-cttwr"
+                    }
+                ],
+                "initContainers": [
+                    {
+                        "args": [
+                            "--loglevel=0"
+                        ],
+                        "command": [
+                            "openshift-git-clone"
+                        ],
+                        "env": [
+                            {
+                                "name": "BUILD",
+                                "value": "{\"kind\":\"Build\",\"apiVersion\":\"build.openshift.io/v1\",\"metadata\":{\"name\":\"php72-fpm-img-1\",\"namespace\":\"php72-fpm\",\"selfLink\":\"/apis/build.openshift.io/v1/namespaces/php72-fpm/builds/php72-fpm-img-1\",\"uid\":\"37691c96-edc8-11e9-aabc-525400d89ef8\",\"resourceVersion\":\"2464545\",\"creationTimestamp\":\"2019-10-13T14:46:19Z\",\"labels\":{\"app\":\"php72-fpm\",\"build\":\"php72-fpm-img\",\"buildconfig\":\"php72-fpm-img\",\"openshift.io/build-config.name\":\"php72-fpm-img\",\"openshift.io/build.start-policy\":\"Serial\"},\"annotations\":{\"openshift.io/build-config.name\":\"php72-fpm-img\",\"openshift.io/build.number\":\"1\"},\"ownerReferences\":[{\"apiVersion\":\"build.openshift.io/v1\",\"kind\":\"BuildConfig\",\"name\":\"php72-fpm-img\",\"uid\":\"fa01e329-edc7-11e9-aabc-525400d89ef8\",\"controller\":true}]},\"spec\":{\"serviceAccount\":\"builder\",\"source\":{\"type\":\"Git\",\"git\":{\"uri\":\"https://github.com/samyunodos/s2i-php-container.git\",\"ref\":\"php72-fpm\"},\"contextDir\":\"test/test-app\"},\"strategy\":{\"type\":\"Source\",\"sourceStrategy\":{\"from\":{\"kind\":\"DockerImage\",\"name\":\"docker-registry.default.svc:5000/php72-fpm/php72-fpm-s2i@sha256:c98dd004a37f107fedeb05fcd5b0f88a63cc07160e9c6480183c3aa293ffbe07\"},\"pullSecret\":{\"name\":\"builder-dockercfg-cttwr\"}}},\"output\":{\"to\":{\"kind\":\"DockerImage\",\"name\":\"docker-registry.default.svc:5000/php72-fpm/php72-fpm-img:latest\"},\"pushSecret\":{\"name\":\"builder-dockercfg-cttwr\"}},\"resources\":{},\"postCommit\":{},\"nodeSelector\":null,\"triggeredBy\":[{\"message\":\"Build configuration change\"}]},\"status\":{\"phase\":\"New\",\"outputDockerImageReference\":\"docker-registry.default.svc:5000/php72-fpm/php72-fpm-img:latest\",\"config\":{\"kind\":\"BuildConfig\",\"namespace\":\"php72-fpm\",\"name\":\"php72-fpm-img\"},\"output\":{}}}\n"
+                            },
+                            {
+                                "name": "SOURCE_REPOSITORY",
+                                "value": "https://github.com/samyunodos/s2i-php-container.git"
+                            },
+                            {
+                                "name": "SOURCE_URI",
+                                "value": "https://github.com/samyunodos/s2i-php-container.git"
+                            },
+                            {
+                                "name": "SOURCE_CONTEXT_DIR",
+                                "value": "test/test-app"
+                            },
+                            {
+                                "name": "SOURCE_REF",
+                                "value": "php72-fpm"
+                            },
+                            {
+                                "name": "ALLOWED_UIDS",
+                                "value": "1-"
+                            },
+                            {
+                                "name": "DROP_CAPS",
+                                "value": "KILL,MKNOD,SETGID,SETUID"
+                            }
+                        ],
+                        "image": "docker.io/openshift/origin-docker-builder:v3.11.0",
+                        "imagePullPolicy": "IfNotPresent",
+                        "name": "git-clone",
+                        "resources": {},
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "FallbackToLogsOnError",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/tmp/build",
+                                "name": "buildworkdir"
+                            },
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "builder-token-2dhgh",
+                                "readOnly": true
+                            }
+                        ]
+                    },
+                    {
+                        "args": [
+                            "--loglevel=0"
+                        ],
+                        "command": [
+                            "openshift-manage-dockerfile"
+                        ],
+                        "env": [
+                            {
+                                "name": "BUILD",
+                                "value": "{\"kind\":\"Build\",\"apiVersion\":\"build.openshift.io/v1\",\"metadata\":{\"name\":\"php72-fpm-img-1\",\"namespace\":\"php72-fpm\",\"selfLink\":\"/apis/build.openshift.io/v1/namespaces/php72-fpm/builds/php72-fpm-img-1\",\"uid\":\"37691c96-edc8-11e9-aabc-525400d89ef8\",\"resourceVersion\":\"2464545\",\"creationTimestamp\":\"2019-10-13T14:46:19Z\",\"labels\":{\"app\":\"php72-fpm\",\"build\":\"php72-fpm-img\",\"buildconfig\":\"php72-fpm-img\",\"openshift.io/build-config.name\":\"php72-fpm-img\",\"openshift.io/build.start-policy\":\"Serial\"},\"annotations\":{\"openshift.io/build-config.name\":\"php72-fpm-img\",\"openshift.io/build.number\":\"1\"},\"ownerReferences\":[{\"apiVersion\":\"build.openshift.io/v1\",\"kind\":\"BuildConfig\",\"name\":\"php72-fpm-img\",\"uid\":\"fa01e329-edc7-11e9-aabc-525400d89ef8\",\"controller\":true}]},\"spec\":{\"serviceAccount\":\"builder\",\"source\":{\"type\":\"Git\",\"git\":{\"uri\":\"https://github.com/samyunodos/s2i-php-container.git\",\"ref\":\"php72-fpm\"},\"contextDir\":\"test/test-app\"},\"strategy\":{\"type\":\"Source\",\"sourceStrategy\":{\"from\":{\"kind\":\"DockerImage\",\"name\":\"docker-registry.default.svc:5000/php72-fpm/php72-fpm-s2i@sha256:c98dd004a37f107fedeb05fcd5b0f88a63cc07160e9c6480183c3aa293ffbe07\"},\"pullSecret\":{\"name\":\"builder-dockercfg-cttwr\"}}},\"output\":{\"to\":{\"kind\":\"DockerImage\",\"name\":\"docker-registry.default.svc:5000/php72-fpm/php72-fpm-img:latest\"},\"pushSecret\":{\"name\":\"builder-dockercfg-cttwr\"}},\"resources\":{},\"postCommit\":{},\"nodeSelector\":null,\"triggeredBy\":[{\"message\":\"Build configuration change\"}]},\"status\":{\"phase\":\"New\",\"outputDockerImageReference\":\"docker-registry.default.svc:5000/php72-fpm/php72-fpm-img:latest\",\"config\":{\"kind\":\"BuildConfig\",\"namespace\":\"php72-fpm\",\"name\":\"php72-fpm-img\"},\"output\":{}}}\n"
+                            },
+                            {
+                                "name": "SOURCE_REPOSITORY",
+                                "value": "https://github.com/samyunodos/s2i-php-container.git"
+                            },
+                            {
+                                "name": "SOURCE_URI",
+                                "value": "https://github.com/samyunodos/s2i-php-container.git"
+                            },
+                            {
+                                "name": "SOURCE_CONTEXT_DIR",
+                                "value": "test/test-app"
+                            },
+                            {
+                                "name": "SOURCE_REF",
+                                "value": "php72-fpm"
+                            },
+                            {
+                                "name": "ALLOWED_UIDS",
+                                "value": "1-"
+                            },
+                            {
+                                "name": "DROP_CAPS",
+                                "value": "KILL,MKNOD,SETGID,SETUID"
+                            }
+                        ],
+                        "image": "docker.io/openshift/origin-docker-builder:v3.11.0",
+                        "imagePullPolicy": "IfNotPresent",
+                        "name": "manage-dockerfile",
+                        "resources": {},
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "FallbackToLogsOnError",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/tmp/build",
+                                "name": "buildworkdir"
+                            },
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "builder-token-2dhgh",
+                                "readOnly": true
+                            }
+                        ]
+                    }
+                ],
+                "nodeName": "node02.srv.world",
+                "nodeSelector": {
+                    "node-role.kubernetes.io/compute": "true"
+                },
+                "priority": 0,
+                "restartPolicy": "Never",
+                "schedulerName": "default-scheduler",
+                "securityContext": {},
+                "serviceAccount": "builder",
+                "serviceAccountName": "builder",
+                "terminationGracePeriodSeconds": 30,
+                "volumes": [
+                    {
+                        "emptyDir": {},
+                        "name": "buildworkdir"
+                    },
+                    {
+                        "hostPath": {
+                            "path": "/var/run/docker.sock",
+                            "type": ""
+                        },
+                        "name": "docker-socket"
+                    },
+                    {
+                        "hostPath": {
+                            "path": "/var/run/crio/crio.sock",
+                            "type": ""
+                        },
+                        "name": "crio-socket"
+                    },
+                    {
+                        "name": "builder-dockercfg-cttwr-push",
+                        "secret": {
+                            "defaultMode": 384,
+                            "secretName": "builder-dockercfg-cttwr"
+                        }
+                    },
+                    {
+                        "name": "builder-dockercfg-cttwr-pull",
+                        "secret": {
+                            "defaultMode": 384,
+                            "secretName": "builder-dockercfg-cttwr"
+                        }
+                    },
+                    {
+                        "name": "builder-token-2dhgh",
+                        "secret": {
+                            "defaultMode": 420,
+                            "secretName": "builder-token-2dhgh"
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2019-10-13T14:46:34Z",
+                        "reason": "PodCompleted",
+                        "status": "True",
+                        "type": "Initialized"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2019-10-13T14:47:20Z",
+                        "reason": "PodCompleted",
+                        "status": "False",
+                        "type": "Ready"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": null,
+                        "reason": "PodCompleted",
+                        "status": "False",
+                        "type": "ContainersReady"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2019-10-13T14:46:19Z",
+                        "status": "True",
+                        "type": "PodScheduled"
+                    }
+                ],
+                "containerStatuses": [
+                    {
+                        "containerID": "docker://b3634d632ed4744d18f30f8464b16a376389994afeb5d352c8a1c4922707b53d",
+                        "image": "docker.io/openshift/origin-docker-builder:v3.11.0",
+                        "imageID": "docker-pullable://docker.io/openshift/origin-docker-builder@sha256:54c4e677d41c8297c7febb69cbefb446946685fc2075a05bd07f48247d5c3890",
+                        "lastState": {},
+                        "name": "sti-build",
+                        "ready": false,
+                        "restartCount": 0,
+                        "state": {
+                            "terminated": {
+                                "containerID": "docker://b3634d632ed4744d18f30f8464b16a376389994afeb5d352c8a1c4922707b53d",
+                                "exitCode": 0,
+                                "finishedAt": "2019-10-13T14:47:19Z",
+                                "reason": "Completed",
+                                "startedAt": "2019-10-13T14:46:35Z"
+                            }
+                        }
+                    }
+                ],
+                "hostIP": "192.168.122.102",
+                "initContainerStatuses": [
+                    {
+                        "containerID": "docker://3338262a9e7b836164e0fc44cdc4d37ee454a05cea499946cd7329e46c15ab76",
+                        "image": "docker.io/openshift/origin-docker-builder:v3.11.0",
+                        "imageID": "docker-pullable://docker.io/openshift/origin-docker-builder@sha256:54c4e677d41c8297c7febb69cbefb446946685fc2075a05bd07f48247d5c3890",
+                        "lastState": {},
+                        "name": "git-clone",
+                        "ready": true,
+                        "restartCount": 0,
+                        "state": {
+                            "terminated": {
+                                "containerID": "docker://3338262a9e7b836164e0fc44cdc4d37ee454a05cea499946cd7329e46c15ab76",
+                                "exitCode": 0,
+                                "finishedAt": "2019-10-13T14:46:31Z",
+                                "reason": "Completed",
+                                "startedAt": "2019-10-13T14:46:24Z"
+                            }
+                        }
+                    },
+                    {
+                        "containerID": "docker://e0162613347d29790d0a3db42474be6ea66695099977e409b6bc2f7201542a2a",
+                        "image": "docker.io/openshift/origin-docker-builder:v3.11.0",
+                        "imageID": "docker-pullable://docker.io/openshift/origin-docker-builder@sha256:54c4e677d41c8297c7febb69cbefb446946685fc2075a05bd07f48247d5c3890",
+                        "lastState": {},
+                        "name": "manage-dockerfile",
+                        "ready": true,
+                        "restartCount": 0,
+                        "state": {
+                            "terminated": {
+                                "containerID": "docker://e0162613347d29790d0a3db42474be6ea66695099977e409b6bc2f7201542a2a",
+                                "exitCode": 0,
+                                "finishedAt": "2019-10-13T14:46:33Z",
+                                "reason": "Completed",
+                                "startedAt": "2019-10-13T14:46:33Z"
+                            }
+                        }
+                    }
+                ],
+                "phase": "Succeeded",
+                "podIP": "10.129.0.15",
+                "qosClass": "BestEffort",
+                "startTime": "2019-10-13T14:46:19Z"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "annotations": {
+                    "openshift.io/deployment-config.latest-version": "1",
+                    "openshift.io/deployment-config.name": "php72-fpm-img",
+                    "openshift.io/deployment.name": "php72-fpm-img-1",
+                    "openshift.io/scc": "restricted"
+                },
+                "creationTimestamp": "2019-10-13T14:44:47Z",
+                "generateName": "php72-fpm-img-1-",
+                "labels": {
+                    "app": "php72-fpm-img",
+                    "deployment": "php72-fpm-img-1",
+                    "deploymentconfig": "php72-fpm-img"
+                },
+                "name": "php72-fpm-img-1-kgtzt",
+                "namespace": "php72-fpm",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "ReplicationController",
+                        "name": "php72-fpm-img-1",
+                        "uid": "fa1a4248-edc7-11e9-aabc-525400d89ef8"
+                    }
+                ],
+                "resourceVersion": "2464785",
+                "selfLink": "/api/v1/namespaces/php72-fpm/pods/php72-fpm-img-1-kgtzt",
+                "uid": "00accb79-edc8-11e9-aabc-525400d89ef8"
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "image": "docker-registry.default.svc:5000/php72-fpm/php72-fpm-img:latest",
+                        "imagePullPolicy": "Always",
+                        "name": "php72-fpm-img",
+                        "ports": [
+                            {
+                                "containerPort": 8443,
+                                "protocol": "TCP"
+                            },
+                            {
+                                "containerPort": 8080,
+                                "protocol": "TCP"
+                            }
+                        ],
+                        "resources": {},
+                        "securityContext": {
+                            "capabilities": {
+                                "drop": [
+                                    "KILL",
+                                    "MKNOD",
+                                    "SETGID",
+                                    "SETUID"
+                                ]
+                            },
+                            "runAsUser": 1000120000
+                        },
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "default-token-tq4dm",
+                                "readOnly": true
+                            }
+                        ]
+                    }
+                ],
+                "dnsPolicy": "ClusterFirst",
+                "imagePullSecrets": [
+                    {
+                        "name": "default-dockercfg-9f5w7"
+                    }
+                ],
+                "nodeName": "node01.srv.world",
+                "nodeSelector": {
+                    "node-role.kubernetes.io/compute": "true"
+                },
+                "priority": 0,
+                "restartPolicy": "Always",
+                "schedulerName": "default-scheduler",
+                "securityContext": {
+                    "fsGroup": 1000120000,
+                    "seLinuxOptions": {
+                        "level": "s0:c11,c5"
+                    }
+                },
+                "serviceAccount": "default",
+                "serviceAccountName": "default",
+                "terminationGracePeriodSeconds": 30,
+                "volumes": [
+                    {
+                        "name": "default-token-tq4dm",
+                        "secret": {
+                            "defaultMode": 420,
+                            "secretName": "default-token-tq4dm"
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2019-10-13T14:44:47Z",
+                        "status": "True",
+                        "type": "Initialized"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2019-10-13T14:47:59Z",
+                        "status": "True",
+                        "type": "Ready"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": null,
+                        "status": "True",
+                        "type": "ContainersReady"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2019-10-13T14:44:47Z",
+                        "status": "True",
+                        "type": "PodScheduled"
+                    }
+                ],
+                "containerStatuses": [
+                    {
+                        "containerID": "docker://41461bee5e8a777f7bbe1e77e72a8c2e1ac181866a24db120316e060cc91295f",
+                        "image": "docker-registry.default.svc:5000/php72-fpm/php72-fpm-img:latest",
+                        "imageID": "docker-pullable://docker-registry.default.svc:5000/php72-fpm/php72-fpm-img@sha256:db82358f33b109ed244d16562d5d596972e152537d152c2c5df226e3515dd941",
+                        "lastState": {},
+                        "name": "php72-fpm-img",
+                        "ready": true,
+                        "restartCount": 0,
+                        "state": {
+                            "running": {
+                                "startedAt": "2019-10-13T14:47:59Z"
+                            }
+                        }
+                    }
+                ],
+                "hostIP": "192.168.122.101",
+                "phase": "Running",
+                "podIP": "10.130.1.74",
+                "qosClass": "BestEffort",
+                "startTime": "2019-10-13T14:44:47Z"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "annotations": {
+                    "openshift.io/build.name": "php72-fpm-s2i-1",
+                    "openshift.io/scc": "privileged"
+                },
+                "creationTimestamp": "2019-10-13T14:44:36Z",
+                "labels": {
+                    "openshift.io/build.name": "php72-fpm-s2i-1"
+                },
+                "name": "php72-fpm-s2i-1-build",
+                "namespace": "php72-fpm",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "build.openshift.io/v1",
+                        "controller": true,
+                        "kind": "Build",
+                        "name": "php72-fpm-s2i-1",
+                        "uid": "fa103657-edc7-11e9-aabc-525400d89ef8"
+                    }
+                ],
+                "resourceVersion": "2464500",
+                "selfLink": "/api/v1/namespaces/php72-fpm/pods/php72-fpm-s2i-1-build",
+                "uid": "fa2bad82-edc7-11e9-aabc-525400d89ef8"
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "args": [
+                            "--loglevel=0"
+                        ],
+                        "command": [
+                            "openshift-docker-build"
+                        ],
+                        "env": [
+                            {
+                                "name": "BUILD",
+                                "value": "{\"kind\":\"Build\",\"apiVersion\":\"build.openshift.io/v1\",\"metadata\":{\"name\":\"php72-fpm-s2i-1\",\"namespace\":\"php72-fpm\",\"selfLink\":\"/apis/build.openshift.io/v1/namespaces/php72-fpm/builds/php72-fpm-s2i-1\",\"uid\":\"fa103657-edc7-11e9-aabc-525400d89ef8\",\"resourceVersion\":\"2464222\",\"creationTimestamp\":\"2019-10-13T14:44:36Z\",\"labels\":{\"app\":\"php72-fpm\",\"build\":\"php72-fpm-s2i\",\"buildconfig\":\"php72-fpm-s2i\",\"openshift.io/build-config.name\":\"php72-fpm-s2i\",\"openshift.io/build.start-policy\":\"Serial\"},\"annotations\":{\"openshift.io/build-config.name\":\"php72-fpm-s2i\",\"openshift.io/build.number\":\"1\"},\"ownerReferences\":[{\"apiVersion\":\"build.openshift.io/v1\",\"kind\":\"BuildConfig\",\"name\":\"php72-fpm-s2i\",\"uid\":\"f9fc0935-edc7-11e9-aabc-525400d89ef8\",\"controller\":true}]},\"spec\":{\"serviceAccount\":\"builder\",\"source\":{\"type\":\"Git\",\"git\":{\"uri\":\"https://github.com/samyunodos/s2i-php-container.git\",\"ref\":\"php72-fpm\"},\"contextDir\":\"7.2\"},\"strategy\":{\"type\":\"Docker\",\"dockerStrategy\":{\"from\":{\"kind\":\"DockerImage\",\"name\":\"docker.io/centos/s2i-base-centos7:latest\"},\"pullSecret\":{\"name\":\"builder-dockercfg-cttwr\"},\"forcePull\":true}},\"output\":{\"to\":{\"kind\":\"DockerImage\",\"name\":\"docker-registry.default.svc:5000/php72-fpm/php72-fpm-s2i:latest\"},\"pushSecret\":{\"name\":\"builder-dockercfg-cttwr\"}},\"resources\":{},\"postCommit\":{},\"nodeSelector\":null,\"triggeredBy\":[{\"message\":\"Build configuration change\"}]},\"status\":{\"phase\":\"New\",\"outputDockerImageReference\":\"docker-registry.default.svc:5000/php72-fpm/php72-fpm-s2i:latest\",\"config\":{\"kind\":\"BuildConfig\",\"namespace\":\"php72-fpm\",\"name\":\"php72-fpm-s2i\"},\"output\":{}}}\n"
+                            },
+                            {
+                                "name": "SOURCE_REPOSITORY",
+                                "value": "https://github.com/samyunodos/s2i-php-container.git"
+                            },
+                            {
+                                "name": "SOURCE_URI",
+                                "value": "https://github.com/samyunodos/s2i-php-container.git"
+                            },
+                            {
+                                "name": "SOURCE_CONTEXT_DIR",
+                                "value": "7.2"
+                            },
+                            {
+                                "name": "SOURCE_REF",
+                                "value": "php72-fpm"
+                            },
+                            {
+                                "name": "PUSH_DOCKERCFG_PATH",
+                                "value": "/var/run/secrets/openshift.io/push"
+                            },
+                            {
+                                "name": "PULL_DOCKERCFG_PATH",
+                                "value": "/var/run/secrets/openshift.io/pull"
+                            }
+                        ],
+                        "image": "docker.io/openshift/origin-docker-builder:v3.11.0",
+                        "imagePullPolicy": "IfNotPresent",
+                        "name": "docker-build",
+                        "resources": {},
+                        "securityContext": {
+                            "privileged": true
+                        },
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "FallbackToLogsOnError",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/tmp/build",
+                                "name": "buildworkdir"
+                            },
+                            {
+                                "mountPath": "/var/run/docker.sock",
+                                "name": "docker-socket"
+                            },
+                            {
+                                "mountPath": "/var/run/crio/crio.sock",
+                                "name": "crio-socket"
+                            },
+                            {
+                                "mountPath": "/var/run/secrets/openshift.io/push",
+                                "name": "builder-dockercfg-cttwr-push",
+                                "readOnly": true
+                            },
+                            {
+                                "mountPath": "/var/run/secrets/openshift.io/pull",
+                                "name": "builder-dockercfg-cttwr-pull",
+                                "readOnly": true
+                            },
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "builder-token-2dhgh",
+                                "readOnly": true
+                            }
+                        ]
+                    }
+                ],
+                "dnsPolicy": "ClusterFirst",
+                "imagePullSecrets": [
+                    {
+                        "name": "builder-dockercfg-cttwr"
+                    }
+                ],
+                "initContainers": [
+                    {
+                        "args": [
+                            "--loglevel=0"
+                        ],
+                        "command": [
+                            "openshift-git-clone"
+                        ],
+                        "env": [
+                            {
+                                "name": "BUILD",
+                                "value": "{\"kind\":\"Build\",\"apiVersion\":\"build.openshift.io/v1\",\"metadata\":{\"name\":\"php72-fpm-s2i-1\",\"namespace\":\"php72-fpm\",\"selfLink\":\"/apis/build.openshift.io/v1/namespaces/php72-fpm/builds/php72-fpm-s2i-1\",\"uid\":\"fa103657-edc7-11e9-aabc-525400d89ef8\",\"resourceVersion\":\"2464222\",\"creationTimestamp\":\"2019-10-13T14:44:36Z\",\"labels\":{\"app\":\"php72-fpm\",\"build\":\"php72-fpm-s2i\",\"buildconfig\":\"php72-fpm-s2i\",\"openshift.io/build-config.name\":\"php72-fpm-s2i\",\"openshift.io/build.start-policy\":\"Serial\"},\"annotations\":{\"openshift.io/build-config.name\":\"php72-fpm-s2i\",\"openshift.io/build.number\":\"1\"},\"ownerReferences\":[{\"apiVersion\":\"build.openshift.io/v1\",\"kind\":\"BuildConfig\",\"name\":\"php72-fpm-s2i\",\"uid\":\"f9fc0935-edc7-11e9-aabc-525400d89ef8\",\"controller\":true}]},\"spec\":{\"serviceAccount\":\"builder\",\"source\":{\"type\":\"Git\",\"git\":{\"uri\":\"https://github.com/samyunodos/s2i-php-container.git\",\"ref\":\"php72-fpm\"},\"contextDir\":\"7.2\"},\"strategy\":{\"type\":\"Docker\",\"dockerStrategy\":{\"from\":{\"kind\":\"DockerImage\",\"name\":\"docker.io/centos/s2i-base-centos7:latest\"},\"pullSecret\":{\"name\":\"builder-dockercfg-cttwr\"},\"forcePull\":true}},\"output\":{\"to\":{\"kind\":\"DockerImage\",\"name\":\"docker-registry.default.svc:5000/php72-fpm/php72-fpm-s2i:latest\"},\"pushSecret\":{\"name\":\"builder-dockercfg-cttwr\"}},\"resources\":{},\"postCommit\":{},\"nodeSelector\":null,\"triggeredBy\":[{\"message\":\"Build configuration change\"}]},\"status\":{\"phase\":\"New\",\"outputDockerImageReference\":\"docker-registry.default.svc:5000/php72-fpm/php72-fpm-s2i:latest\",\"config\":{\"kind\":\"BuildConfig\",\"namespace\":\"php72-fpm\",\"name\":\"php72-fpm-s2i\"},\"output\":{}}}\n"
+                            },
+                            {
+                                "name": "SOURCE_REPOSITORY",
+                                "value": "https://github.com/samyunodos/s2i-php-container.git"
+                            },
+                            {
+                                "name": "SOURCE_URI",
+                                "value": "https://github.com/samyunodos/s2i-php-container.git"
+                            },
+                            {
+                                "name": "SOURCE_CONTEXT_DIR",
+                                "value": "7.2"
+                            },
+                            {
+                                "name": "SOURCE_REF",
+                                "value": "php72-fpm"
+                            }
+                        ],
+                        "image": "docker.io/openshift/origin-docker-builder:v3.11.0",
+                        "imagePullPolicy": "IfNotPresent",
+                        "name": "git-clone",
+                        "resources": {},
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "FallbackToLogsOnError",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/tmp/build",
+                                "name": "buildworkdir"
+                            },
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "builder-token-2dhgh",
+                                "readOnly": true
+                            }
+                        ]
+                    },
+                    {
+                        "args": [
+                            "--loglevel=0"
+                        ],
+                        "command": [
+                            "openshift-manage-dockerfile"
+                        ],
+                        "env": [
+                            {
+                                "name": "BUILD",
+                                "value": "{\"kind\":\"Build\",\"apiVersion\":\"build.openshift.io/v1\",\"metadata\":{\"name\":\"php72-fpm-s2i-1\",\"namespace\":\"php72-fpm\",\"selfLink\":\"/apis/build.openshift.io/v1/namespaces/php72-fpm/builds/php72-fpm-s2i-1\",\"uid\":\"fa103657-edc7-11e9-aabc-525400d89ef8\",\"resourceVersion\":\"2464222\",\"creationTimestamp\":\"2019-10-13T14:44:36Z\",\"labels\":{\"app\":\"php72-fpm\",\"build\":\"php72-fpm-s2i\",\"buildconfig\":\"php72-fpm-s2i\",\"openshift.io/build-config.name\":\"php72-fpm-s2i\",\"openshift.io/build.start-policy\":\"Serial\"},\"annotations\":{\"openshift.io/build-config.name\":\"php72-fpm-s2i\",\"openshift.io/build.number\":\"1\"},\"ownerReferences\":[{\"apiVersion\":\"build.openshift.io/v1\",\"kind\":\"BuildConfig\",\"name\":\"php72-fpm-s2i\",\"uid\":\"f9fc0935-edc7-11e9-aabc-525400d89ef8\",\"controller\":true}]},\"spec\":{\"serviceAccount\":\"builder\",\"source\":{\"type\":\"Git\",\"git\":{\"uri\":\"https://github.com/samyunodos/s2i-php-container.git\",\"ref\":\"php72-fpm\"},\"contextDir\":\"7.2\"},\"strategy\":{\"type\":\"Docker\",\"dockerStrategy\":{\"from\":{\"kind\":\"DockerImage\",\"name\":\"docker.io/centos/s2i-base-centos7:latest\"},\"pullSecret\":{\"name\":\"builder-dockercfg-cttwr\"},\"forcePull\":true}},\"output\":{\"to\":{\"kind\":\"DockerImage\",\"name\":\"docker-registry.default.svc:5000/php72-fpm/php72-fpm-s2i:latest\"},\"pushSecret\":{\"name\":\"builder-dockercfg-cttwr\"}},\"resources\":{},\"postCommit\":{},\"nodeSelector\":null,\"triggeredBy\":[{\"message\":\"Build configuration change\"}]},\"status\":{\"phase\":\"New\",\"outputDockerImageReference\":\"docker-registry.default.svc:5000/php72-fpm/php72-fpm-s2i:latest\",\"config\":{\"kind\":\"BuildConfig\",\"namespace\":\"php72-fpm\",\"name\":\"php72-fpm-s2i\"},\"output\":{}}}\n"
+                            },
+                            {
+                                "name": "SOURCE_REPOSITORY",
+                                "value": "https://github.com/samyunodos/s2i-php-container.git"
+                            },
+                            {
+                                "name": "SOURCE_URI",
+                                "value": "https://github.com/samyunodos/s2i-php-container.git"
+                            },
+                            {
+                                "name": "SOURCE_CONTEXT_DIR",
+                                "value": "7.2"
+                            },
+                            {
+                                "name": "SOURCE_REF",
+                                "value": "php72-fpm"
+                            }
+                        ],
+                        "image": "docker.io/openshift/origin-docker-builder:v3.11.0",
+                        "imagePullPolicy": "IfNotPresent",
+                        "name": "manage-dockerfile",
+                        "resources": {},
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "FallbackToLogsOnError",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/tmp/build",
+                                "name": "buildworkdir"
+                            },
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "builder-token-2dhgh",
+                                "readOnly": true
+                            }
+                        ]
+                    }
+                ],
+                "nodeName": "node02.srv.world",
+                "nodeSelector": {
+                    "node-role.kubernetes.io/compute": "true"
+                },
+                "priority": 0,
+                "restartPolicy": "Never",
+                "schedulerName": "default-scheduler",
+                "securityContext": {},
+                "serviceAccount": "builder",
+                "serviceAccountName": "builder",
+                "terminationGracePeriodSeconds": 30,
+                "volumes": [
+                    {
+                        "emptyDir": {},
+                        "name": "buildworkdir"
+                    },
+                    {
+                        "hostPath": {
+                            "path": "/var/run/docker.sock",
+                            "type": ""
+                        },
+                        "name": "docker-socket"
+                    },
+                    {
+                        "hostPath": {
+                            "path": "/var/run/crio/crio.sock",
+                            "type": ""
+                        },
+                        "name": "crio-socket"
+                    },
+                    {
+                        "name": "builder-dockercfg-cttwr-push",
+                        "secret": {
+                            "defaultMode": 384,
+                            "secretName": "builder-dockercfg-cttwr"
+                        }
+                    },
+                    {
+                        "name": "builder-dockercfg-cttwr-pull",
+                        "secret": {
+                            "defaultMode": 384,
+                            "secretName": "builder-dockercfg-cttwr"
+                        }
+                    },
+                    {
+                        "name": "builder-token-2dhgh",
+                        "secret": {
+                            "defaultMode": 420,
+                            "secretName": "builder-token-2dhgh"
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2019-10-13T14:44:58Z",
+                        "reason": "PodCompleted",
+                        "status": "True",
+                        "type": "Initialized"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2019-10-13T14:46:00Z",
+                        "reason": "PodCompleted",
+                        "status": "False",
+                        "type": "Ready"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": null,
+                        "reason": "PodCompleted",
+                        "status": "False",
+                        "type": "ContainersReady"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2019-10-13T14:44:36Z",
+                        "status": "True",
+                        "type": "PodScheduled"
+                    }
+                ],
+                "containerStatuses": [
+                    {
+                        "containerID": "docker://bf826dc0efbe40583252c77bbbbf8b54d54a4d79a76ac308d99f6677e264ad6d",
+                        "image": "docker.io/openshift/origin-docker-builder:v3.11.0",
+                        "imageID": "docker-pullable://docker.io/openshift/origin-docker-builder@sha256:54c4e677d41c8297c7febb69cbefb446946685fc2075a05bd07f48247d5c3890",
+                        "lastState": {},
+                        "name": "docker-build",
+                        "ready": false,
+                        "restartCount": 0,
+                        "state": {
+                            "terminated": {
+                                "containerID": "docker://bf826dc0efbe40583252c77bbbbf8b54d54a4d79a76ac308d99f6677e264ad6d",
+                                "exitCode": 0,
+                                "finishedAt": "2019-10-13T14:45:59Z",
+                                "reason": "Completed",
+                                "startedAt": "2019-10-13T14:45:01Z"
+                            }
+                        }
+                    }
+                ],
+                "hostIP": "192.168.122.102",
+                "initContainerStatuses": [
+                    {
+                        "containerID": "docker://127b297f88dded4af238800be526e915e7972a9fb926b92ee7dc3553dd55db08",
+                        "image": "docker.io/openshift/origin-docker-builder:v3.11.0",
+                        "imageID": "docker-pullable://docker.io/openshift/origin-docker-builder@sha256:54c4e677d41c8297c7febb69cbefb446946685fc2075a05bd07f48247d5c3890",
+                        "lastState": {},
+                        "name": "git-clone",
+                        "ready": true,
+                        "restartCount": 0,
+                        "state": {
+                            "terminated": {
+                                "containerID": "docker://127b297f88dded4af238800be526e915e7972a9fb926b92ee7dc3553dd55db08",
+                                "exitCode": 0,
+                                "finishedAt": "2019-10-13T14:44:52Z",
+                                "reason": "Completed",
+                                "startedAt": "2019-10-13T14:44:45Z"
+                            }
+                        }
+                    },
+                    {
+                        "containerID": "docker://fbbad434275c9272986f87bf7c29d568df5eadd3fa16276e274eff6a06142639",
+                        "image": "docker.io/openshift/origin-docker-builder:v3.11.0",
+                        "imageID": "docker-pullable://docker.io/openshift/origin-docker-builder@sha256:54c4e677d41c8297c7febb69cbefb446946685fc2075a05bd07f48247d5c3890",
+                        "lastState": {},
+                        "name": "manage-dockerfile",
+                        "ready": true,
+                        "restartCount": 0,
+                        "state": {
+                            "terminated": {
+                                "containerID": "docker://fbbad434275c9272986f87bf7c29d568df5eadd3fa16276e274eff6a06142639",
+                                "exitCode": 0,
+                                "finishedAt": "2019-10-13T14:44:58Z",
+                                "reason": "Completed",
+                                "startedAt": "2019-10-13T14:44:57Z"
+                            }
+                        }
+                    }
+                ],
+                "phase": "Succeeded",
+                "podIP": "10.129.0.14",
+                "qosClass": "BestEffort",
+                "startTime": "2019-10-13T14:44:36Z"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "ReplicationController",
+            "metadata": {
+                "annotations": {
+                    "openshift.io/deployer-pod.completed-at": "2019-10-13 14:48:00 +0000 UTC",
+                    "openshift.io/deployer-pod.created-at": "2019-10-13 14:44:36 +0000 UTC",
+                    "openshift.io/deployer-pod.name": "php72-fpm-img-1-deploy",
+                    "openshift.io/deployment-config.latest-version": "1",
+                    "openshift.io/deployment-config.name": "php72-fpm-img",
+                    "openshift.io/deployment.phase": "Complete",
+                    "openshift.io/deployment.replicas": "1",
+                    "openshift.io/deployment.status-reason": "config change",
+                    "openshift.io/encoded-deployment-config": "{\"kind\":\"DeploymentConfig\",\"apiVersion\":\"apps.openshift.io/v1\",\"metadata\":{\"name\":\"php72-fpm-img\",\"namespace\":\"php72-fpm\",\"selfLink\":\"/apis/apps.openshift.io/v1/namespaces/php72-fpm/deploymentconfigs/php72-fpm-img\",\"uid\":\"fa082c56-edc7-11e9-aabc-525400d89ef8\",\"resourceVersion\":\"2464221\",\"generation\":1,\"creationTimestamp\":\"2019-10-13T14:44:36Z\",\"labels\":{\"app\":\"php72-fpm-img\"}},\"spec\":{\"strategy\":{\"type\":\"Rolling\",\"rollingParams\":{\"updatePeriodSeconds\":1,\"intervalSeconds\":1,\"timeoutSeconds\":600,\"maxUnavailable\":\"25%\",\"maxSurge\":\"25%\"},\"resources\":{},\"activeDeadlineSeconds\":21600},\"triggers\":[{\"type\":\"ConfigChange\"}],\"replicas\":1,\"revisionHistoryLimit\":10,\"test\":false,\"selector\":{\"app\":\"php72-fpm-img\",\"deploymentconfig\":\"php72-fpm-img\"},\"template\":{\"metadata\":{\"creationTimestamp\":null,\"labels\":{\"app\":\"php72-fpm-img\",\"deploymentconfig\":\"php72-fpm-img\"}},\"spec\":{\"containers\":[{\"name\":\"php72-fpm-img\",\"image\":\"docker-registry.default.svc:5000/php72-fpm/php72-fpm-img:latest\",\"ports\":[{\"containerPort\":8443,\"protocol\":\"TCP\"},{\"containerPort\":8080,\"protocol\":\"TCP\"}],\"resources\":{},\"terminationMessagePath\":\"/dev/termination-log\",\"terminationMessagePolicy\":\"File\",\"imagePullPolicy\":\"Always\"}],\"restartPolicy\":\"Always\",\"terminationGracePeriodSeconds\":30,\"dnsPolicy\":\"ClusterFirst\",\"securityContext\":{},\"schedulerName\":\"default-scheduler\"}}},\"status\":{\"latestVersion\":1,\"observedGeneration\":0,\"replicas\":0,\"updatedReplicas\":0,\"availableReplicas\":0,\"unavailableReplicas\":0,\"details\":{\"message\":\"config change\",\"causes\":[{\"type\":\"ConfigChange\"}]}}}\n"
+                },
+                "creationTimestamp": "2019-10-13T14:44:36Z",
+                "generation": 2,
+                "labels": {
+                    "app": "php72-fpm-img",
+                    "openshift.io/deployment-config.name": "php72-fpm-img"
+                },
+                "name": "php72-fpm-img-1",
+                "namespace": "php72-fpm",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps.openshift.io/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "DeploymentConfig",
+                        "name": "php72-fpm-img",
+                        "uid": "fa082c56-edc7-11e9-aabc-525400d89ef8"
+                    }
+                ],
+                "resourceVersion": "2464793",
+                "selfLink": "/api/v1/namespaces/php72-fpm/replicationcontrollers/php72-fpm-img-1",
+                "uid": "fa1a4248-edc7-11e9-aabc-525400d89ef8"
+            },
+            "spec": {
+                "replicas": 1,
+                "selector": {
+                    "app": "php72-fpm-img",
+                    "deployment": "php72-fpm-img-1",
+                    "deploymentconfig": "php72-fpm-img"
+                },
+                "template": {
+                    "metadata": {
+                        "annotations": {
+                            "openshift.io/deployment-config.latest-version": "1",
+                            "openshift.io/deployment-config.name": "php72-fpm-img",
+                            "openshift.io/deployment.name": "php72-fpm-img-1"
+                        },
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "php72-fpm-img",
+                            "deployment": "php72-fpm-img-1",
+                            "deploymentconfig": "php72-fpm-img"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "image": "docker-registry.default.svc:5000/php72-fpm/php72-fpm-img:latest",
+                                "imagePullPolicy": "Always",
+                                "name": "php72-fpm-img",
+                                "ports": [
+                                    {
+                                        "containerPort": 8443,
+                                        "protocol": "TCP"
+                                    },
+                                    {
+                                        "containerPort": 8080,
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File"
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30
+                    }
+                }
+            },
+            "status": {
+                "availableReplicas": 1,
+                "fullyLabeledReplicas": 1,
+                "observedGeneration": 2,
+                "readyReplicas": 1,
+                "replicas": 1
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "creationTimestamp": "2019-10-13T14:44:36Z",
+                "labels": {
+                    "app": "php72-fpm-img"
+                },
+                "name": "php72-fpm-img",
+                "namespace": "php72-fpm",
+                "resourceVersion": "2464215",
+                "selfLink": "/api/v1/namespaces/php72-fpm/services/php72-fpm-img",
+                "uid": "fa04620f-edc7-11e9-aabc-525400d89ef8"
+            },
+            "spec": {
+                "clusterIP": "172.30.62.85",
+                "ports": [
+                    {
+                        "name": "8080-tcp",
+                        "port": 8080,
+                        "protocol": "TCP",
+                        "targetPort": 8080
+                    },
+                    {
+                        "name": "8443-tcp",
+                        "port": 8443,
+                        "protocol": "TCP",
+                        "targetPort": 8443
+                    }
+                ],
+                "selector": {
+                    "app": "php72-fpm-img",
+                    "deploymentconfig": "php72-fpm-img"
+                },
+                "sessionAffinity": "None",
+                "type": "ClusterIP"
+            },
+            "status": {
+                "loadBalancer": {}
+            }
+        },
+        {
+            "apiVersion": "apps.openshift.io/v1",
+            "kind": "DeploymentConfig",
+            "metadata": {
+                "creationTimestamp": "2019-10-13T14:44:36Z",
+                "generation": 1,
+                "labels": {
+                    "app": "php72-fpm-img"
+                },
+                "name": "php72-fpm-img",
+                "namespace": "php72-fpm",
+                "resourceVersion": "2464794",
+                "selfLink": "/apis/apps.openshift.io/v1/namespaces/php72-fpm/deploymentconfigs/php72-fpm-img",
+                "uid": "fa082c56-edc7-11e9-aabc-525400d89ef8"
+            },
+            "spec": {
+                "replicas": 1,
+                "revisionHistoryLimit": 10,
+                "selector": {
+                    "app": "php72-fpm-img",
+                    "deploymentconfig": "php72-fpm-img"
+                },
+                "strategy": {
+                    "activeDeadlineSeconds": 21600,
+                    "resources": {},
+                    "rollingParams": {
+                        "intervalSeconds": 1,
+                        "maxSurge": "25%",
+                        "maxUnavailable": "25%",
+                        "timeoutSeconds": 600,
+                        "updatePeriodSeconds": 1
+                    },
+                    "type": "Rolling"
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "php72-fpm-img",
+                            "deploymentconfig": "php72-fpm-img"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "image": "docker-registry.default.svc:5000/php72-fpm/php72-fpm-img:latest",
+                                "imagePullPolicy": "Always",
+                                "name": "php72-fpm-img",
+                                "ports": [
+                                    {
+                                        "containerPort": 8443,
+                                        "protocol": "TCP"
+                                    },
+                                    {
+                                        "containerPort": 8080,
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File"
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30
+                    }
+                },
+                "test": false,
+                "triggers": [
+                    {
+                        "type": "ConfigChange"
+                    }
+                ]
+            },
+            "status": {
+                "availableReplicas": 1,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2019-10-13T14:48:00Z",
+                        "lastUpdateTime": "2019-10-13T14:48:00Z",
+                        "message": "Deployment config has minimum availability.",
+                        "status": "True",
+                        "type": "Available"
+                    },
+                    {
+                        "lastTransitionTime": "2019-10-13T14:44:47Z",
+                        "lastUpdateTime": "2019-10-13T14:48:01Z",
+                        "message": "replication controller \"php72-fpm-img-1\" successfully rolled out",
+                        "reason": "NewReplicationControllerAvailable",
+                        "status": "True",
+                        "type": "Progressing"
+                    }
+                ],
+                "details": {
+                    "causes": [
+                        {
+                            "type": "ConfigChange"
+                        }
+                    ],
+                    "message": "config change"
+                },
+                "latestVersion": 1,
+                "observedGeneration": 1,
+                "readyReplicas": 1,
+                "replicas": 1,
+                "unavailableReplicas": 0,
+                "updatedReplicas": 1
+            }
+        },
+        {
+            "apiVersion": "build.openshift.io/v1",
+            "kind": "BuildConfig",
+            "metadata": {
+                "creationTimestamp": "2019-10-13T14:44:36Z",
+                "labels": {
+                    "app": "php72-fpm",
+                    "build": "php72-fpm-img"
+                },
+                "name": "php72-fpm-img",
+                "namespace": "php72-fpm",
+                "resourceVersion": "2464544",
+                "selfLink": "/apis/build.openshift.io/v1/namespaces/php72-fpm/buildconfigs/php72-fpm-img",
+                "uid": "fa01e329-edc7-11e9-aabc-525400d89ef8"
+            },
+            "spec": {
+                "failedBuildsHistoryLimit": 5,
+                "nodeSelector": null,
+                "output": {
+                    "to": {
+                        "kind": "ImageStreamTag",
+                        "name": "php72-fpm-img:latest"
+                    }
+                },
+                "postCommit": {},
+                "resources": {},
+                "runPolicy": "Serial",
+                "source": {
+                    "contextDir": "test/test-app",
+                    "git": {
+                        "ref": "php72-fpm",
+                        "uri": "https://github.com/samyunodos/s2i-php-container.git"
+                    },
+                    "type": "Git"
+                },
+                "strategy": {
+                    "sourceStrategy": {
+                        "from": {
+                            "kind": "ImageStreamTag",
+                            "name": "php72-fpm-s2i:latest",
+                            "namespace": "php72-fpm"
+                        }
+                    },
+                    "type": "Source"
+                },
+                "successfulBuildsHistoryLimit": 5,
+                "triggers": [
+                    {
+                        "github": {
+                            "secret": "xdlwMqxFiVkfR9fBiIaV",
+                            "secretReference": {
+                                "name": "secret-php72-fpm-img"
+                            }
+                        },
+                        "type": "GitHub"
+                    },
+                    {
+                        "generic": {
+                            "secret": "F-ilfroO9PAhjTRSWX67"
+                        },
+                        "type": "Generic"
+                    },
+                    {
+                        "type": "ConfigChange"
+                    }
+                ]
+            },
+            "status": {
+                "lastVersion": 1
+            }
+        },
+        {
+            "apiVersion": "build.openshift.io/v1",
+            "kind": "BuildConfig",
+            "metadata": {
+                "creationTimestamp": "2019-10-13T14:44:35Z",
+                "labels": {
+                    "app": "php72-fpm",
+                    "build": "php72-fpm-s2i"
+                },
+                "name": "php72-fpm-s2i",
+                "namespace": "php72-fpm",
+                "resourceVersion": "2464219",
+                "selfLink": "/apis/build.openshift.io/v1/namespaces/php72-fpm/buildconfigs/php72-fpm-s2i",
+                "uid": "f9fc0935-edc7-11e9-aabc-525400d89ef8"
+            },
+            "spec": {
+                "failedBuildsHistoryLimit": 5,
+                "nodeSelector": null,
+                "output": {
+                    "to": {
+                        "kind": "ImageStreamTag",
+                        "name": "php72-fpm-s2i:latest"
+                    }
+                },
+                "postCommit": {},
+                "resources": {},
+                "runPolicy": "Serial",
+                "source": {
+                    "contextDir": "7.2",
+                    "git": {
+                        "ref": "php72-fpm",
+                        "uri": "https://github.com/samyunodos/s2i-php-container.git"
+                    },
+                    "type": "Git"
+                },
+                "strategy": {
+                    "dockerStrategy": {
+                        "forcePull": true,
+                        "from": {
+                            "kind": "DockerImage",
+                            "name": "docker.io/centos/s2i-base-centos7:latest"
+                        }
+                    },
+                    "type": "Docker"
+                },
+                "successfulBuildsHistoryLimit": 5,
+                "triggers": [
+                    {
+                        "github": {
+                            "secret": "xdlwMqxFiVkfR9fBiIaV",
+                            "secretReference": {
+                                "name": "secret-php72-fpm-s2i"
+                            }
+                        },
+                        "type": "GitHub"
+                    },
+                    {
+                        "generic": {
+                            "secret": "F-ilfroO9PAhjTRSWX67"
+                        },
+                        "type": "Generic"
+                    },
+                    {
+                        "type": "ConfigChange"
+                    }
+                ]
+            },
+            "status": {
+                "lastVersion": 1
+            }
+        },
+        {
+            "apiVersion": "build.openshift.io/v1",
+            "kind": "Build",
+            "metadata": {
+                "annotations": {
+                    "openshift.io/build-config.name": "php72-fpm-img",
+                    "openshift.io/build.number": "1",
+                    "openshift.io/build.pod-name": "php72-fpm-img-1-build"
+                },
+                "creationTimestamp": "2019-10-13T14:46:19Z",
+                "labels": {
+                    "app": "php72-fpm",
+                    "build": "php72-fpm-img",
+                    "buildconfig": "php72-fpm-img",
+                    "openshift.io/build-config.name": "php72-fpm-img",
+                    "openshift.io/build.start-policy": "Serial"
+                },
+                "name": "php72-fpm-img-1",
+                "namespace": "php72-fpm",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "build.openshift.io/v1",
+                        "controller": true,
+                        "kind": "BuildConfig",
+                        "name": "php72-fpm-img",
+                        "uid": "fa01e329-edc7-11e9-aabc-525400d89ef8"
+                    }
+                ],
+                "resourceVersion": "2464700",
+                "selfLink": "/apis/build.openshift.io/v1/namespaces/php72-fpm/builds/php72-fpm-img-1",
+                "uid": "37691c96-edc8-11e9-aabc-525400d89ef8"
+            },
+            "spec": {
+                "nodeSelector": null,
+                "output": {
+                    "pushSecret": {
+                        "name": "builder-dockercfg-cttwr"
+                    },
+                    "to": {
+                        "kind": "ImageStreamTag",
+                        "name": "php72-fpm-img:latest"
+                    }
+                },
+                "postCommit": {},
+                "resources": {},
+                "revision": {
+                    "git": {
+                        "author": {
+                            "email": "samyunodos@gmail.com",
+                            "name": "Samyunodos"
+                        },
+                        "commit": "97d296f65fecee81cc4b9be3461261a95823616c",
+                        "committer": {
+                            "email": "samyunodos@gmail.com",
+                            "name": "Samyunodos"
+                        },
+                        "message": "all"
+                    },
+                    "type": "Git"
+                },
+                "serviceAccount": "builder",
+                "source": {
+                    "contextDir": "test/test-app",
+                    "git": {
+                        "ref": "php72-fpm",
+                        "uri": "https://github.com/samyunodos/s2i-php-container.git"
+                    },
+                    "type": "Git"
+                },
+                "strategy": {
+                    "sourceStrategy": {
+                        "from": {
+                            "kind": "DockerImage",
+                            "name": "docker-registry.default.svc:5000/php72-fpm/php72-fpm-s2i@sha256:c98dd004a37f107fedeb05fcd5b0f88a63cc07160e9c6480183c3aa293ffbe07"
+                        },
+                        "pullSecret": {
+                            "name": "builder-dockercfg-cttwr"
+                        }
+                    },
+                    "type": "Source"
+                },
+                "triggeredBy": [
+                    {
+                        "message": "Build configuration change"
+                    }
+                ]
+            },
+            "status": {
+                "completionTimestamp": "2019-10-13T14:47:20Z",
+                "config": {
+                    "kind": "BuildConfig",
+                    "name": "php72-fpm-img",
+                    "namespace": "php72-fpm"
+                },
+                "duration": 61000000000,
+                "output": {
+                    "to": {
+                        "imageDigest": "sha256:db82358f33b109ed244d16562d5d596972e152537d152c2c5df226e3515dd941"
+                    }
+                },
+                "outputDockerImageReference": "docker-registry.default.svc:5000/php72-fpm/php72-fpm-img:latest",
+                "phase": "Complete",
+                "stages": [
+                    {
+                        "durationMilliseconds": 1744,
+                        "name": "FetchInputs",
+                        "startTime": "2019-10-13T14:46:26Z",
+                        "steps": [
+                            {
+                                "durationMilliseconds": 1744,
+                                "name": "FetchGitSource",
+                                "startTime": "2019-10-13T14:46:26Z"
+                            }
+                        ]
+                    },
+                    {
+                        "durationMilliseconds": 6951,
+                        "name": "CommitContainer",
+                        "startTime": "2019-10-13T14:47:09Z",
+                        "steps": [
+                            {
+                                "durationMilliseconds": 6951,
+                                "name": "CommitContainer",
+                                "startTime": "2019-10-13T14:47:09Z"
+                            }
+                        ]
+                    },
+                    {
+                        "durationMilliseconds": 40239,
+                        "name": "Assemble",
+                        "startTime": "2019-10-13T14:46:36Z",
+                        "steps": [
+                            {
+                                "durationMilliseconds": 40239,
+                                "name": "AssembleBuildScripts",
+                                "startTime": "2019-10-13T14:46:36Z"
+                            }
+                        ]
+                    },
+                    {
+                        "durationMilliseconds": 2845,
+                        "name": "PushImage",
+                        "startTime": "2019-10-13T14:47:16Z",
+                        "steps": [
+                            {
+                                "durationMilliseconds": 2845,
+                                "name": "PushImage",
+                                "startTime": "2019-10-13T14:47:16Z"
+                            }
+                        ]
+                    }
+                ],
+                "startTimestamp": "2019-10-13T14:46:19Z"
+            }
+        },
+        {
+            "apiVersion": "build.openshift.io/v1",
+            "kind": "Build",
+            "metadata": {
+                "annotations": {
+                    "openshift.io/build-config.name": "php72-fpm-s2i",
+                    "openshift.io/build.number": "1",
+                    "openshift.io/build.pod-name": "php72-fpm-s2i-1-build"
+                },
+                "creationTimestamp": "2019-10-13T14:44:36Z",
+                "labels": {
+                    "app": "php72-fpm",
+                    "build": "php72-fpm-s2i",
+                    "buildconfig": "php72-fpm-s2i",
+                    "openshift.io/build-config.name": "php72-fpm-s2i",
+                    "openshift.io/build.start-policy": "Serial"
+                },
+                "name": "php72-fpm-s2i-1",
+                "namespace": "php72-fpm",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "build.openshift.io/v1",
+                        "controller": true,
+                        "kind": "BuildConfig",
+                        "name": "php72-fpm-s2i",
+                        "uid": "f9fc0935-edc7-11e9-aabc-525400d89ef8"
+                    }
+                ],
+                "resourceVersion": "2464502",
+                "selfLink": "/apis/build.openshift.io/v1/namespaces/php72-fpm/builds/php72-fpm-s2i-1",
+                "uid": "fa103657-edc7-11e9-aabc-525400d89ef8"
+            },
+            "spec": {
+                "nodeSelector": null,
+                "output": {
+                    "pushSecret": {
+                        "name": "builder-dockercfg-cttwr"
+                    },
+                    "to": {
+                        "kind": "ImageStreamTag",
+                        "name": "php72-fpm-s2i:latest"
+                    }
+                },
+                "postCommit": {},
+                "resources": {},
+                "revision": {
+                    "git": {
+                        "author": {
+                            "email": "samyunodos@gmail.com",
+                            "name": "Samyunodos"
+                        },
+                        "commit": "97d296f65fecee81cc4b9be3461261a95823616c",
+                        "committer": {
+                            "email": "samyunodos@gmail.com",
+                            "name": "Samyunodos"
+                        },
+                        "message": "all"
+                    },
+                    "type": "Git"
+                },
+                "serviceAccount": "builder",
+                "source": {
+                    "contextDir": "7.2",
+                    "git": {
+                        "ref": "php72-fpm",
+                        "uri": "https://github.com/samyunodos/s2i-php-container.git"
+                    },
+                    "type": "Git"
+                },
+                "strategy": {
+                    "dockerStrategy": {
+                        "forcePull": true,
+                        "from": {
+                            "kind": "DockerImage",
+                            "name": "docker.io/centos/s2i-base-centos7:latest"
+                        }
+                    },
+                    "type": "Docker"
+                },
+                "triggeredBy": [
+                    {
+                        "message": "Build configuration change"
+                    }
+                ]
+            },
+            "status": {
+                "completionTimestamp": "2019-10-13T14:46:00Z",
+                "config": {
+                    "kind": "BuildConfig",
+                    "name": "php72-fpm-s2i",
+                    "namespace": "php72-fpm"
+                },
+                "duration": 84000000000,
+                "output": {
+                    "to": {
+                        "imageDigest": "sha256:c98dd004a37f107fedeb05fcd5b0f88a63cc07160e9c6480183c3aa293ffbe07"
+                    }
+                },
+                "outputDockerImageReference": "docker-registry.default.svc:5000/php72-fpm/php72-fpm-s2i:latest",
+                "phase": "Complete",
+                "stages": [
+                    {
+                        "durationMilliseconds": 2493,
+                        "name": "FetchInputs",
+                        "startTime": "2019-10-13T14:44:47Z",
+                        "steps": [
+                            {
+                                "durationMilliseconds": 2493,
+                                "name": "FetchGitSource",
+                                "startTime": "2019-10-13T14:44:47Z"
+                            }
+                        ]
+                    },
+                    {
+                        "durationMilliseconds": 2143,
+                        "name": "PullImages",
+                        "startTime": "2019-10-13T14:45:01Z",
+                        "steps": [
+                            {
+                                "durationMilliseconds": 2143,
+                                "name": "PullBaseImage",
+                                "startTime": "2019-10-13T14:45:01Z"
+                            }
+                        ]
+                    },
+                    {
+                        "durationMilliseconds": 52618,
+                        "name": "Build",
+                        "startTime": "2019-10-13T14:45:04Z",
+                        "steps": [
+                            {
+                                "durationMilliseconds": 52618,
+                                "name": "DockerBuild",
+                                "startTime": "2019-10-13T14:45:04Z"
+                            }
+                        ]
+                    },
+                    {
+                        "durationMilliseconds": 1408,
+                        "name": "PushImage",
+                        "startTime": "2019-10-13T14:45:57Z",
+                        "steps": [
+                            {
+                                "durationMilliseconds": 1408,
+                                "name": "PushDockerImage",
+                                "startTime": "2019-10-13T14:45:57Z"
+                            }
+                        ]
+                    }
+                ],
+                "startTimestamp": "2019-10-13T14:44:36Z"
+            }
+        },
+        {
+            "apiVersion": "image.openshift.io/v1",
+            "kind": "ImageStream",
+            "metadata": {
+                "creationTimestamp": "2019-10-13T14:44:35Z",
+                "generation": 1,
+                "labels": {
+                    "app": "php72-fpm",
+                    "build": "php72-fpm-img"
+                },
+                "name": "php72-fpm-img",
+                "namespace": "php72-fpm",
+                "resourceVersion": "2464696",
+                "selfLink": "/apis/image.openshift.io/v1/namespaces/php72-fpm/imagestreams/php72-fpm-img",
+                "uid": "f9f6e7a5-edc7-11e9-aabc-525400d89ef8"
+            },
+            "spec": {
+                "lookupPolicy": {
+                    "local": false
+                }
+            },
+            "status": {
+                "dockerImageRepository": "docker-registry.default.svc:5000/php72-fpm/php72-fpm-img",
+                "tags": [
+                    {
+                        "items": [
+                            {
+                                "created": "2019-10-13T14:47:19Z",
+                                "dockerImageReference": "docker-registry.default.svc:5000/php72-fpm/php72-fpm-img@sha256:db82358f33b109ed244d16562d5d596972e152537d152c2c5df226e3515dd941",
+                                "generation": 1,
+                                "image": "sha256:db82358f33b109ed244d16562d5d596972e152537d152c2c5df226e3515dd941"
+                            }
+                        ],
+                        "tag": "latest"
+                    }
+                ]
+            }
+        },
+        {
+            "apiVersion": "image.openshift.io/v1",
+            "kind": "ImageStream",
+            "metadata": {
+                "creationTimestamp": "2019-10-13T14:44:35Z",
+                "generation": 1,
+                "labels": {
+                    "app": "php72-fpm",
+                    "build": "php72-fpm-s2i"
+                },
+                "name": "php72-fpm-s2i",
+                "namespace": "php72-fpm",
+                "resourceVersion": "2464493",
+                "selfLink": "/apis/image.openshift.io/v1/namespaces/php72-fpm/imagestreams/php72-fpm-s2i",
+                "uid": "f9f113a0-edc7-11e9-aabc-525400d89ef8"
+            },
+            "spec": {
+                "lookupPolicy": {
+                    "local": false
+                }
+            },
+            "status": {
+                "dockerImageRepository": "docker-registry.default.svc:5000/php72-fpm/php72-fpm-s2i",
+                "tags": [
+                    {
+                        "items": [
+                            {
+                                "created": "2019-10-13T14:45:58Z",
+                                "dockerImageReference": "docker-registry.default.svc:5000/php72-fpm/php72-fpm-s2i@sha256:c98dd004a37f107fedeb05fcd5b0f88a63cc07160e9c6480183c3aa293ffbe07",
+                                "generation": 1,
+                                "image": "sha256:c98dd004a37f107fedeb05fcd5b0f88a63cc07160e9c6480183c3aa293ffbe07"
+                            }
+                        ],
+                        "tag": "latest"
+                    }
+                ]
+            }
+        },
+        {
+            "apiVersion": "route.openshift.io/v1",
+            "kind": "Route",
+            "metadata": {
+                "annotations": {
+                    "openshift.io/host.generated": "true"
+                },
+                "creationTimestamp": "2019-10-13T14:44:36Z",
+                "labels": {
+                    "app": "php72-fpm-img"
+                },
+                "name": "php72-fpm-img",
+                "namespace": "php72-fpm",
+                "resourceVersion": "2464223",
+                "selfLink": "/apis/route.openshift.io/v1/namespaces/php72-fpm/routes/php72-fpm-img",
+                "uid": "fa0a2948-edc7-11e9-aabc-525400d89ef8"
+            },
+            "spec": {
+                "host": "php72-fpm-img-php72-fpm.apps.srv.world",
+                "port": {
+                    "targetPort": "8080-tcp"
+                },
+                "to": {
+                    "kind": "Service",
+                    "name": "php72-fpm-img",
+                    "weight": 100
+                },
+                "wildcardPolicy": "None"
+            },
+            "status": {
+                "ingress": [
+                    {
+                        "conditions": [
+                            {
+                                "lastTransitionTime": "2019-10-13T14:44:36Z",
+                                "status": "True",
+                                "type": "Admitted"
+                            }
+                        ],
+                        "host": "php72-fpm-img-php72-fpm.apps.srv.world",
+                        "routerName": "router",
+                        "wildcardPolicy": "None"
+                    }
+                ]
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": "",
+        "selfLink": ""
+    }
+}

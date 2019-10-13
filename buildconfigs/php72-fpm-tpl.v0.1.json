@@ -282,6 +282,9 @@
           "app": "${IMAGE_STREAM}-img",
           "deploymentconfig": "${IMAGE_STREAM}-img"
         },
+        "strategy": {
+          "type": "Rolling"
+        },
         "triggers": [
           {
             "type": "ConfigChange"

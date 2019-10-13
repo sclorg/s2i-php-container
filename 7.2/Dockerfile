@@ -6,7 +6,7 @@ FROM centos/s2i-base-centos7
 EXPOSE 8080
 EXPOSE 8443
 EXPOSE 9000
-EXPOSE 9080
+
 
 # Description
 # This image provides an Apache 2.4 + PHP 7.2 environment for running PHP applications.
