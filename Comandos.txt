@@ -13,3 +13,20 @@ $ oc process -f buildconfigs/php72-fpm-tpl.json | oc create -f -
 $ oc expose service docker-registry -n default
 
 $ oc import-image php72-fpm/php72-fpm-img:latest --from=docker-registry-default.apps.ctrl.srv.world
+
+
+$ ngrok http https://ctrl.srv.world:8443
+
+ngrok by @inconshreveable                                       (Ctrl+C to quit)
+                                                                                
+Session Status                online                                            
+Account                       samyunodos (Plan: Free)                           
+Update                        update available (version 2.3.35, Ctrl-U to update
+Version                       2.3.29                                            
+Region                        United States (us)                                
+Web Interface                 http://127.0.0.1:4040                             
+Forwarding                    http://031bfeca.ngrok.io -> https://ctrl.srv.world
+Forwarding                    https://031bfeca.ngrok.io -> https://ctrl.srv.worl
+                                                                                
+Connections                   ttl     opn     rt1     rt5     p50     p90       
+                              0       0       0.00    0.00    0.00    0.00
