@@ -12,10 +12,10 @@ EXPOSE 9000
 # Exposed ports:
 # * 8080 - alternative port for http
 
-ENV PHP_VERSION=7.2 \
-    PHP_VER_SHORT=72 \
-    NAME=php \
-    PATH=$PATH:/opt/rh/rh-php72/root/usr/bin
+ENV PHP_VERSION="7.2" \
+    PHP_VER_SHORT="72" \
+    NAME="php" \
+    PATH="$PATH:/opt/rh/rh-php72/root/usr/bin"
 
 ENV SUMMARY="Platform for building and running PHP $PHP_VERSION applications" \
     DESCRIPTION="PHP $PHP_VERSION available as container is a base platform for \
@@ -51,21 +51,42 @@ RUN yum install -y centos-release-scl && \
     rpm -V $INSTALL_PKGS && \
     yum -y clean all --enablerepo='*'
 
-ENV PHP_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/php/ \
-    APP_DATA=${APP_ROOT}/src \
-    PHP_DEFAULT_INCLUDE_PATH=/opt/rh/rh-php72/root/usr/share/pear \
-    PHP_SYSCONF_PATH=/etc/opt/rh/rh-php72 \
-    PHP_HTTPD_CONF_FILE=rh-php72-php.conf \
-    HTTPD_CONFIGURATION_PATH=${APP_ROOT}/etc/conf.d \
-    HTTPD_MAIN_CONF_PATH=/etc/httpd/conf \
-    HTTPD_MAIN_CONF_D_PATH=/etc/httpd/conf.d \
-    HTTPD_VAR_RUN=/var/run/httpd \
-    HTTPD_DATA_PATH=/var/www \
-    HTTPD_DATA_ORIG_PATH=/opt/rh/httpd24/root/var/www \
-    HTTPD_VAR_PATH=/opt/rh/httpd24/root/var \
-    SCL_ENABLED=rh-php72 \
-## Variables add
-    SERVERNAME=${SERVERNAME:-www.ejemplo.com}
+ENV PHP_CONTAINER_SCRIPTS_PATH="/usr/share/container-scripts/php/" \
+    APP_DATA="${APP_ROOT}/src" \
+    PHP_DEFAULT_INCLUDE_PATH="/opt/rh/rh-php72/root/usr/share/pear" \
+    PHP_SYSCONF_PATH="/etc/opt/rh/rh-php72" \
+    PHP_HTTPD_CONF_FILE="rh-php72-php.conf" \
+    HTTPD_CONFIGURATION_PATH="${APP_ROOT}/etc/conf.d" \
+    HTTPD_MAIN_CONF_PATH="/etc/httpd/conf" \
+    HTTPD_MAIN_CONF_D_PATH="/etc/httpd/conf.d" \
+    HTTPD_VAR_RUN="/var/run/httpd" \
+    HTTPD_DATA_PATH="/var/www" \
+    HTTPD_DATA_ORIG_PATH="/opt/rh/httpd24/root/var/www" \
+    HTTPD_VAR_PATH="/opt/rh/httpd24/root/var" \
+    SCL_ENABLED="rh-php72" \
+## Variables add para apache
+##  SERVERNAME=${SERVERNAME:-www.ejemplo.com} 
+    SERVERNAME="www.ejemplo.com" \
+    DB_USER_R="" \
+    DB_PASSWORD_R="" \
+    DB_NAME_R="" \
+    DB_ROOT_PASSOWRD="passroot" \
+    DB_HOST="localhost" \
+    DB_PORT_NUMBER="3306" \
+    WP_USERNAME="userwp" \
+    WP_PASSWORD="passuserwp" \
+    WP_EMAIL="userwp@ejemplo.com" \
+    WP_FIRST_NAME="FirtsName" \
+    WP_LAST_NAME="LastName" \
+    WP_BLOG_NAME="Mi Blog" \
+    WP_SCHEME="https" \
+    WP_TABLE_PREFIX="wp_" \
+    SMTP_HOST="" \
+    SMTP_PASSWORD="" \
+    SMTP_PORT="" \
+    SMTP_PROTOCOL="" \
+    SMTP_USER="" \
+    SMTP_USERNAME="" \
 
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
