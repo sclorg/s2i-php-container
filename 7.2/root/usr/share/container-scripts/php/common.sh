@@ -34,9 +34,9 @@ config_modules_conf() {
 
 config_fpm() {
 
-    # echo "<FilesMatch \.php$>" >> /etc/httpd/conf.d/rh-php72-php.conf
-    # echo '  SetHandler "proxy:fcgi://127.0.0.1:9000"' >> /etc/httpd/conf.d/rh-php72-php.conf 
-    # echo "</FilesMatch>" >> /etc/httpd/conf.d/rh-php72-php.conf
+    echo "<FilesMatch \.php$>" >> /etc/httpd/conf.d/rh-php72-php.conf
+    echo '    SetHandler "proxy:fcgi://127.0.0.1:9000"' >> /etc/httpd/conf.d/rh-php72-php.conf 
+    echo "</FilesMatch>" >> /etc/httpd/conf.d/rh-php72-php.conf
     sed -i '/listen.allowed_clients/s/^/;/g' /etc/opt/rh/rh-php72/php-fpm.d/www.conf
     
     # sed -i '/^.*session.save_path.*$/d' /etc/opt/rh/rh-php72/php-fpm.d/www.conf
