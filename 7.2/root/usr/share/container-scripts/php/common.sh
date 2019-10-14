@@ -43,8 +43,6 @@ config_fpm() {
     # echo "php_value[session.save_path]    = /tmp/session" >> /etc/opt/rh/rh-php72/php-fpm.d/www.conf
     # echo " php_value[soap.wsdl_cache_dir]  = /tmp/wsdlcache" >> /etc/opt/rh/rh-php72/php-fpm.d/www.conf
     # echo "php_value[opcache.file_cache]  = /tmp/opcache" >> /etc/opt/rh/rh-php72/php-fpm.d/www.conf
-
-
 }
 
 config_general() {
