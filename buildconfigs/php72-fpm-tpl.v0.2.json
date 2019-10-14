@@ -258,8 +258,8 @@
           }
         ],
         "selector": {
-          "app": "${APLICATION_NAME}",
-          "deploymentconfig": "${APLICATION_NAME}"
+          "app": "${IMAGE_STREAM}-img",
+          "deploymentconfig": "${IMAGE_STREAM}-img"
         },
         "sessionAffinity": "None",
         "type": "ClusterIP"
@@ -281,7 +281,7 @@
         "revisionHistoryLimit": 10,
         "selector": {
           "app": "${APLICATION_NAME}",
-          "deploymentconfig": "${APLICATION_NAME}"
+          "deploymentconfig":  "${IMAGE_STREAM}-img"
         },
         "strategy": {
           "type": "Rolling"
@@ -309,7 +309,7 @@
             "creationTimestamp": null,
             "labels": {
               "app": "${APLICATION_NAME}",
-              "deploymentconfig": "${APLICATION_NAME}"
+              "deploymentconfig":  "${IMAGE_STREAM}-img"
             }
           },
           "spec": {
