@@ -53,8 +53,8 @@ config_fpm() {
 config_general() {
   config_httpd_conf
   config_ssl_conf
-  config_modules_conf
-  config_fpm
+  # config_modules_conf
+  # config_fpm
   sed -i '/php_value session.save_/d' ${HTTPD_MAIN_CONF_D_PATH}/${PHP_HTTPD_CONF_FILE}
   head -n${HTTPCONF_LINENO} ${HTTPD_MAIN_CONF_PATH}/httpd.conf | tail -n1 | grep "AllowOverride All" || exit 1
   echo "IncludeOptional ${APP_ROOT}/etc/conf.d/*.conf" >> ${HTTPD_MAIN_CONF_PATH}/httpd.conf
