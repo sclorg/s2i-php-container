@@ -67,7 +67,7 @@ ENV PHP_CONTAINER_SCRIPTS_PATH="/usr/share/container-scripts/php/" \
 ## Variables add para apache
 ##  SERVERNAME=${SERVERNAME:-www.ejemplo.com} 
 
-ENV SERVERNAME="www.ejemplo.com" \
+ENV SERVER_NAME="www.ejemplo.com" \
     DB_USER_R="" \
     DB_PASSWORD_R="" \
     DB_NAME_R="" \

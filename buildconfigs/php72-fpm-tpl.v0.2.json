@@ -35,6 +35,36 @@
       "description": "The password for the database user.",
       "name": "DOCKER_REGISTER",
       "value": "docker-registry.default.svc:5000"
+    },
+    {
+      "name": "SERVER_NAME",
+      "description": "The tagged version of the source repository to use.",
+      "value": "www.devnely.com"
+    },
+    {
+      "name": "MYSQL_USER",
+      "description": "The tagged version of the source repository to use.",
+      "value": "usermysql"
+    },
+    {
+      "name": "MYSQL_PASSWORD",
+      "description": "The tagged version of the source repository to use.",
+      "value": "passmyql"
+    },
+    {
+      "name": "MYSQL_DATABASE",
+      "description": "The tagged version of the source repository to use.",
+      "value": "php72-wp-s2i"
+    },
+    {
+      "name": "MYSQL_HOST",
+      "description": "The tagged version of the source repository to use.",
+      "value": "localhost"
+    },
+    {
+      "name": "MYSQL_TABLE_PREFIX",
+      "description": "The tagged version of the source repository to use.",
+      "value": "wp_"
     }
   ],
   "objects": [
