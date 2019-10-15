@@ -26,7 +26,9 @@ config_ssl_conf() {
 
 config_modules_conf() {
   # overwrite default rhel-8 mpm mode
-  echo "LoadModule mpm_prefork_module modules/mod_mpm_prefork.so" > "${HTTPD_MODULES_CONF_D_PATH}/00-mpm.conf"
+    # echo "LoadModule mpm_prefork_module modules/mod_mpm_prefork.so" > "${HTTPD_MODULES_CONF_D_PATH}/00-mpm.conf"
+    echo "LoadModule mpm_event_module modules/mod_mpm_event.so" > "/etc/httpd/conf.modules.d/00-mpm.conf"
+
 }
 
 config_fpm() {
