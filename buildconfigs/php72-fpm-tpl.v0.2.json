@@ -95,7 +95,7 @@
         "source": {
           "contextDir": "7.2",
           "git": {
-            "ref": "php72-fpm-1",
+            "ref": "php72-fpm-2",
             "uri": "https://github.com/samyunodos/s2i-php-container.git"
           },
           "type": "Git"

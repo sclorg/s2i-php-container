@@ -63,7 +63,7 @@ ENV PHP_CONTAINER_SCRIPTS_PATH="/usr/share/container-scripts/php/" \
     HTTPD_DATA_PATH="/var/www" \
     HTTPD_DATA_ORIG_PATH="/opt/rh/httpd24/root/var/www" \
     HTTPD_VAR_PATH="/opt/rh/httpd24/root/var" \
-    SCL_ENABLED="rh-php72" \
+    SCL_ENABLED="rh-php72" 
 ## Variables add para apache
 ##  SERVERNAME=${SERVERNAME:-www.ejemplo.com} 
 
