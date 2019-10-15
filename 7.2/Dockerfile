@@ -66,7 +66,8 @@ ENV PHP_CONTAINER_SCRIPTS_PATH="/usr/share/container-scripts/php/" \
     SCL_ENABLED="rh-php72" \
 ## Variables add para apache
 ##  SERVERNAME=${SERVERNAME:-www.ejemplo.com} 
-    SERVERNAME="www.ejemplo.com" \
+
+ENV SERVERNAME="www.ejemplo.com" \
     DB_USER_R="" \
     DB_PASSWORD_R="" \
     DB_NAME_R="" \
@@ -86,7 +87,7 @@ ENV PHP_CONTAINER_SCRIPTS_PATH="/usr/share/container-scripts/php/" \
     SMTP_PORT="" \
     SMTP_PROTOCOL="" \
     SMTP_USER="" \
-    SMTP_USERNAME="" \
+    SMTP_USERNAME="" 
 
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH

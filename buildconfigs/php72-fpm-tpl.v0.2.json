@@ -336,26 +336,26 @@
                     "name": "DB_USER_R",
                     "value": "${MYSQL_USER}"
                   },
-                   {
+                  {
                     "name": "DB_PASSWORD_R",
                     "value": "${MYSQL_PASSWORD}"
                   },
-                   {
+                  {
                     "name": "DB_NAME_R",
                     "value": "${MYSQL_DATABASE}"
-                   },
-                   {
+                  },
+                  {
                     "name": "DB_HOST",
                     "value": "${MYSQL_HOST}"
-                   },
-                   {
+                  },
+                  {
                     "name": "DB_TABLE_PREFIX",
                     "value": "${MYSQL_TABLE_PREFIX}"
-                   }
+                  },
                   {
                     "name": "SERVER_NAME",
                     "value": "${SERVER_NAME}"
-                  },
+                  }
                 ]
               }
             ],
