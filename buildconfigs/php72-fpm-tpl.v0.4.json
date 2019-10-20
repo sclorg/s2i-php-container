@@ -408,7 +408,7 @@
           "openshift.io/host.generated": "true"
         },
         "labels": {
-          "app": "${IMAGE_STREAM}-img"
+          "app": "${IMAGE_STREAM}-img",
           "build":  "${IMAGE_STREAM}-s2i"
         },
         "name": "${IMAGE_STREAM}-img",
@@ -426,7 +426,8 @@
         },
         "wildcardPolicy": "None"
       }
-    }
+},
+
 
 
 
@@ -439,7 +440,7 @@
           "description": "Web Hook Secret Key."
         },
         "labels": {
-          "app": "${APLICATION_NAME}",
+          "app": "${APLICATION_NAME}"
          
         }
       },
@@ -454,7 +455,7 @@
       "metadata": {
         "name": "${IMAGE_STREAM}-img-s2i",
         "labels": {
-          "app": "${APLICATION_NAME}",
+          "app": "${APLICATION_NAME}"
           
         }
       }
@@ -479,7 +480,7 @@
       "kind": "Service",
       "metadata": {
         "labels": {
-          "app": "${IMAGE_STREAM}-img-s2i",
+          "app": "${IMAGE_STREAM}-img-s2i"
          
         },
         "name": "${IMAGE_STREAM}-img-s2i",
@@ -513,7 +514,7 @@
       "kind": "BuildConfig",
       "metadata": {
         "labels": {
-          "app": "${APLICATION_NAME}",
+          "app": "${APLICATION_NAME}"
           
         },
         "name": "${IMAGE_STREAM}-img-s2i",
@@ -548,7 +549,7 @@
             {
               "name": "io.openshift.tags",
               "value": "php72-fpm, s2i-php-container"
-            }x
+            }
           ]
         },
         "postCommit": {
