@@ -68,7 +68,6 @@ ENV PHP_CONTAINER_SCRIPTS_PATH="/usr/share/container-scripts/php/" \
 ##  SERVERNAME=${SERVERNAME:-www.ejemplo.com} 
 
 ENV SERVER_NAME="www.ejemplo.com" \
-    PRIVATE_USER="" \
     DB_USER_R="" \
     DB_PASSWORD_R="" \
     DB_NAME_R="" \
