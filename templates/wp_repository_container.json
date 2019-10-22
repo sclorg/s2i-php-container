@@ -5,7 +5,7 @@
     "name": "crea-php72-fpm-wp-is",
     "annotations": {
       "openshift.io/display-name": "php72-fpm-wp-is",
-      "description": "Nos crea una imagen a partir de s2i-php-container con el mpm event y instalando Fsst CGI (rh-php-fpm).  Para compilar sólo la imagen-builder primera .... . Nos crea la imagen a partir de un repositorio git que ya contiene los elementos de wordpress particulares de cadas sitio web.",
+      "description": "Nos crea una imagen a partir de s2i-php-container con el mpm event y instalando Fsst CGI (rh-php-fpm).  Para compilar sólo la imagen-builder primera .... . Nos crea la imagen a partir de un repositorio git que ya contiene los elementos de wordpress particulares de cada sitio web. Si no estan vaciás nos buscará la base de datos especificada ¿¿ y que ya debe estar construida??.  Existen otras variables  DB_ROOT_PASSOWRD, DB_HOST, DB_PORT_NUMBER, DB_TABLE_PREFIX, WP_USERNAME, WP_PASSWORD, WP_EMAIL, WP_FIRST_NAME, WP_LAST_NAME, WP_BLOG_NAME, WP_SCHEME, SMTP_HOST, SMTP_PASSWORD, SMTP_PORT, SMTP_PROTOCOL, SMTP_USER, SMTP_USERNAME, que o ya vienen definidas por defecto el el Dockerfile o no son necesarias, pero que mediante kubernetes podemos personalizar la imagen. Aunque en este caso, ya que partimos de un repositorio privado ya creado no serán necesarias.",
       "tags": "php72-fpm, s2i-php-container",
       "iconClass": "icon-php"
     }

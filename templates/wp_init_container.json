@@ -5,7 +5,7 @@
     "name": "crea-php72-fpm-wp-is",
     "annotations": {
       "openshift.io/display-name": "php72-fpm-wp-is",
-      "description": "Nos crea una imagen a partir de s2i-php-container con el mpm event y instalando Fsst CGI (rh-php-fpm).  Para compilar sólo la imagen-builder primera .... . Nos crea la imagen y o bien procedemos a iniciar la instalación desde wordpress dejando en blanco uno de los siguientes valores: MYSQL_DATABASE_R, MYSQL_USER_R Y MYSQL_PASSWORD_R .",
+      "description": "Nos crea una imagen a partir de s2i-php-container con el mpm event y instalando Fsst CGI (rh-php-fpm).  Para compilar sólo la imagen-builder primera .... . Nos crea la imagen y o bien procedemos a iniciar la instalación desde wordpress dejando en blanco uno de los siguientes valores: MYSQL_DATABASE_R, MYSQL_USER_R Y MYSQL_PASSWORD_R. Es decir, con cualquiera de estas variables vacias (\"\") nos saltaría el instalador de wordpress. Si no estan vaciás nos buscará la base de datos especificada ¿¿ y que ya debe estar construida??.  Existen otras variables   DB_ROOT_PASSOWRD, DB_HOST, DB_PORT_NUMBER, DB_TABLE_PREFIX, WP_USERNAME, WP_PASSWORD, WP_EMAIL, WP_FIRST_NAME, WP_LAST_NAME, WP_BLOG_NAME, WP_SCHEME, SMTP_HOST, SMTP_PASSWORD, SMTP_PORT, SMTP_PROTOCOL, SMTP_USER, SMTP_USERNAME, que o ya vienen definidas por defecto el el Dockerfile o no son necesarias, pero que mediante kubernetes podemos personalizar la imagen.",
       "tags": "php72-fpm, s2i-php-container",
       "iconClass": "icon-php"
     }
@@ -249,17 +249,17 @@
               "name": "${IMAGE_STREAM}-s2i:latest"
             },
             "env": [
-               {
+              {
                 "name": "DB_USER_R",
                 "value": "${MYSQL_USER}"
-               },
-               {
+              },
+              {
                 "name": "DB_PASSWORD_R",
-                "value":  "${MYSQL_PASSWORD}"
-               },
-               {
+                "value": "${MYSQL_PASSWORD}"
+              },
+              {
                 "name": "DB_NAME_R",
-                "value":  "${MYSQL_DATABASE}"
+                "value": "${MYSQL_DATABASE}"
               }
             ]
           }
