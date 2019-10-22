@@ -247,7 +247,21 @@
               "kind": "ImageStreamTag",
               "namespace": "${PROJECT_NAME}",
               "name": "${IMAGE_STREAM}-s2i:latest"
-            }
+            },
+            "env": [
+              {
+                "name": "DB_USER_R",
+                "value": "${MYSQL_USER}"
+              },
+              {
+                "name": "DB_PASSWORD_R",
+                "value": "${MYSQL_PASSWORD}"
+              },
+              {
+                "name": "DB_NAME_R",
+                "value": "${MYSQL_DATABASE}"
+              }
+            ]
           }
         },
         "triggers": [
@@ -387,13 +401,7 @@
             "from": {
               "kind": "ImageStreamTag",
               "name": "${IMAGE_STREAM}-img:latest"
-            },
-            "env": [
-              {
-                "name": "PRIVATE_USER",
-                "value": "true"
-              }
-            ]
+            }
           }
         },
         "triggers": [
