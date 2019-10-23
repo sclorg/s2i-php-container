@@ -89,6 +89,15 @@ ENV SERVER_NAME="www.ejemplo.com" \
     SMTP_USER="" \
     SMTP_USERNAME="" 
 
+## instalamos wp-cli
+RUN set -x && cd /tmp && \
+  curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
+  php wp-cli.phar --info && \
+  chmod +x wp-cli.phar && \
+  mv wp-cli.phar /usr/local/bin/wp && \
+  wp --info 
+
+#####
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
 COPY ./s2i/bin/ $STI_SCRIPTS_PATH
