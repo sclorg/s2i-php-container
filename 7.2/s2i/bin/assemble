@@ -16,9 +16,9 @@ fix-permissions ${HTTPD_CONFIGURATION_PATH}
 
 
 
-npm install gulp@next --save-dev
-npm install gulp-rename --save-dev
-npm install gulp-concat --save-dev
+npm install gulp --global
+npm install gulp-rename --global
+npm install gulp-concat --global
 
 
 
