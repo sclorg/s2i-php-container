@@ -31,4 +31,5 @@ process_extending_files ./php-post-assemble/ ${PHP_CONTAINER_SCRIPTS_PATH}/post-
 fix-permissions /opt/app-root
 fix-permissions ./
 fix-permissions /silo
+fix-permissions /opt/rh/rh-nodejs10/root/usr/lib/node_modules
 fix-permissions ${HTTPD_CONFIGURATION_PATH}
