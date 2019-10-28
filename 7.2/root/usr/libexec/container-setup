@@ -53,7 +53,7 @@ chmod -R a+rwx /etc/opt/rh/rh-php${PHP_VER_SHORT}/php.d
 chmod a+rw /etc/opt/rh/rh-php${PHP_VER_SHORT}/php.ini
 chmod a+rwx /var/opt/rh/rh-php${PHP_VER_SHORT}/run/php-fpm
 chmod -R a+rwx /var/opt/rh/rh-php72/lib/php
-chmod -R a+rwx /opt/rh/rh-nodejs10/root/usr/lib/node_modules
+# chmod -R a+rwx /opt/rh/rh-nodejs10/root/usr/lib/node_modules
 
 mkdir -p ${PHP_CONTAINER_SCRIPTS_PATH}/pre-init
 
