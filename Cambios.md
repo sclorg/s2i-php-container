@@ -1,4 +1,4 @@
-# Cambios a realizar en la rama wp
+# Cambios a realizar en la rama wp 
 
 - Modificar "7.2/Dockerfile"
 - Añadir "Cambios.md"
@@ -13,6 +13,19 @@
 - Añadir "7.2/root/usr/share/container-scripts/php/httpd-cnf/00-servername.conf"
 - Modificar "7.2/root/usr/share/container-scripts/php/httpd-cnf/50-npm-tuning.off"
 - Modificar "7.2/root/usr/share/container-scripts/php/httpd-cnf/50-npm-tuning.old"
+
+Para crear la imagen ""php72-fpm-s2i":
+```
+$ oc process -f templates/wp_init-container.json | oc apply -l build1=php72-fpm-s2i -f -
+
+```
+
+Para comprobar que todo funciona bien:
+
+```
+oc new-app php72-fpm-s2i:latest~https://github.com/samyunodos/s2i-php-container#wp --context-dir=test/test-app --strategy=source --name prueba
+
+```
 
 # Cambios a realizar en esta rama php-72-wp
 
