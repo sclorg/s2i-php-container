@@ -92,7 +92,7 @@ ENV SERVER_NAME="www.ejemplo.com" \
     WP_BLOG_NAME="Mi Blog" \
     WP_SCHEME="http" \
     DB_ROOT_PASSOWRD="passroot" \
-    DB_TABLE_PREFIX="wp_"
+    DB_TABLE_PREFIX="wp_" 
   
 ########  
 
@@ -107,10 +107,10 @@ RUN set -x && cd /tmp && \
 ########
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
-COPY ./7.2/s2i/bin/ $STI_SCRIPTS_PATH
+COPY ./s2i/bin/ $STI_SCRIPTS_PATH
 
 # Copy extra files to the image.
-COPY ./7.2/root/ /
+COPY ./root/ /
 
 
 ######## Creo el directorio /silo
