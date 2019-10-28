@@ -18,9 +18,9 @@ fix-permissions ${HTTPD_CONFIGURATION_PATH}
 # fix-permissions "/opt/rh/rh-nodejs10/root/usr/lib/node_modules"
 
 
-# npm install gulp --save
-# npm install gulp-rename --save
-# npm install gulp-concat --save
+# npm install gulp --global
+# npm install gulp-rename --global
+# npm install gulp-concat --global
 
 
 

@@ -1,17 +1,18 @@
 # Cambios a realizar en la rama wp
 
-- "7.2/Dockerfile"
-- "Cambios.md"
-- "Comandos.txt"
-- "templates/"
-- "builder/"
-- "7.2/s2i/bin/assemble"
-- "7.2/s2i/bin/run"
-- "7.2/root/usr/share/container-scripts/php/common.sh"
-- "7.2/root/usr/share/container-scripts/php/httpd-cnf/00-documentroot.conf"
-- "7.2/root/usr/share/container-scripts/php/httpd-cnf/00-servername.conf"
-- "7.2/root/usr/share/container-scripts/php/httpd-cnf/50-npm-tuning.off"
-- "7.2/root/usr/share/container-scripts/php/httpd-cnf/50-npm-tuning.old"
+- Modificar "7.2/Dockerfile"
+- Añadir "Cambios.md"
+- Añadir "Comandos.txt"
+- Añadir "templates/"
+- Añadir "builder/"
+- Modificar "7.2/root/usr/libexec/container-setup.sh"
+- Modificar "7.2/s2i/bin/assemble"
+- Modificar "7.2/s2i/bin/run"
+- Modificar "7.2/root/usr/share/container-scripts/php/common.sh"
+- Modificar  "7.2/root/usr/share/container-scripts/php/httpd-cnf/00-documentroot.conf"
+- Añadir "7.2/root/usr/share/container-scripts/php/httpd-cnf/00-servername.conf"
+- Modificar "7.2/root/usr/share/container-scripts/php/httpd-cnf/50-npm-tuning.off"
+- Modificar "7.2/root/usr/share/container-scripts/php/httpd-cnf/50-npm-tuning.old"
 
 # Cambios a realizar en esta rama php-72-wp
 
