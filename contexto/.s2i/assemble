@@ -13,6 +13,12 @@ else
 fi
 
 
+# fix-permissions "/opt/rh/rh-nodejs10/root/usr/lib/node_modules"
+
+npm init --yes
+npm install gulp --global
+npm install gulp-rename --global
+npm install gulp-concat --global
 
 
 

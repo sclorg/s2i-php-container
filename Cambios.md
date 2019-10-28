@@ -49,14 +49,66 @@ Vamos a instalar wordpress mediante wp-cli por lo que lo primero que haremos es 
     
 La cuestíón es utilizar el contexDir del buildconfig con la carpeta contexto. Así se ejecutará  en principio los scripts de la carpeta "contexto/.s2i" y nos preparará la nueva imagen para ser otra imagen builder en la que podamos obtener como source el directorio wp-content y demás archivos carácterísticos de un sitio web. El archivo imagen_metadata.json nos cambia los labels s2i para encontrar los scripts de s2i. A su vez vamos a cambiar "APP_DATA" variable de entorno al directorio "/silo/wordpress" y así crear un nuevo builder para trabajar con sitios web particualres y ya iniciados.
 
+nodejs en local
+
+Para ello debemos de cambiar el lugar dónde se guardarán los paquetes así como algunos paths.
+
+- 1.- Para ver los paquetes instalados en global:
+
+```
+sh-4.2$ npm list -g --depth=0
+/opt/rh/rh-nodejs10/root/usr/lib
+`-- npm@6.4.1
+```
+
+
+- 2.-Comprobar donde se guardan los paquetes:
+
+```
+sh-4.2$ npm bin -g
+/opt/rh/rh-nodejs10/root/usr/bin
+sh-4.2$ ls -la /opt/rh/rh-nodejs10/root/usr/bin/
+total 27664
+dr-xr-xr-x  2 root root       40 Oct 10 11:41 .
+drwxr-xr-x 13 root root      155 Oct 10 11:41 ..
+-rwxr-xr-x  1 root root 28326856 May 14 13:31 node
+lrwxrwxrwx  1 root root       38 Oct 10 11:41 npm -> ../lib/node_modules/npm/bin/npm-cli.js
+lrwxrwxrwx  1 root root       38 Oct 10 11:41 npx -> ../lib/node_modules/npm/bin/npx-cli.js
+sh-4.2$ ls -la /opt/rh/rh-nodejs10/root/usr/bin/node
+-rwxr-xr-x 1 root root 28326856 May 14 13:31 /opt/rh/rh-nodejs10/root/usr/bin/node
+sh-4.2$ ls -la /opt/rh/rh-nodejs10/root/usr/bin/node
+
+```
+Como podemos comprobar no tenemos acceso al lugar dónde se guardan los paquetes. 
+
+Cambiar el permiso dónde se guardan los paquetes no es lo apropiado. En su  lugar cambiar el propio directorio con la creación de un nuevo perfil.
+
+```
+$ mkdir ~/.npm-global
+$ npm config set prefix '~/.npm-global'
+$ export PATH=~/.npm-global/bin:$PATH
+$ source ~/.profile
+```
+
+Con esto ya estaríamos preparados para instalar paquetes en global en el directorio "~/.npm-global".
+
+```
+npm install -g <paquete>
+```
 
 
 
+
+
+- 3.- 
 
 Para ello creo otro json "wp_s2i.json" el cual su inicio es el mismo que el php72_fpm-s2i.json.
 
 
+```
+$ oc new-app wp-builder-s2i:latest~https://github.com/samyunodos/s2i-php-container#wp --context-dir=test/test-app --strategy=source --name prueba
 
+```
 
 
 
