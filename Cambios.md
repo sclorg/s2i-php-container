@@ -1,5 +1,7 @@
 # Cambios a realizar en la rama wp 
 
+## Creación de la imagen php72-fpm-s2i
+
 - Modificar "7.2/Dockerfile"
 - Añadir "Cambios.md"
 - Añadir "Comandos.txt"
@@ -19,13 +21,45 @@ Para crear la imagen ""php72-fpm-s2i":
 $ oc process -f templates/wp_init-container.json | oc apply -l build1=php72-fpm-s2i -f -
 
 ```
-
+El archivo "templates/wp_init-container.json" le he cambiado el nombre por "php72_fpm-s2i.json"
+ 
 Para comprobar que todo funciona bien:
 
 ```
-oc new-app php72-fpm-s2i:latest~https://github.com/samyunodos/s2i-php-container#wp --context-dir=test/test-app --strategy=source --name prueba
+$ oc new-app php72-fpm-s2i:latest~https://github.com/samyunodos/s2i-php-container#wp --context-dir=test/test-app --strategy=source --name prueba
 
 ```
+
+
+## Creación de la imagen wordpress-builder-s2i
+
+
+Vamos a instalar wordpress mediante wp-cli por lo que lo primero que haremos es creaar un directorio llamaado contexto en la raíz, en el cual vamos a tener dos carpetas:
+
+                   - contexto/builder
+                        - assemble
+                        - runSH
+                        - run
+                        - image_metadata.json
+                        - save-artifacts
+                        
+                   - contexto/.s2i
+                        - assemble
+                        - run
+    
+La cuestíón es utilizar el contexDir del buildconfig con la carpeta contexto. Así se ejecutará  en principio los scripts de la carpeta "contexto/.s2i" y nos preparará la nueva imagen para ser otra imagen builder en la que podamos obtener como source el directorio wp-content y demás archivos carácterísticos de un sitio web. El archivo imagen_metadata.json nos cambia los labels s2i para encontrar los scripts de s2i. A su vez vamos a cambiar "APP_DATA" variable de entorno al directorio "/silo/wordpress" y así crear un nuevo builder para trabajar con sitios web particualres y ya iniciados.
+
+
+
+
+
+Para ello creo otro json "wp_s2i.json" el cual su inicio es el mismo que el php72_fpm-s2i.json.
+
+
+
+
+
+
 
 # Cambios a realizar en esta rama php-72-wp
 
