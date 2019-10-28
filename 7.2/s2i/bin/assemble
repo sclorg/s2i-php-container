@@ -6,19 +6,13 @@ source ${PHP_CONTAINER_SCRIPTS_PATH}/common.sh
 
 shopt -s dotglob  ## para mover los archivos ocultos
 
-mkdir -p /opt/app-root/s2i
+echo "---> Installing application source..."
+mv /tmp/src/* ./
 
-# contextDir=builder/
-# dockerfilePath: 7.2/Dockerfile
+# Fix source directory permissions
+fix-permissions ./
+fix-permissions ${HTTPD_CONFIGURATION_PATH}
 
-mv /tmp/src/builder/assemble /opt/app-root/s2i/assemble
-mv /tmp/src/builder/run /opt/app-root/s2i/run
-mv /tmp/src/builder/runSH /opt/app-root/s2i/runSH
-mv /tmp/src/builder/save-artifacts /opt/app-root/s2i/save-artifacts
-
-# No es necesario ya que con openshift podemos incluir dichos valores en el buildconfig
-# mkdir -p /tmp/.s2i
-# mv /tmp/src/builder/image_metadata.json /tmp/.s2i/image_metadata.json
 
 
 

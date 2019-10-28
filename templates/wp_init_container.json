@@ -137,7 +137,29 @@
           "to": {
             "kind": "ImageStreamTag",
             "name": "${IMAGE_STREAM}-s2i:latest"
-          }
+          },
+          "imageLabels": [
+            {
+              "name": "io.k8s.display-name",
+              "value": "${APPLICATION_NAME}"
+            },
+            {
+              "name": "io.k8s.description",
+              "value": "mysql application and S2I builder."
+            },
+            {
+              "name": "io.openshift.s2i.scripts-url",
+              "value": "image:///opt/app-root/s2i"
+            },
+            {
+              "name": "io.s2i.scripts-url",
+              "value": "image:///opt/app-root/s2i"
+            },
+            {
+              "name": "io.openshift.tags",
+              "value": "php72-fpm, s2i-php-container"
+            }
+          ]
         },
         "postCommit": {
         },
