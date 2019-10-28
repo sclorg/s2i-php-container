@@ -5,6 +5,9 @@ FROM centos/s2i-base-centos7
 
 EXPOSE 8080
 EXPOSE 8443
+########
+EXPOSE 9000
+########
 
 # Description
 # This image provides an Apache 2.4 + PHP 7.2 environment for running PHP applications.
@@ -14,7 +17,9 @@ EXPOSE 8443
 ENV PHP_VERSION=7.2 \
     PHP_VER_SHORT=72 \
     NAME=php \
-    PATH=$PATH:/opt/rh/rh-php72/root/usr/bin
+#######
+    PATH=$PATH:/opt/rh/rh-php72/root/usr/bin:/opt/rh/rh-mysql80/root/usr/bin/
+#######
 
 ENV SUMMARY="Platform for building and running PHP $PHP_VERSION applications" \
     DESCRIPTION="PHP $PHP_VERSION available as container is a base platform for \
@@ -42,33 +47,81 @@ LABEL summary="${SUMMARY}" \
 
 # Install Apache httpd and PHP
 RUN yum install -y centos-release-scl && \
-    INSTALL_PKGS="rh-php72 rh-php72-php rh-php72-php-mysqlnd rh-php72-php-pgsql rh-php72-php-bcmath \
+########
+    INSTALL_PKGS="rh-php72 rh-php72-php  rh-php72-php-fpm rh-php72-php-mysqlnd rh-php72-php-pgsql rh-php72-php-bcmath \
+########
                   rh-php72-php-gd rh-php72-php-intl rh-php72-php-ldap rh-php72-php-mbstring rh-php72-php-pdo \
                   rh-php72-php-process rh-php72-php-soap rh-php72-php-opcache rh-php72-php-xml \
-                  rh-php72-php-gmp rh-php72-php-pecl-apcu httpd24-mod_ssl" && \
+########
+                  rh-php72-php-gmp rh-php72-php-pecl-apcu httpd24-mod_ssl rh-mysql80-mysql" && \
+########
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS --nogpgcheck && \
     rpm -V $INSTALL_PKGS && \
     yum -y clean all --enablerepo='*'
 
-ENV PHP_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/php/ \
-    APP_DATA=${APP_ROOT}/src \
-    PHP_DEFAULT_INCLUDE_PATH=/opt/rh/rh-php72/root/usr/share/pear \
-    PHP_SYSCONF_PATH=/etc/opt/rh/rh-php72 \
-    PHP_HTTPD_CONF_FILE=rh-php72-php.conf \
-    HTTPD_CONFIGURATION_PATH=${APP_ROOT}/etc/conf.d \
-    HTTPD_MAIN_CONF_PATH=/etc/httpd/conf \
-    HTTPD_MAIN_CONF_D_PATH=/etc/httpd/conf.d \
-    HTTPD_VAR_RUN=/var/run/httpd \
-    HTTPD_DATA_PATH=/var/www \
-    HTTPD_DATA_ORIG_PATH=/opt/rh/httpd24/root/var/www \
-    HTTPD_VAR_PATH=/opt/rh/httpd24/root/var \
-    SCL_ENABLED=rh-php72
+ENV PHP_CONTAINER_SCRIPTS_PATH="/usr/share/container-scripts/php/" \
+    APP_DATA="${APP_ROOT}/src" \
+    PHP_DEFAULT_INCLUDE_PATH="/opt/rh/rh-php72/root/usr/share/pear" \
+    PHP_SYSCONF_PATH="/etc/opt/rh/rh-php72" \
+    PHP_HTTPD_CONF_FILE="rh-php72-php.conf" \
+    HTTPD_CONFIGURATION_PATH="${APP_ROOT}/etc/conf.d" \
+    HTTPD_MAIN_CONF_PATH="/etc/httpd/conf" \
+    HTTPD_MAIN_CONF_D_PATH="/etc/httpd/conf.d" \
+    HTTPD_VAR_RUN="/var/run/httpd" \
+    HTTPD_DATA_PATH="/var/www" \
+    HTTPD_DATA_ORIG_PATH="/opt/rh/httpd24/root/var/www" \
+    HTTPD_VAR_PATH="/opt/rh/httpd24/root/var" \
+    SCL_ENABLED="rh-php72"
+
+
+######## Variables add para apache
+##  SERVERNAME=${SERVERNAME:-www.ejemplo.com} 
+
+ENV SERVER_NAME="www.ejemplo.com" \
+    WP_INSTALL_VERSION="" \
+    DB_USER="" \
+    DB_PASSWORD="" \
+    DB_NAME="" \
+    DB_HOST="" \
+    DB_PORT_NUMBER="3306" \
+    WP_USERNAME="" \
+    WP_PASSWORD="" \
+    WP_EMAIL="userwp@ejemplo.com" \
+    WP_FIRST_NAME="FirtsName" \
+    WP_LAST_NAME="LastName" \
+    WP_BLOG_NAME="Mi Blog" \
+    WP_SCHEME="http" \
+    DB_ROOT_PASSOWRD="passroot" \
+    DB_TABLE_PREFIX="wp_"
+  
+########  
+
+######## instalamos wp-cli
+RUN set -x && cd /tmp && \
+  curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
+  php wp-cli.phar --info && \
+  chmod +x wp-cli.phar && \
+  mv wp-cli.phar /usr/local/bin/wp && \
+  wp --info 
+
+########
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
 COPY ./s2i/bin/ $STI_SCRIPTS_PATH
 
 # Copy extra files to the image.
 COPY ./root/ /
+
+
+######## Creo el directorio /silo
+RUN mkdir -p /silo
+RUN chmod -R a+rwx /silo && \
+chmod -R a+rwx /silo && \
+chmod -R ug+r  /silo && \
+chmod -R ug+r  /silo && \
+chown -R 1001:0 /silo && \
+chown -R 1001:0 /silo 
+########
 
 # Reset permissions of filesystem to default values
 RUN /usr/libexec/container-setup && rpm-file-permissions

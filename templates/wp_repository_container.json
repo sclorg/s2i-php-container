@@ -1,0 +1,432 @@
+{
+  "kind": "Template",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "crea-php72-fpm-wp-is",
+    "annotations": {
+      "openshift.io/display-name": "php72-fpm-wp-is",
+      "description": "Nos crea una imagen a partir de s2i-php-container con el mpm event y instalando Fsst CGI (rh-php-fpm).  Para compilar sólo la imagen-builder primera .... . Nos crea la imagen a partir de un repositorio git que ya contiene los elementos de wordpress particulares de cada sitio web. Si no estan vaciás nos buscará la base de datos especificada ¿¿ y que ya debe estar construida??.  Existen otras variables  DB_ROOT_PASSOWRD, DB_HOST, DB_PORT_NUMBER, DB_TABLE_PREFIX, WP_USERNAME, WP_PASSWORD, WP_EMAIL, WP_FIRST_NAME, WP_LAST_NAME, WP_BLOG_NAME, WP_SCHEME, SMTP_HOST, SMTP_PASSWORD, SMTP_PORT, SMTP_PROTOCOL, SMTP_USER, SMTP_USERNAME, que o ya vienen definidas por defecto el el Dockerfile o no son necesarias, pero que mediante kubernetes podemos personalizar la imagen. Aunque en este caso, ya que partimos de un repositorio privado ya creado no serán necesarias.",
+      "tags": "php72-fpm, s2i-php-container",
+      "iconClass": "icon-php"
+    }
+  },
+  "parameters": [
+    {
+      "name": "PROJECT_NAME",
+      "description": "NOmbre de la imagen stream.",
+      "value": "image-wp"
+    },
+    {
+      "name": "APLICATION_NAME",
+      "description": "NOmbre de la imagen stream.",
+      "value": "crea-php72-fpm-wp"
+    },
+    {
+      "name": "IMAGE_STREAM",
+      "description": "NOmbre de la imagen stream.",
+      "value": "php72-fpm"
+    },
+    {
+      "name": "SOURCE_REPOSITORY_URL_1",
+      "description": "Nombre del repositorio source.",
+      "value": "https://github.com/samyunodos/s2i-php-container.git"
+    },
+    {
+      "name": "SOURCE_REPOSITORY_1_TAG",
+      "description": "The tagged version of the source repository to use.",
+      "value": "php72-wp-s2i"
+    },
+    {
+      "description": "The password for the database user.",
+      "name": "DOCKER_REGISTER",
+      "value": "docker-registry.default.svc:5000"
+    },
+    {
+      "name": "SERVER_NAME",
+      "description": "The tagged version of the source repository to use.",
+      "value": "www.devnely.com"
+    },
+    {
+      "name": "MYSQL_USER",
+      "description": "The tagged version of the source repository to use.",
+      "value": "usermysql"
+    },
+    {
+      "name": "MYSQL_PASSWORD",
+      "description": "The tagged version of the source repository to use.",
+      "value": "passmyql"
+    },
+    {
+      "name": "MYSQL_DATABASE",
+      "description": "The tagged version of the source repository to use.",
+      "value": "php72-wp-s2i"
+    },
+    {
+      "name": "MYSQL_HOST",
+      "description": "The tagged version of the source repository to use.",
+      "value": "localhost"
+    },
+    {
+      "name": "MYSQL_TABLE_PREFIX",
+      "description": "The tagged version of the source repository to use.",
+      "value": "wp_"
+    }
+  ],
+  "objects": [
+    {
+      "apiVersion": "v1",
+      "kind": "Secret",
+      "metadata": {
+        "name": "secret-php72-fpm-s2i",
+        "anotations": {
+          "description": "Web Hook Secret Key."
+        },
+        "labels": {
+          "app": "${APLICATION_NAME}",
+          "build1": "${IMAGE_STREAM}-s2i",
+          "build2": "${IMAGE_STREAM}-img",
+          "build3": "${IMAGE_STREAM}-img-s2i"
+        }
+      },
+      "type": "Opaque",
+      "data": {
+        "WebHookSecretKey": "dGVzdA=="
+      }
+    },
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${IMAGE_STREAM}-s2i",
+        "labels": {
+          "app": "${APLICATION_NAME}",
+          "build1": "${IMAGE_STREAM}-s2i",
+          "build2": "${IMAGE_STREAM}-img",
+          "build3": "${IMAGE_STREAM}-img-s2i"
+        }
+      }
+    },
+    {
+      "apiVersion": "build.openshift.io/v1",
+      "kind": "BuildConfig",
+      "metadata": {
+        "labels": {
+          "app": "${APLICATION_NAME}",
+          "build1": "${IMAGE_STREAM}-s2i",
+          "build2": "${IMAGE_STREAM}-img",
+          "build3": "${IMAGE_STREAM}-img-s2i"
+        },
+        "name": "${IMAGE_STREAM}-s2i",
+        "namespace": "${PROJECT_NAME}"
+      },
+      "spec": {
+        "failedBuildsHistoryLimit": 5,
+        "nodeSelector": null,
+        "output": {
+          "to": {
+            "kind": "ImageStreamTag",
+            "name": "${IMAGE_STREAM}-s2i:latest"
+          }
+        },
+        "postCommit": {
+        },
+        "resources": {
+        },
+        "runPolicy": "Serial",
+        "source": {
+          "contextDir": "7.2",
+          "git": {
+            "ref": "php72-fpm-2",
+            "uri": "https://github.com/samyunodos/s2i-php-container.git"
+          },
+          "type": "Git"
+        },
+        "strategy": {
+          "dockerStrategy": {
+            "forcePull": true,
+            "from": {
+              "kind": "DockerImage",
+              "name": "docker.io/centos/s2i-base-centos7:latest"
+            }
+          },
+          "type": "Docker"
+        },
+        "triggers": [
+          {
+            "github": {
+              "secret": "xdlwMqxFiVkfR9fBiIaV",
+              "secretReference": {
+                "name": "secret-php72-fpm-s2i"
+              }
+            },
+            "type": "GitHub"
+          },
+          {
+            "generic": {
+              "secret": "F-ilfroO9PAhjTRSWX67"
+            },
+            "type": "Generic"
+          },
+          {
+            "type": "ConfigChange"
+          },
+          {
+            "type": "ImageChange"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Secret",
+      "metadata": {
+        "name": "secret-php72-fpm-img",
+        "anotations": {
+          "description": "Web Hook Secret Key."
+        },
+        "labels": {
+          "app": "${APLICATION_NAME}",
+          "build2": "${IMAGE_STREAM}-img",
+          "build3": "${IMAGE_STREAM}-img-s2i"
+        }
+      },
+      "type": "Opaque",
+      "data": {
+        "WebHookSecretKey": "cHJ1ZWJhCg=="
+      }
+    },
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${IMAGE_STREAM}-img",
+        "labels": {
+          "app": "${APLICATION_NAME}",
+          "build2": "${IMAGE_STREAM}-img",
+          "build3": "${IMAGE_STREAM}-img-s2i"
+        }
+      }
+    },
+    {
+      "apiVersion": "build.openshift.io/v1",
+      "kind": "BuildConfig",
+      "metadata": {
+        "labels": {
+          "app": "${APLICATION_NAME}",
+          "build2": "${IMAGE_STREAM}-img",
+          "build3": "${IMAGE_STREAM}-img-s2i"
+        },
+        "name": "${IMAGE_STREAM}-img",
+        "namespace": "${PROJECT_NAME}"
+      },
+      "spec": {
+        "failedBuildsHistoryLimit": 5,
+        "nodeSelector": null,
+        "output": {
+          "to": {
+            "kind": "ImageStreamTag",
+            "name": "${IMAGE_STREAM}-img:latest"
+          }
+        },
+        "postCommit": {
+        },
+        "resources": {
+        },
+        "runPolicy": "Serial",
+        "source": {
+          "git": {
+            "ref": "5.2.2-tag",
+            "uri": "https://github.com/samyunodos/Wordpress.git"
+          },
+          "type": "Git"
+        },
+        "type": "Source",
+        "strategy": {
+          "sourceStrategy": {
+            "from": {
+              "kind": "ImageStreamTag",
+              "namespace": "${PROJECT_NAME}",
+              "name": "${IMAGE_STREAM}-s2i:latest"
+            },
+            "env": [
+              {
+                "name": "DB_USER_R",
+                "value": "${MYSQL_USER}"
+              },
+              {
+                "name": "DB_PASSWORD_R",
+                "value": "${MYSQL_PASSWORD}"
+              },
+              {
+                "name": "DB_NAME_R",
+                "value": "${MYSQL_DATABASE}"
+              }
+            ]
+          }
+        },
+        "triggers": [
+          {
+            "github": {
+              "secret": "xdlwMqxFiVkfR9fBiIaV",
+              "secretReference": {
+                "name": "secret-php72-fpm-img"
+              }
+            },
+            "type": "GitHub"
+          },
+          {
+            "generic": {
+              "secret": "F-ilfroO9PAhjTRSWX67"
+            },
+            "type": "Generic"
+          },
+          {
+            "type": "ConfigChange"
+          },
+          {
+            "type": "ImageChange"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Secret",
+      "metadata": {
+        "name": "secret-php72-fpm-img-s2i",
+        "anotations": {
+          "description": "Web Hook Secret Key."
+        },
+        "labels": {
+          "app": "${APLICATION_NAME}",
+          "build3": "${IMAGE_STREAM}-img-s2i"
+        }
+      },
+      "type": "Opaque",
+      "data": {
+        "WebHookSecretKey": "dGVuZGVuY2lhCg=="
+      }
+    },
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${IMAGE_STREAM}-img-s2i",
+        "labels": {
+          "app": "${APLICATION_NAME}",
+          "build3": "${IMAGE_STREAM}-img-s2i"
+        }
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Secret",
+      "metadata": {
+        "name": "github-secret",
+        "labels": {
+          "app": "${APLICATION_NAME}",
+          "build3": "${IMAGE_STREAM}-img-s2i"
+        },
+        "anotations": {
+          "description": "GithubSecret Key."
+        }
+      },
+      "type": "Opaque",
+      "data": {
+        "username": "c2FteXVub2Rvc0BnbWFpbC5jb20K",
+        "password": "UG9jYXNzMTIzCg=="
+      }
+    },
+    {
+      "apiVersion": "build.openshift.io/v1",
+      "kind": "BuildConfig",
+      "metadata": {
+        "labels": {
+          "app": "${APLICATION_NAME}",
+          "build3": "${IMAGE_STREAM}-img-s2i"
+        },
+        "name": "${IMAGE_STREAM}-img-s2i",
+        "namespace": "${PROJECT_NAME}"
+      },
+      "spec": {
+        "failedBuildsHistoryLimit": 5,
+        "nodeSelector": null,
+        "output": {
+          "to": {
+            "kind": "ImageStreamTag",
+            "namespace": "${PROJECT_NAME}",
+            "name": "${IMAGE_STREAM}-img-s2i:latest"
+          },
+          "imageLabels": [
+            {
+              "name": "io.k8s.display-name",
+              "value": "${APPLICATION_NAME}"
+            },
+            {
+              "name": "io.k8s.description",
+              "value": "mysql application and S2I builder."
+            },
+            {
+              "name": "io.openshift.s2i.scripts-url",
+              "value": "image:///opt/app-root/s2i"
+            },
+            {
+              "name": "io.s2i.scripts-url",
+              "value": "image:///opt/app-root/s2i"
+            },
+            {
+              "name": "io.openshift.tags",
+              "value": "php72-fpm, s2i-php-container"
+            }
+          ]
+        },
+        "postCommit": {
+        },
+        "resources": {
+        },
+        "runPolicy": "Serial",
+        "source": {
+          "git": {
+            "ref": "work",
+            "uri": "https://github.com/samyunodos/devnely.git"
+          },
+          "sourceSecret": {
+            "name": "github-secret"
+          },
+          "type": "Git"
+        },
+        "strategy": {
+          "type": "Source",
+          "sourceStrategy": {
+            "from": {
+              "kind": "ImageStreamTag",
+              "name": "${IMAGE_STREAM}-img:latest"
+            }
+          }
+        },
+        "triggers": [
+          {
+            "github": {
+              "secretReference": {
+                "name": "secret-php72-fpm-img-s2i"
+              }
+            },
+            "type": "GitHub"
+          },
+          {
+            "generic": {
+              "secret": "F-ilfroO9PAhjTRSWX67"
+            },
+            "type": "Generic"
+          },
+          {
+            "type": "ConfigChange"
+          },
+          {
+            "type": "ImageChange"
+          }
+        ]
+      }
+    }
+  ]
+}
