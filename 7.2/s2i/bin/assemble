@@ -13,14 +13,14 @@ mv /tmp/src/* ./
 fix-permissions ./
 fix-permissions ${HTTPD_CONFIGURATION_PATH}
 
-scl enable rh-nodejs10 bash
+# scl enable rh-nodejs10 bash
 
 # fix-permissions "/opt/rh/rh-nodejs10/root/usr/lib/node_modules"
 
 
-npm install gulp --global
-npm install gulp-rename --global
-npm install gulp-concat --global
+npm install gulp --save
+npm install gulp-rename --save
+npm install gulp-concat --save
 
 
 
