@@ -18,7 +18,7 @@ ENV PHP_VERSION=7.2 \
     PHP_VER_SHORT=72 \
     NAME=php \
 #######
-    PATH=$PATH:/opt/rh/rh-php72/root/usr/bin:/opt/rh/rh-mysql80/root/usr/bin/
+    PATH=$PATH:/opt/rh/rh-php72/root/usr/bin:/opt/rh/rh-mysql80/root/usr/bin/:/silo/nodejs/.npm-global/bin
 #######
 
 ENV SUMMARY="Platform for building and running PHP $PHP_VERSION applications" \
@@ -111,17 +111,6 @@ COPY ./s2i/bin/ $STI_SCRIPTS_PATH
 
 # Copy extra files to the image.
 COPY ./root/ /
-
-
-######## Creo el directorio /silo
-RUN mkdir -p /silo
-RUN chmod -R a+rwx /silo && \
-chmod -R a+rwx /silo && \
-chmod -R ug+r  /silo && \
-chmod -R ug+r  /silo && \
-chown -R 1001:0 /silo && \
-chown -R 1001:0 /silo 
-########
 
 # Reset permissions of filesystem to default values
 RUN /usr/libexec/container-setup && rpm-file-permissions
