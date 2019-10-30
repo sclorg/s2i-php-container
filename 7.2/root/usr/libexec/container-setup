@@ -62,24 +62,32 @@ chmod -R a+rwx /var/opt/rh/rh-php72/lib/php
 ######## Creo el directorio /silo
 # Aqui se guardará todo lo concerniente al sitio worpress (wp-content, wp-config.php, htcaccess, los certificados del sitio)
 
+mkdir -p /silo/wordpress
+
+chmod -R a+rwX /silo && \
+    chmod -R a+rwX /silo && \
+    chmod -R ug+r  /silo && \
+    chmod -R ug+r  /silo && \
+    chown -R 1001:0 /silo && \
+    chown -R 1001:0 /silo 
+########
+
+
+########
+
 # Creo el directorio /silo/nodejs/.npm-global/bin 
 # Aqui es dónde se guardarán los paquetes globales en .npm-global
 # Necesitamos añadir el path, en el Dockerfile
 # PATH=$PATH:/opt/rh/rh-php72/root/usr/bin:/opt/rh/rh-mysql80/root/usr/bin/:/silo/nodejs/.npm-global/bin
 
-mkdir -p /silo/wordpress
-mkdir -p /silo/nodejs/.npm-global
-chmod -R a+rwX /silo && \
-chmod -R a+rwX /silo && \
-chmod -R ug+r  /silo && \
-chmod -R ug+r  /silo && \
-chown -R 1001:0 /silo && \
-chown -R 1001:0 /silo 
-########
 
-
-
-
+mkdir -p /opt/app-root/nodejs/.npm-global
+chmod -R a+rwX /opt/app-root/nodejs && \
+chmod -R a+rwX /opt/app-root/nodejs && \
+chmod -R ug+r  /opt/app-root/nodejs && \
+chmod -R ug+r /opt/app-root/nodejs && \
+chown -R 1001:0 /opt/app-root/nodejs && \
+chown -R 1001:0  /opt/app-root/nodejs 
 ########
 
 
