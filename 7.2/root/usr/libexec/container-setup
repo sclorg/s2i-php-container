@@ -57,9 +57,13 @@ chmod -R a+rwX /var/opt/rh/rh-php72/lib/php
 
 ######
 ##Donde se guardaran los paquetes globales. Hay que añadir a la variable de entorno PATH=$PATH:/opt/rh/rh-php72/root/usr/bin:/opt/rh/rh-mysql80/root/usr/bin/:/opt/app-root/nodejs/.npm-global/bin. Nosotros ya lo hemos hecho en el Dockerfile. 
-mkdir -p /opt/app-root/src/.npm-global
-npm config set prefix  "/opt/app-root/src/.npm-global"
+# mkdir -p /opt/app-root/src/.npm-global
+# npm config set prefix  "/opt/app-root/src/.npm-global"
 
+# chmod -R a+rwX /opt/app-root/src
+# chmod -R ug+r /opt/app-root/src
+# chown -R 1001:0 /opt/app-root/src
+# chown -R 1001:0 /opt/app-root/src
 ######
 
 ######## Creo el directorio /silo
@@ -68,12 +72,13 @@ npm config set prefix  "/opt/app-root/src/.npm-global"
 mkdir -p /silo/wordpress
 
 chmod -R a+rwX /silo && \
-    chmod -R a+rwX /silo && \
+  
     chmod -R ug+r  /silo && \
     chmod -R ug+r  /silo && \
     chown -R 1001:0 /silo && \
     chown -R 1001:0 /silo 
 ########
+
 
 
 ########
