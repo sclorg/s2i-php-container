@@ -56,6 +56,9 @@ chmod -R a+rwX /var/opt/rh/rh-php72/lib/php
 # chmod -R a+rwX /opt/rh/rh-nodejs10/root/usr/lib/node_modules
 
 ######
+##Donde se guardaran los paquetes globales. Hay que añadir a la variable de entorno PATH=$PATH:/opt/rh/rh-php72/root/usr/bin:/opt/rh/rh-mysql80/root/usr/bin/:/opt/app-root/nodejs/.npm-global/bin. Nosotros ya lo hemos hecho en el Dockerfile. 
+mkdir -p /opt/app-root/src/.npm-global
+npm config set prefix  "/opt/app-root/src/.npm-global"
 
 ######
 
