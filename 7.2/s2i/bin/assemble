@@ -23,9 +23,14 @@ fix-permissions ${HTTPD_CONFIGURATION_PATH}
 # npm install gulp-concat --global
 ##Donde se guardaran los paquetes globales. Hay que añadir a la variable de entorno PATH=$PATH:/opt/rh/rh-php72/root/usr/bin:/opt/rh/rh-mysql80/root/usr/bin/:/opt/app-root/nodejs/.npm-global/bin. Nosotros ya lo hemos hecho en el Dockerfile. 
 
-##npm config set prefix  "/opt/app-root/nodejs/.npm-global"
+npm config set prefix  "/opt/app-root/nodejs/.npm-global"
 
 ## Ahora para instalar paquetes" npm install <paquete> --global"
+
+##Workround to working with fs-extra (lo instalamos en local)
+
+./../nodejs/npm install -D grunt-cache-bust
+./../nodejs/npm install -D fs-extra
 
 
 # post-assemble files

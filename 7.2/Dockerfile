@@ -18,7 +18,7 @@ ENV PHP_VERSION=7.2 \
     PHP_VER_SHORT=72 \
     NAME=php \
 #######
-    PATH=$PATH:/opt/rh/rh-php72/root/usr/bin:/opt/rh/rh-mysql80/root/usr/bin/
+    PATH=$PATH:/opt/rh/rh-php72/root/usr/bin:/opt/rh/rh-mysql80/root/usr/bin/:/opt/app-root/nodejs/.npm-global/bin
 #######
 
 ENV SUMMARY="Platform for building and running PHP $PHP_VERSION applications" \
