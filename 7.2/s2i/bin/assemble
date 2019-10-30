@@ -29,9 +29,10 @@ npm config set prefix  "/opt/app-root/nodejs/.npm-global"
 
 ##Workround to working with fs-extra (lo instalamos en local)
 
-./../nodejs/npm install -D grunt-cache-bust
-./../nodejs/npm install -D fs-extra
-
+cd ./../nodejs
+npm install -D grunt-cache-bust
+npm install -D fs-extra
+cd ./../src
 
 # post-assemble files
 process_extending_files ./php-post-assemble/ ${PHP_CONTAINER_SCRIPTS_PATH}/post-assemble/
