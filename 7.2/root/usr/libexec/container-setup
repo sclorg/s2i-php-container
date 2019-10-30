@@ -53,7 +53,7 @@ chmod -R a+rwx /etc/opt/rh/rh-php${PHP_VER_SHORT}/php.d
 chmod a+rw /etc/opt/rh/rh-php${PHP_VER_SHORT}/php.ini
 chmod a+rwX /var/opt/rh/rh-php${PHP_VER_SHORT}/run/php-fpm
 chmod -R a+rwX /var/opt/rh/rh-php72/lib/php
-chmod -R a+rwX /opt/rh/rh-nodejs10/root/usr/lib/node_modules
+# chmod -R a+rwX /opt/rh/rh-nodejs10/root/usr/lib/node_modules
 
 ######
 
@@ -81,13 +81,13 @@ chmod -R a+rwX /silo && \
 # PATH=$PATH:/opt/rh/rh-php72/root/usr/bin:/opt/rh/rh-mysql80/root/usr/bin/:/silo/nodejs/.npm-global/bin
 
 
-mkdir -p /opt/app-root/nodejs/.npm-global
-chmod -R a+rwX /opt/app-root/nodejs && \
-chmod -R a+rwX /opt/app-root/nodejs && \
-chmod -R ug+r  /opt/app-root/nodejs && \
-chmod -R ug+r /opt/app-root/nodejs && \
-chown -R 1001:0 /opt/app-root/nodejs && \
-chown -R 1001:0  /opt/app-root/nodejs 
+# mkdir -p /opt/app-root/nodejs/.npm-global
+# chmod -R a+rwX /opt/app-root/nodejs && \
+# chmod -R a+rwX /opt/app-root/nodejs && \
+# chmod -R ug+r  /opt/app-root/nodejs && \
+# chmod -R ug+r /opt/app-root/nodejs && \
+# chown -R 1001:0 /opt/app-root/nodejs && \
+# chown -R 1001:0  /opt/app-root/nodejs 
 ########
 
 
