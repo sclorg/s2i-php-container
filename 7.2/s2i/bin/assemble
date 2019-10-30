@@ -33,7 +33,11 @@ fix-permissions ${HTTPD_CONFIGURATION_PATH}
 # npm install -D fs-extraxs
 mkdir -p /opt/app-root/src/.npm-global
 npm config set prefix  "/opt/app-root/src/.npm-global"
-
+npm update
+npm init --yes
+npm install gulp --save
+npm install fs-extra --save
+echo -e "const fs = require('fs-extra');\n fs.ensureDirSync('/opt/app-root/src/cartilago/a/b/c');" > mi.js
 
 # post-assemble files
 process_extending_files ./php-post-assemble/ ${PHP_CONTAINER_SCRIPTS_PATH}/post-assemble/
