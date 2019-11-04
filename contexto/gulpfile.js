@@ -80,16 +80,21 @@ async function crearlinkwphtcaccess () {
 
 
 
-gulp.task('tmoverwpcontent', function() {
+gulp.task('tmoverwpcontent', function(done) {
   moverwpcontent();
+  done();
 });
 
-gulp.task('tmoverwpconfig', function() {
-  gulp.series('moverwpconfig', 'crearlinkwpconfig');
+gulp.task('tmoverwpconfig', function(done) {
+  moverwpconfig();
+  crearlinkwpconfig();
+  done();
 });
 
-gulp.task('tmoverwphtcaccess', function() {
-  gulp.series('moverwphtcaccess', 'crearlinkwphttcacces');
+gulp.task('tmoverwphtcaccess', function(done) {
+  moverwphtcaccess();
+  crearlinkwphttcacces();
+  done();
 });
 
 gulp.task('watch',  function() {
