@@ -7,7 +7,7 @@ const fs = require('fs-extra');
 
 
 const srcwpcontent = '/opt/app-root/src/wp-content';
-const dstwpcontent = '/silo/wordpress';
+const dstwpcontent = '/silo/wordpress/';
 const srcwphtaccess = '/opt/app-root/src/.httaccess';
 const dstwphtaccess = '/silo/wordpress/.htaccess';
 const srcwpconfig = '/opt/app-root/src/wp-config.php' ;
@@ -68,8 +68,8 @@ async function crearlinkwphtcaccess () {
 
 
 
-gulp.task('tmoverwpcontent', function() {
-  gulp.series('moverwpcontent');
+ggulp.task('tmoverwpcontent', function() {
+  moverwpcontent();
 });
 
 gulp.task('tmoverwpconfig', function() {
@@ -81,12 +81,12 @@ gulp.task('tmoverwphtcaccess', function() {
 });
 
 gulp.task('watch',  function() {
-  gulp.watch('/opt/app-root/src/wp-content',gulp.series('moverwpcontent', 'crearlinkwpcontent'));
-  gulp.watch('/opt/app-root/src/.htcaccess',gulp.series('moverwphtcaccess', 'crearlinkwphtcaccess'));
-  gulp.watch('/opt/app-root/src/wp-config.php',gulp.series('moverwpconfig', 'crearlinkwpconfig'));
-  gulp.watch('/silo/wordpress/wp-content', 'crearlinkwpcontent');
-  gulp.watch('/silo/wordpress/.htcaccess', 'crearlinkwphtcaccess');
-  gulp.watch('/silo/wordpress/wp-config.php', 'crearlinkwpconfig');
+  gulp.watch('/opt/app-root/src/wp-content',gulp.series('tmoverwpcontent', 'tcrearlinkwpcontent'));
+  gulp.watch('/opt/app-root/src/.htcaccess',gulp.series('tmoverwphtcaccess', 'tcrearlinkwphtcaccess'));
+  gulp.watch('/opt/app-root/src/wp-config.php',gulp.series('tmoverwpconfig', 'tcrearlinkwpconfig'));
+  gulp.watch('/silo/wordpress/wp-content', 'tcrearlinkwpcontent');
+  gulp.watch('/silo/wordpress/.htcaccess', 'tcrearlinkwphtcaccess');
+  gulp.watch('/silo/wordpress/wp-config.php', 'tcrearlinkwpconfig');
 });
 
-gulp.task('default',  gulp.parallel('mover', 'watch'));
+gulp.task('default',  gulp.parallel('watch'));
