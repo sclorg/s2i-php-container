@@ -7,16 +7,28 @@ const fs = require('fs-extra');
 
 
 const srcwpcontent = '/opt/app-root/src/wp-content';
-const dstwpcontent = '/silo/wordpress/wp-content/';
+const dstwpcontent = '/silo/wordpress/wp-content';
 const srcwphtaccess = '/opt/app-root/src/.httaccess';
 const dstwphtaccess = '/silo/wordpress/.htaccess';
 const srcwpconfig = '/opt/app-root/src/wp-config.php' ;
 const dstwpconfig = '/silo/wordpress/wp-config.php';
 
+// With async/await:
+async function createdirwpcontent () {
+  try {
+    await fs.emptyDir('/silo/wordpress,wp-content');
+    console.log('success!');
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+
 
 // Async/Await:
 async function moverwpcontent () {
   try {
+    createdirwpcontent();
     await fs.move( srcwpcontent, dstwpcontent, {overwrite: true});
     console.log('success!');
   } catch (err) {
