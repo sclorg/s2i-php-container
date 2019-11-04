@@ -82,6 +82,11 @@ gulp.task('tmoverwphtcaccess', function() {
 
 gulp.task('watch',  function() {
   gulp.watch('/opt/app-root/src/wp-content',gulp.series('moverwpcontent', 'crearlinkwpcontent'));
+  gulp.watch('/opt/app-root/src/.htcaccess',gulp.series('moverwphtcaccess', 'crearlinkwphtcaccess'));
+  gulp.watch('/opt/app-root/src/wp-config.php',gulp.series('moverwpconfig', 'crearlinkwpconfig'));
+  gulp.watch('/silo/wordpress/wp-content', 'crearlinkwpcontent');
+  gulp.watch('/silo/wordpress/.htcaccess', 'crearlinkwphtcaccess');
+  gulp.watch('/silo/wordpress/wp-config.php', 'crearlinkwpconfig');
 });
 
 gulp.task('default',  gulp.parallel('mover', 'watch'));
