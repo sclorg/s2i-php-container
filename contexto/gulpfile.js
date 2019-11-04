@@ -8,8 +8,8 @@ const fs = require('fs-extra');
 
 const srcwpcontent = '/opt/app-root/src/wp-content';
 const dstwpcontent = '/silo/wordpress/wp-content';
-const srcwphtaccess = '/opt/app-root/src/.httaccess';
-const dstwphtaccess = '/silo/wordpress/.htaccess';
+const srcwphtcaccess = '/opt/app-root/src/.htcaccess';
+const dstwphtcaccess = '/silo/wordpress/.htcaccess';
 const srcwpconfig = '/opt/app-root/src/wp-config.php' ;
 const dstwpconfig = '/silo/wordpress/wp-config.php';
 
@@ -30,6 +30,8 @@ async function moverwpcontent () {
   try {
     createdirwpcontent();
     await fs.move( srcwpcontent, dstwpcontent, {overwrite: true});
+    // await fs.remove(srcwpcontent);
+    await fs.ensureSymlink( dstwpcontent,  srcwpcontent, 'dir');
     console.log('success!');
   } catch (err) {
     console.error(err);
@@ -38,70 +40,81 @@ async function moverwpcontent () {
 
 // Async/Await:
 async function moverwpconfig () {
-  try {
-    await fs.move( srcwpconfig, dstwpconfig, {overwrite: true});
-    console.log('success!');
-  } catch (err) {
-    console.error(err);
+
+  if ( ! fs.pathExists(srcwpconfig)) {
+    try {
+      await fs.move( srcwpconfig, dstwpconfig, {overwrite: true});
+      // await fs.remove(srcwpconfig);
+      await fs.ensureSymlink( dstwpconfig,  srcwpconfig, 'file');
+      console.log('success!');
+    } catch (err) {
+      console.error(err);
+    }
+  } else {
+    console.log("No existe el archivo ", srcwpconfig);
   }
+   
 }
 
 // Async/Await:
 async function moverwphtcaccess () {
+  if ( ! fs.pathExists(srcwphtcaccess)) {
   try {
-    await fs.move( srcwphtaccess, dstwphtaccess, {overwrite: true});
+    await fs.move( srcwphtcaccess, dstwphtcaccess, {overwrite: true});
+    // await fs.remove(srcwphtcaccess);
+    await fs.ensureSymlink( dstwphtaccess,  srcwphtaccess, 'file');
     console.log('success!');
   } catch (err) {
     console.error(err);
+  }
+  } else {
+     console.log("No existe el archivo ", srcwphtcaccess);
   }
 }
 
-async function crearlinkwpcontent () {
-  try {
-    await fs.ensureSymlink(dstwpcontent, srcwpcontent);
-    console.log('success!');
-  } catch (err) {
-    console.error(err);
-  }
-}
+// async function crearlinkwpcontent () {
+//   try {
+//     await fs.ensureSymlink(    srcwpcontent, dstwpcontent, 'dir');
+//     console.log('success!');
+//   } catch (err) {
+//     console.error(err);
+//   }
+// }
  
 
-async function crearlinkwpconfig () {
-  try {
-    await fs.ensureSymlink(dstwpconfig, srcwpconfig);
-    console.log('success!');
-  } catch (err) {
-    console.error(err);
-  }
-}
+// async function crearlinkwpconfig () {
+//   try {
+//     await fs.ensureSymlink(  dstwpconfig, srcwpconfig);
+//     console.log('success!');
+//   } catch (err) {
+//     console.error(err);
+//   }
+// }
 
-async function crearlinkwphtcaccess () {
-  try {
-    await fs.ensureSymlink(dstwphtaccess, srcwphtaccess);
-    console.log('success!');
-  } catch (err) {
-    console.error(err);
-  }
-}
+// async function crearlinkwphtcaccess () {
+//   try {
+//     await fs.ensureSymlink (srcwphtaccess, dstwphtaccess);
+//     console.log('success!');
+//   } catch (err) {
+//     console.error(err);
+//   }
+// }
 
 
 
 
 gulp.task('tmoverwpcontent', function(done) {
   moverwpcontent();
-  crearlinkwpcontent();
   done();
 });
 
 gulp.task('tmoverwpconfig', function(done) {
   moverwpconfig();
-  crearlinkwpconfig();
   done();
 });
 
 gulp.task('tmoverwphtcaccess', function(done) {
   moverwphtcaccess();
-  crearlinkwphttcacces();
   done();
 });
 
@@ -111,9 +124,6 @@ gulp.task('watch',  function(done) {
   gulp.watch('/opt/app-root/src/wp-content',gulp.series('tmoverwpcontent'));
   gulp.watch('/opt/app-root/src/.htcaccess',gulp.series('tmoverwphtcaccess'));
   gulp.watch('/opt/app-root/src/wp-config.php',gulp.series('tmoverwpconfig'));
-  gulp.watch('/silo/wordpress/wp-content', gulp.series('tcrearlinkwpcontent'));
-  gulp.watch('/silo/wordpress/.htcaccess', gulp.series('tcrearlinkwphtcaccess'));
-  gulp.watch('/silo/wordpress/wp-config.php', gulp.series('tcrearlinkwpconfig'));
   done();
 });
 
