@@ -56,7 +56,14 @@ async function moverwphtcaccess () {
   }
 }
 
-
+async function crearlinkwpcontent () {
+  try {
+    await fs.ensureSymlink(dstwpcontent, srcwpcontent);
+    console.log('success!');
+  } catch (err) {
+    console.error(err);
+  }
+}
  
 
 async function crearlinkwpconfig () {
@@ -82,6 +89,7 @@ async function crearlinkwphtcaccess () {
 
 gulp.task('tmoverwpcontent', function(done) {
   moverwpcontent();
+  crearlinkwpcontent();
   done();
 });
 
@@ -97,13 +105,16 @@ gulp.task('tmoverwphtcaccess', function(done) {
   done();
 });
 
-gulp.task('watch',  function() {
-  gulp.watch('/opt/app-root/src/wp-content',gulp.series('tmoverwpcontent', 'tcrearlinkwpcontent'));
-  gulp.watch('/opt/app-root/src/.htcaccess',gulp.series('tmoverwphtcaccess', 'tcrearlinkwphtcaccess'));
-  gulp.watch('/opt/app-root/src/wp-config.php',gulp.series('tmoverwpconfig', 'tcrearlinkwpconfig'));
+
+
+gulp.task('watch',  function(done) {
+  gulp.watch('/opt/app-root/src/wp-content',gulp.series('tmoverwpcontent');
+  gulp.watch('/opt/app-root/src/.htcaccess',gulp.series('tmoverwphtcaccess'));
+  gulp.watch('/opt/app-root/src/wp-config.php',gulp.series('tmoverwpconfig'));
   gulp.watch('/silo/wordpress/wp-content', 'tcrearlinkwpcontent');
   gulp.watch('/silo/wordpress/.htcaccess', 'tcrearlinkwphtcaccess');
   gulp.watch('/silo/wordpress/wp-config.php', 'tcrearlinkwpconfig');
+  done();
 });
 
 gulp.task('default',  gulp.parallel('watch'));
