@@ -76,6 +76,9 @@ The following environment variables set their equivalent property value in the p
 * **PHP_MEMORY_LIMIT**
   * Memory Limit
   * Default: 128M
+* **SENDMAIL_PATH**
+  * Where the sendmail program can be found
+  * Default: /usr/sbin/sendmail -t -i
 * **SESSION_NAME**
   * Name of the session
   * Default: PHPSESSID
