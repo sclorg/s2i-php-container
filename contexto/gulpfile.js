@@ -108,12 +108,12 @@ gulp.task('tmoverwphtcaccess', function(done) {
 
 
 gulp.task('watch',  function(done) {
-  gulp.watch('/opt/app-root/src/wp-content',gulp.series('tmoverwpcontent');
+  gulp.watch('/opt/app-root/src/wp-content',gulp.series('tmoverwpcontent'));
   gulp.watch('/opt/app-root/src/.htcaccess',gulp.series('tmoverwphtcaccess'));
   gulp.watch('/opt/app-root/src/wp-config.php',gulp.series('tmoverwpconfig'));
-  gulp.watch('/silo/wordpress/wp-content', 'tcrearlinkwpcontent');
-  gulp.watch('/silo/wordpress/.htcaccess', 'tcrearlinkwphtcaccess');
-  gulp.watch('/silo/wordpress/wp-config.php', 'tcrearlinkwpconfig');
+  gulp.watch('/silo/wordpress/wp-content', gulp.series('tcrearlinkwpcontent'));
+  gulp.watch('/silo/wordpress/.htcaccess', gulp.series('tcrearlinkwphtcaccess'));
+  gulp.watch('/silo/wordpress/wp-config.php', gulp.series('tcrearlinkwpconfig'));
   done();
 });
 
