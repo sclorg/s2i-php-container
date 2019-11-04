@@ -7,7 +7,7 @@ const fs = require('fs-extra');
 
 
 const srcwpcontent = '/opt/app-root/src/wp-content';
-const dstwpcontent = '/silo/wordpress/';
+const dstwpcontent = '/silo/wordpress/wp-content/';
 const srcwphtaccess = '/opt/app-root/src/.httaccess';
 const dstwphtaccess = '/silo/wordpress/.htaccess';
 const srcwpconfig = '/opt/app-root/src/wp-config.php' ;
@@ -68,7 +68,7 @@ async function crearlinkwphtcaccess () {
 
 
 
-ggulp.task('tmoverwpcontent', function() {
+gulp.task('tmoverwpcontent', function() {
   moverwpcontent();
 });
 
