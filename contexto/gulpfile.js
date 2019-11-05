@@ -31,7 +31,7 @@ async function linkremovewpcontentwpconfightcaccess () {
     await fs.remove(srcwpconfig);
     await fs.ensureSymlink( dstwpcontent,  srcwpcontent, 'dir');
     await fs.ensureSymlink( dstwpconfig,  srcwpconfig, 'file');
-    if ( ! fs.pathExists(dstwphtcaccess)) {
+    if ( fs.pathExists(dstwphtcaccess)) {
       try {
         await fs.remove(srcwphtcaccess);
         await fs.ensureSymlink( dstwphtcaccess,  srcwphtcaccess, 'file');
@@ -67,7 +67,7 @@ async function moverwpcontent () {
 // Async/Await:
 async function moverwpconfig () {
 
-  if ( ! fs.pathExists(srcwpconfig)) {
+  if ( fs.pathExists(srcwpconfig)) {
     try {
       await fs.move( srcwpconfig, dstwpconfig, {overwrite: true});
       // await fs.remove(srcwpconfig);
@@ -84,7 +84,7 @@ async function moverwpconfig () {
 
 // Async/Await:
 async function moverwphtcaccess () {
-  if ( ! fs.pathExists(srcwphtcaccess)) {
+  if ( fs.pathExists(srcwphtcaccess)) {
   try {
     await fs.move( srcwphtcaccess, dstwphtcaccess, {overwrite: true});
     // await fs.remove(srcwphtcaccess);
