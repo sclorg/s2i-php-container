@@ -54,6 +54,7 @@ npm install gulp --save
 npm install fs-extra --save
 # echo -e "const fs = require('fs-extra');\n fs.ensureDirSync('/opt/app-root/src/cartilago/a/b/c');" > mi.js
 
+download_wp
 
 if [ -f "/silo/wordpress/wp-config" ] && [ -d "/silo/wordpress/wp-content" ]; then
     gulp tlinkremovewpcontentwpconfightcaccess
