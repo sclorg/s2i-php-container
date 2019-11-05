@@ -153,7 +153,7 @@ gulp.task('tmoverwphtcaccess', function(done) {
 gulp.task('watch',  function(done) {
   // gulp.watch('/opt/app-root/src/wp-content',gulp.series('tmoverwpcontent'));
   // gulp.watch('/opt/app-root/src/.htcaccess',gulp.series('tmoverwphtcaccess'));
-  gulp.watch('/opt/app-root/src/wp-config.php',gulp.series('tmoverwpconfig', 'tmoverwpcontent', 'tmoverhtcaccess'));
+  gulp.watch('/opt/app-root/src/wp-config.php',gulp.series('tmoverwpconfig', 'tmoverwpcontent', 'tmoverwphtcaccess'));
   done();
 });
 
