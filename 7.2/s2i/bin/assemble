@@ -15,14 +15,18 @@ mv /tmp/src/* ./
 fix-permissions ./
 fix-permissions ${HTTPD_CONFIGURATION_PATH}
 
-## Lo instala en /opt/app-root/src
-if [ -z "$WP_INSTALL_VERSION" ]; then
-    wp core download --locale=es_ES --version=latest
-else
-    wp core download --locale=es_ES --version="$WP_INSTALL_VERSION"
-fi
+download_wp(){
+    ## Download  en /opt/app-root/src
+    if [ -z "$WP_INSTALL_VERSION" ]; then
+        wp core download --locale=es_ES --version=latest
+    else
+        wp core download --locale=es_ES --version="$WP_INSTALL_VERSION"
+    fi
+}
 
-mkdir -p /silo/wordpress
+
+
+# mkdir -p /silo/wordpress
 
 # scl enable rh-nodejs10 bash
 
@@ -42,13 +46,63 @@ mkdir -p /silo/wordpress
 
 # npm install -D grunt-cache-bust
 # npm install -D fs-extraxs
-mkdir -p /opt/app-root/src/.npm-global
-npm config set prefix  "/opt/app-root/src/.npm-global"
+# mkdir -p /opt/app-root/src/.npm-global
+# npm config set prefix  "/opt/app-root/src/.npm-global"
 npm update
 npm init --yes
 npm install gulp --save
 npm install fs-extra --save
 # echo -e "const fs = require('fs-extra');\n fs.ensureDirSync('/opt/app-root/src/cartilago/a/b/c');" > mi.js
+
+
+if [ -f "/silo/wordpress/wp-config" ] and [ -d "/silo/wordpress/wp-content" ]; then
+    gulp tlinkremovewpcontentwpconfightcaccess
+
+else
+    if [ -z "${DB_USER}" ] ||  [ -z "${DB_PASSWORD}" ] ||  [ -z "${DB_NAME}" ] ||  [ -z "${DB_HOST}" ]; then
+        echo "Procedemos desde el propio instalador php de wordpress (web)."
+    else
+        gulp default &
+
+        wp config create --dbname="${DB_NAME}" --dbuser="${DB_USER}" --dbpass="${DB_PASSWORD}" --dbhost="${DB_HOST}" --skip-check --extra-php <<PHP
+define( 'WP_DEBUG', true );
+define( 'WP_DEBUG_LOG', true );
+define('FORCE_SSL_ADMIN', true);
+define('FORCE_SSL_LOGIN', true);
+if (strpos(\$_SERVER['HTTP_X_FORWARDED_PROTO'], 'https') !== false) \$_SERVER['HTTPS']='on';
+define( 'WP_CONTENT_DIR', '/silo/wordpress');
+define( 'WP_PLUGIN_DIR', WP_CONTENT_DIR . '/plugins' );
+define('WP_HOME', 'http://' . \$_SERVER['HTTP_HOST'] . '/');
+define('WP_SITEURL', 'http://' . \$_SERVER['HTTP_HOST'] . '/');
+define('FS_METHOD', 'direct');
+if ( defined( 'WP_CLI' ) ) {
+    \$_SERVER['HTTP_HOST'] = 'localhost';
+};
+if ( ! defined( 'WP_CLI' ) ) {
+    // remove x-pingback HTTP header
+    add_filter('wp_headers', function(\$headers) {
+        unset(\$headers['X-Pingback']);
+        return \$headers;
+    });
+    // disable pingbacks
+    add_filter( 'xmlrpc_methods', function( \$methods ) {
+            unset( \$methods['pingback.ping'] );
+            return \$methods;
+    });
+    add_filter( 'auto_update_translation', '__return_false' );
+};
+PHP
+
+
+    fi
+
+
+
+fi
+
+
+
+
 
 # post-assemble files
 process_extending_files ./php-post-assemble/ ${PHP_CONTAINER_SCRIPTS_PATH}/post-assemble/

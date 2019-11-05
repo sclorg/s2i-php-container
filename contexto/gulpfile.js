@@ -24,6 +24,32 @@ async function createdirwpcontent () {
 }
 
 
+// Async/Await:
+async function linkremovewpcontentwpconfightcaccess () {
+  try {
+    await fs.remove(srcwpcontent);
+    await fs.remove(srcwpconfig);
+    await fs.ensureSymlink( dstwpcontent,  srcwpcontent, 'dir');
+    await fs.ensureSymlink( dstwpconfig,  srcwpconfig, 'file');
+    if ( ! fs.pathExists(dstwphtcaccess)) {
+      try {
+        await fs.remove(srcwphtcaccess);
+        await fs.ensureSymlink( dstwphtcaccess,  srcwphtcaccess, 'file');
+        console.log('success!');
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      console.log("No existe el archivo ", dstwphtcaccess);
+    }
+
+    console.log('success!');
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+
 
 // Async/Await:
 async function moverwpcontent () {
@@ -31,7 +57,7 @@ async function moverwpcontent () {
     createdirwpcontent();
     await fs.move( srcwpcontent, dstwpcontent, {overwrite: true});
     // await fs.remove(srcwpcontent);
-    await fs.ensureSymlink( dstwpcontent,  srcwpcontent, 'dir');
+    // await fs.ensureSymlink( dstwpcontent,  srcwpcontent, 'dir');
     console.log('success!');
   } catch (err) {
     console.error(err);
@@ -101,6 +127,10 @@ async function moverwphtcaccess () {
 // }
 
 
+gulp.task('tlinkremovewpcontentwpconfightcaccess', function(done) {
+  linkremovewpcontentwpconfightcaccess();
+  done();
+});
 
 
 gulp.task('tmoverwpcontent', function(done) {
@@ -121,9 +151,9 @@ gulp.task('tmoverwphtcaccess', function(done) {
 
 
 gulp.task('watch',  function(done) {
-  gulp.watch('/opt/app-root/src/wp-content',gulp.series('tmoverwpcontent'));
-  gulp.watch('/opt/app-root/src/.htcaccess',gulp.series('tmoverwphtcaccess'));
-  gulp.watch('/opt/app-root/src/wp-config.php',gulp.series('tmoverwpconfig'));
+  // gulp.watch('/opt/app-root/src/wp-content',gulp.series('tmoverwpcontent'));
+  // gulp.watch('/opt/app-root/src/.htcaccess',gulp.series('tmoverwphtcaccess'));
+  gulp.watch('/opt/app-root/src/wp-config.php',gulp.series('tmoverwpconfig', 'tmoverwpcontent', 'tmoverhtcaccess'));
   done();
 });
 
