@@ -88,7 +88,7 @@ async function moverwphtcaccess () {
   try {
     await fs.move( srcwphtcaccess, dstwphtcaccess, {overwrite: true});
     // await fs.remove(srcwphtcaccess);
-    await fs.ensureSymlink( dstwphtaccess,  srcwphtaccess, 'file');
+    await fs.ensureSymlink( dstwphtcaccess,  srcwphtcaccess, 'file');
     console.log('success!');
   } catch (err) {
     console.error(err);
