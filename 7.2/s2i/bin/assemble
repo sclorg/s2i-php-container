@@ -15,12 +15,12 @@ mv /tmp/src/* ./
 fix-permissions ./
 fix-permissions ${HTTPD_CONFIGURATION_PATH}
 
-download_wp(){
+download-wp () {
     ## Download  en /opt/app-root/src
     if [ -z "$WP_INSTALL_VERSION" ]; then
         wp core download --locale=es_ES --version=latest --path='/opt/app-root/src'
     else
-        wp core download --locale=es_ES --version="$WP_INSTALL_VERSION"  --path='/opt/app-root/src
+        wp core download --locale=es_ES --version="$WP_INSTALL_VERSION"  --path='/opt/app-root/src'
     fi
 }
 
@@ -54,7 +54,7 @@ npm install gulp --save
 npm install fs-extra --save
 # echo -e "const fs = require('fs-extra');\n fs.ensureDirSync('/opt/app-root/src/cartilago/a/b/c');" > mi.js
 
-download_wp
+download-wp
 
 if [ -f "/silo/wordpress/wp-config" ] && [ -d "/silo/wordpress/wp-content" ]; then
     gulp tlinkremovewpcontentwpconfightcaccess
