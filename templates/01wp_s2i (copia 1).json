@@ -283,7 +283,7 @@
                 "value": "${MYSQL_APPLICATION_NAME}"
               },
               {
-                "name": "DB_PORT_NUMBER",
+                "name": "DB_PORT",
                 "value": "${MYSQL_PORT_NAME}"
               }
             ]
