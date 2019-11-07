@@ -22,25 +22,9 @@
       "value": "crea-php72-fpm-wp"
     },
     {
-      "name": "MYSQL_APPLICATION_NAME",
-      "description": "The name of the WordPress instance.",
-      "value": "mysql80",
-      "required": true
-    },
-    {
-      "description": "The password for the database user.",
-      "name": "MYSQL_PORT_NUMBER",
-      "value": "3306"
-    },
-    {
       "name": "IMAGE_STREAM",
       "description": "NOmbre de la imagen stream.",
       "value": "php72-fpm"
-    },
-    {
-      "name": "WP_IMAGE_STREAM",
-      "description": "NOmbre de la imagen stream.",
-      "value": "wp-builder"
     },
     {
       "name": "SOURCE_REPOSITORY_URL_1",
@@ -56,36 +40,6 @@
       "description": "The password for the database user.",
       "name": "DOCKER_REGISTER",
       "value": "docker-registry.default.svc:5000"
-    },
-    {
-      "name": "SERVER_NAME",
-      "description": "The tagged version of the source repository to use.",
-      "value": "www.devnely.com"
-    },
-    {
-      "name": "MYSQL_USER",
-      "description": "The tagged version of the source repository to use.",
-      "value": "userdb"
-    },
-    {
-      "name": "MYSQL_PASSWORD",
-      "description": "The tagged version of the source repository to use.",
-      "value": "passmyql"
-    },
-    {
-      "name": "MYSQL_DATABASE",
-      "description": "The tagged version of the source repository to use.",
-      "value": "php72-wp-s2i"
-    },
-    {
-      "name": "MYSQL_HOST",
-      "description": "The tagged version of the source repository to use.",
-      "value": "localhost"
-    },
-    {
-      "name": "MYSQL_TABLE_PREFIX",
-      "description": "The tagged version of the source repository to use.",
-      "value": "wp_"
     }
   ],
   "objects": [
@@ -173,128 +127,6 @@
               "secret": "xdlwMqxFiVkfR9fBiIaV",
               "secretReference": {
                 "name": "secret-php72-fpm-s2i"
-              }
-            },
-            "type": "GitHub"
-          },
-          {
-            "generic": {
-              "secret": "F-ilfroO9PAhjTRSWX67"
-            },
-            "type": "Generic"
-          },
-          {
-            "type": "ConfigChange"
-          },
-          {
-            "type": "ImageChange"
-          }
-        ]
-      }
-    },
-    {
-      "apiVersion": "v1",
-      "kind": "Secret",
-      "metadata": {
-        "name": "secret-${WP_IMAGE_STREAM}-s2i",
-        "anotations": {
-          "description": "Web Hook Secret Key."
-        },
-        "labels": {
-          "app": "${APLICATION_NAME}",
-          "build2": "${IMAGE_STREAM}-img",
-          "build3": "${IMAGE_STREAM}-img-s2i"
-        }
-      },
-      "type": "Opaque",
-      "data": {
-        "WebHookSecretKey": "cHJ1ZWJhCg=="
-      }
-    },
-    {
-      "kind": "ImageStream",
-      "apiVersion": "v1",
-      "metadata": {
-        "name": "${WP_IMAGE_STREAM}-s2i",
-        "labels": {
-          "app": "${APLICATION_NAME}",
-          "build2": "${IMAGE_STREAM}-img",
-          "build3": "${IMAGE_STREAM}-img-s2i"
-        }
-      }
-    },
-    {
-      "apiVersion": "build.openshift.io/v1",
-      "kind": "BuildConfig",
-      "metadata": {
-        "labels": {
-          "app": "${APLICATION_NAME}",
-          "build2": "${IMAGE_STREAM}-img",
-          "build3": "${IMAGE_STREAM}-img-s2i"
-        },
-        "name": "${WP_IMAGE_STREAM}-s2i",
-        "namespace": "${PROJECT_NAME}"
-      },
-      "spec": {
-        "failedBuildsHistoryLimit": 5,
-        "nodeSelector": null,
-        "output": {
-          "to": {
-            "kind": "ImageStreamTag",
-            "name": "${WP_IMAGE_STREAM}-s2i:latest"
-          }
-        },
-        "postCommit": {
-        },
-        "resources": {
-        },
-        "runPolicy": "Serial",
-        "source": {
-          "contextDir": "contexto",
-          "git": {
-            "ref": "wp",
-            "uri": "https://github.com/samyunodos/s2i-php-container.git"
-          },
-          "type": "Git"
-        },
-        "type": "Source",
-        "strategy": {
-          "sourceStrategy": {
-            "from": {
-              "kind": "ImageStreamTag",
-              "namespace": "${PROJECT_NAME}",
-              "name": "${IMAGE_STREAM}-s2i:latest"
-            },
-            "env": [
-              {
-                "name": "DB_USER",
-                "value": "${MYSQL_USER}"
-              },
-              {
-                "name": "DB_PASSWORD",
-                "value": "${MYSQL_PASSWORD}"
-              },
-              {
-                "name": "DB_NAME",
-                "value": "${MYSQL_DATABASE}"
-              },
-              {
-                "name": "DB_HOST",
-                "value": "${MYSQL_APPLICATION_NAME}"
-              },
-              {
-                "name": "WP_INSTALL_VERSION",
-                "value": "${MYSQL_PORT_NAME}"
-              }
-            ]
-          }
-        },
-        "triggers": [
-          {
-            "github": {
-              "secret": "xdlwMqxFiVkfR9fBiIaV",
-              "secretReference": {
-                "name": "secret-php72-fpm-img"
               }
             },
             "type": "GitHub"
