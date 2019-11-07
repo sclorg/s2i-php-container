@@ -1,0 +1,313 @@
+{
+  "kind": "Template",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "wp-init-basic",
+    "annotations": {
+      "openshift.io/display-name": "Wordpress Inicio Básico",
+      "description": "Nuestra primera instalación de wp. Simplemente le proporcionamos una base de datos.",
+      "tags": "wordpres",
+      "iconClass": "icon-mysql"
+    }
+  },
+  "parameters": [
+    {
+      "name": "PROJECT_NAME",
+      "description": "The name of the WordPress instance.",
+      "value": "image-wp"
+    },
+    {
+      "name": "WP_APPLICATION_NAME",
+      "description": "NOmbre de la imagen stream.",
+      "value": "wordpress"
+    },
+    {
+      "name": "MYSQL_APPLICATION_NAME",
+      "description": "The name of the WordPress instance.",
+      "value": "mysql80",
+      "required": true
+    },
+    {
+      "name": "SERVER_NAME",
+      "description": "The tagged version of the source repository to use.",
+      "value": "www.devnely.com"
+    },
+    {
+      "name": "WP_INSTALL_VERSION",
+      "description": "The tagged version of the source repository to use.",
+      "value": "latest"
+    },
+    {
+      "description": "The name of the database user.",
+      "name": "DB_USER",
+      "value": ""
+    },
+    {
+      "description": "The password for the database user.",
+      "name": "DB_PASSWORD",
+      "value": "passuserdb"
+    },
+    {
+      "description": "The password for the database user.",
+      "name": "DB_NAME",
+      "value": "mydatabase"
+    },
+    {
+      "description": "The password for the database user.",
+      "name": "DB_HOST",
+      "value": "mysql80"
+    },
+    {
+      "description": "The password for the database user.",
+      "name": "DB_PORT_NUMBER",
+      "value": "3306"
+    },
+    {
+      "description": "The password for the database user.",
+      "name": "DB_ROOT_PASSWORD",
+      "value": "passroot"
+    },
+    {
+      "name": "DB_TABLE_PREFIX",
+      "description": "The tagged version of the source repository to use.",
+      "value": "wp_"
+    },
+    {
+      "name": "WP_USERNAME",
+      "description": "The tagged version of the source repository to use.",
+      "value": "usuario"
+    },
+    {
+      "name": "WP_PASSWORD",
+      "description": "The tagged version of the source repository to use.",
+      "value": "passuser"
+    },
+    {
+      "name": "WP_MAIL",
+      "description": "The tagged version of the source repository to use.",
+      "value": "userwp@ejemplo.com"
+    },
+    {
+      "name": "WP_FIRST_NAME",
+      "description": "The tagged version of the source repository to use.",
+      "value": "FirstName"
+    },
+    {
+      "name": "WP_LAST_NAME",
+      "description": "The tagged version of the source repository to use.",
+      "value": "LastName"
+    },
+    {
+      "name": "WP_BLOG_NAME",
+      "description": "The tagged version of the source repository to use.",
+      "value": "Mi Blog"
+    },
+    {
+      "name": "WP_SCHEME",
+      "description": "The tagged version of the source repository to use.",
+      "value": "http"
+    },
+    {
+      "description": "The password for the database user.",
+      "name": "DOKER_REGISTER",
+      "value": "docker-registry.default.svc:5000"
+    }
+  ],
+  "objects": [
+    {
+      "kind": "Service",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${MYSQL_APPLICATION_NAME}",
+        "labels": {
+          "name": "${MYSQL_APPLICATION_NAME}"
+        }
+      },
+      "spec": {
+        "ports": [
+          {
+            "port": "${DB_PORT_NUMBER}"
+          }
+        ],
+        "selector": {
+          "app": "${MYSQL_APPLICATION_NAME}",
+          "deploymentconfig": "${MYSQL_APPLICATION_NAME}"
+        },
+        "type": "ClusterIP"
+      }
+    },
+    {
+      "kind": "DeploymentConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${MYSQL_APPLICATION_NAME}",
+        "labels": {
+          "app": "${MYSQL_APPLICATION_NAME}"
+        }
+      },
+      "spec": {
+        "replicas": 1,
+        "strategy": {
+          "type": "Rolling"
+        },
+        "triggers": [
+          {
+            "type": "ConfigChange"
+          }
+        ],
+        "selector": {
+          "app": "${MYSQL_APPLICATION_NAME}",
+          "deploymentconfig": "${MYSQL_APPLICATION_NAME}"
+        },
+        "template": {
+          "metadata": {
+            "name": "${MYSQL_APPLICATION_NAME}",
+            "labels": {
+              "app": "${MYSQL_APPLICATION_NAME}",
+              "deploymentconfig": "${MYSQL_APPLICATION_NAME}"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "name": "${MYSQL_APPLICATION_NAME}",
+                "image": "${DOKER_REGISTER}/image-wp/${MYSQL_APPLICATION_NAME}-img:latest",
+                "args": [
+                  "run-mysqld"
+                ],
+                "ports": [
+                  {
+                    "containerPort": "${DB_PORT_NUMBER}"
+                  }
+                ],
+                "env": [
+                  {
+                    "name": "MYSQL_USER",
+                    "value": "${DB_USER}"
+                  },
+                  {
+                    "name": "MYSQL_PASSWORD",
+                    "value": "${DB_PASSWORD}"
+                  },
+                  {
+                    "name": "MYSQL_DATABASE",
+                    "value": "${DB_NAME}"
+                  },
+                  {
+                    "name": "MYSQL_ROOT_PASSWORD",
+                    "value": "${DB_ROOT_PASSWORD}"
+                  },
+                  {
+                    "name": "MYSQL_HOST",
+                    "value": "localhost"
+                  }
+                ],
+                "imagePullPolicy": "IfNotPresent"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "Service",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${WP_APPLICATION_NAME}",
+        "labels": {
+          "app": "${WP_APPLICATION_NAME}"
+        }
+      },
+      "spec": {
+        "ports": [
+          {
+            "name": "8080-tcp",
+            "protocol": "TCP",
+            "port": 8080,
+            "targetPort": 8080
+          }
+        ],
+        "selector": {
+          "app": "${WP_APPLICATION_NAME}",
+          "deploymentconfig": "${WP_APPLICATION_NAME}"
+        }
+      }
+    },
+    {
+      "kind": "DeploymentConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${WP_APPLICATION_NAME}",
+        "labels": {
+          "app": "${WP_APPLICATION_NAME}",
+          "apps": "borrar"
+        }
+      },
+      "spec": {
+        "strategy": {
+          "type": "Rolling"
+        },
+        "triggers": [
+          {
+            "type": "ConfigChange"
+          }
+        ],
+        "replicas": 1,
+        "selector": {
+          "app": "${WP_APPLICATION_NAME}",
+          "deploymentconfig": "${WP_APPLICATION_NAME}"
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "${WP_APPLICATION_NAME}",
+              "deploymentconfig": "${WP_APPLICATION_NAME}"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "name": "${WP_APPLICATION_NAME}",
+                "image": "docker-registry.default.svc:5000/image-wp/wp-builder-s2i:latest",
+                "ports": [
+                  {
+                    "containerPort": 8080,
+                    "protocol": "TCP"
+                  }
+                ],
+                "resources": {
+                },
+                "env": [
+                  {
+                    "name": "DB_NAME",
+                    "value": "${DB_NAME}"
+                  },
+                  {
+                    "name": "DB_USER",
+                    "value": "${DB_USER}"
+                  },
+                  {
+                    "name": "DB_PASSWORD",
+                    "value": "${DB_PASSWORD}"
+                  },
+                  {
+                    "name": "DB_ROOT_PASSWORD",
+                    "value": "${DB_ROOT_PASSWORD}"
+                  },
+                  {
+                    "name": "DB_HOST",
+                    "value": "${DB_HOST}"
+                  },
+                  {
+                    "name": "DB_TABLE_PREFIX",
+                    "value": "${DB_TABLE_PREFIX}"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

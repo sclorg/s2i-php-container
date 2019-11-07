@@ -1,0 +1,143 @@
+{
+  //0 Encabezado
+  "kind": "Template",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "Wordpress-Template",
+    "annotations": {
+      "openshift.io/display-name": "Wordpress con mysql",
+      "description": "Creamos la imagen mysql y de wordpress a partir de software collection. Después desplegamos.",
+      "tags": "wordpress",
+      "iconClass": "icon-wordpress"
+    }
+  },
+  //1 Parámetros
+  "parameters": [
+    {
+      "name": "PROJECT_NAME",
+      "description": "The name of the WordPress instance.",
+      "value": "image-wp"
+    },
+    {
+      "name": "WP_APPLICATION_NAME",
+      "description": "The name of the WordPress instance.",
+      "value": "wordpress",
+      "required": true
+    },
+    {
+      "name": "MYSQL_APPLICATION_NAME",
+      "description": "The name of the mysql instance.",
+      "value": "mysql80",
+      "required": true
+    },
+    {
+      "name": "SOURCE_REPOSITORY_MYSQL_URL",
+      "description": "The URL of the quickstart Git repository.",
+      "value": "https://github.com/samyunodos/mysql-container-1",
+      "required": true
+    },
+    {
+      "name": "SOURCE_REPOSITORY_MYSQL_TAG",
+      "description": "The tagged version of the source repository to use.",
+      "value": "mysql80",
+      "required": true
+    }
+  ],
+  //2 Objetos
+  "objects": [
+    //20 Creación de la imagen mysql
+    //200 Secreto WebHook para samyunodos/mysql-container.git/#mysql80
+    {
+      "apiVersion": "v1",
+      "kind": "Secret",
+      "metadata": {
+        "name": "${MYSQL_APPLICATION_NAME}-s2i",
+        "anotations": {
+          "description": "Web Hook Secret Key."
+        },
+        "labels": {
+          "app": "${MYSQL_APPLICATION_NAME}",
+          "build": "${MYSQL_APPLICATION_NAME}-s2i"
+        }
+      },
+      "type": "Opaque",
+      "data": {
+        "WebHookSecretKey": "dGVzdA=="
+      }
+    },
+    //201 Image stream mysql80-s2i
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${MYSQL_APPLICATION_NAME}-s2i",
+        "labels": {
+          "app": "${MYSQL_APPLICATION_NAME}",
+          "build1": "${MYSQL_APPLICATION_NAME}-s2i"
+        }
+      }
+    },
+    //202 Buildconfig mysql80-s2i
+    {
+      "kind": "BuildConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${MYSQL_APPLICATION_NAME}-s2i",
+        "labels": {
+          "app": "${MYSQL_APPLICATION_NAME}",
+          "build1": "${MYSQL_APPLICATION_NAME}-s2i"
+        }
+      },
+      "spec": {
+        "failedBuildsHistoryLimit": 5,
+        "nodeSelector": null,
+        "output": {
+          "to": {
+            "kind": "ImageStreamTag",
+            "name": "${MYSQL_APPLICATION_NAME}-s2i:latest"
+          }
+        },
+        "postCommit": {
+        },
+        "resources": {
+        },
+        "triggers": [
+          {
+            "type": "ConfigChange"
+          },
+          {
+            "type": "ImageChange"
+          },
+          {
+            "type": "GitHub",
+            "github": {
+              "secretReference": {
+                "name": "${MYSQL_APPLICATION_NAME}-s2i"
+              }
+            }
+          }
+        ],
+        "source": {
+          "type": "Git",
+          "git": {
+            "uri": "${SOURCE_REPOSITORY_MYSQL_URL}",
+            "ref": "${SOURCE_REPOSITORY_MYSQL_TAG}"
+          }
+        },
+        "strategy": {
+          "type": "Docker",
+          "dockerStrategy": {
+            "dockerfilePath": "8.0/Dockerfile",
+            "forcePull": true,
+            "from": {
+              "kind": "DockerImage",
+              "name": "docker.io/centos/s2i-core-centos7:latest"
+            }
+          }
+        }
+      }
+    }
+    //Final mysql80-s2i, comprobamos con:
+    //oc new-app mysql80-s2i:latest~https://github.com/samyunodos/mysql-container.git/#mysql80 context-dir=test/test-app/mysql-cfg  --name prueba --strategy source 
+  ]
+}
