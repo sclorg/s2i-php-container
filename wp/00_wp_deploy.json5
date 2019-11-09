@@ -1,5 +1,5 @@
 {
-  //0 Encabezado
+//////////////////////////////////////////0 Encabezado
   "kind": "Template",
   "apiVersion": "v1",
   "metadata": {
@@ -11,7 +11,7 @@
       "iconClass": "icon-wordpress"
     }
   },
-  //1 Parámetros
+//////////////////////////////////////////1 Parámetros
   "parameters": [
     {
       "name": "PROJECT_NAME",
@@ -41,12 +41,39 @@
       "description": "The tagged version of the source repository to use.",
       "value": "mysql80",
       "required": true
-    }
+    },
+    { "name": "DOCKER_REGISTER",
+      "description": "The password for the database user.",
+      "value": "docker-registry.default.svc:5000"
+    },
+    //#### Todas las variables que empiezan por DB se introducencen desde el contenedor wordpress asi como las que aún no homos usado DB_HOST y DB_TABLE_PREFIX.
+    {
+      "name": "DB_NAME",
+      "description": "Nombre de la base de datos (MYSQL_DATABASE).",
+      "value": "mydatabase"
+    },
+    {
+      "name": "DB_USER",
+      "description": "Usuario de la base de datos (MYSQL_USER).",
+      "value": "userdb"
+    },
+    {
+       "name": "DB_PASSWORD",
+      "description": "La contraseña del usuario para la base de datos (MYSQL_PASSWORD). Posteriormente la introudciremos como un secreto de kubernetes.",
+      "value": "passuserdb"
+    },
+    
+    {
+      "name": "DB_ROOT_PASSWORD",
+      "description": "El password del root de msql (MYSQL_ROOT_PASSWORD).  Posteriormente la introudciremos como un secreto de kubernetes.",
+      "from": "[a-zA-Z0-9]{12}",
+      "value": "passroot"
+    },
   ],
-  //2 Objetos
+//////////////////////////////////////////2 Objetos
   "objects": [
-    //20 Creación de la imagen mysql
-    //200 Secreto WebHook para samyunodos/mysql-container.git/#mysql80
+    //======== 20 Creación de la imagen mysql
+//-------200 Secreto WebHook para samyunodos/mysql-container.git/#mysql80
     {
       "apiVersion": "v1",
       "kind": "Secret",
@@ -65,27 +92,29 @@
         "WebHookSecretKey": "dGVzdA=="
       }
     },
-    //201 Image stream mysql80-s2i
+//-------201 Image stream mysql80-s2i
     {
       "kind": "ImageStream",
       "apiVersion": "v1",
       "metadata": {
         "name": "${MYSQL_APPLICATION_NAME}-s2i",
         "labels": {
+          "project": "${PROJECT_NAME}",
           "app": "${MYSQL_APPLICATION_NAME}",
-          "build1": "${MYSQL_APPLICATION_NAME}-s2i"
+          "build": "${MYSQL_APPLICATION_NAME}-s2i"
         }
       }
     },
-    //202 Buildconfig mysql80-s2i
+//-------202 Buildconfig mysql80-s2i
     {
       "kind": "BuildConfig",
       "apiVersion": "v1",
       "metadata": {
         "name": "${MYSQL_APPLICATION_NAME}-s2i",
         "labels": {
+          "project": "${PROJECT_NAME}",
           "app": "${MYSQL_APPLICATION_NAME}",
-          "build1": "${MYSQL_APPLICATION_NAME}-s2i"
+          "build": "${MYSQL_APPLICATION_NAME}-s2i"
         }
       },
       "spec": {
@@ -136,8 +165,325 @@
           }
         }
       }
-    }
-    //Final mysql80-s2i, comprobamos con:
-    //oc new-app mysql80-s2i:latest~https://github.com/samyunodos/mysql-container.git/#mysql80 context-dir=test/test-app/mysql-cfg  --name prueba --strategy source 
+    },
+    //#### Para crearla  oc process -f build/00_wp_deploy.json | oc apply -l build=mysql80-s2i -f -
+    //#### Final mysql80-s2i, comprobamos con:
+    //#### oc new-app mysql80-s2i:latest~https://github.com/samyunodos/mysql-container-1.git/#mysql80 context-dir=test/test-app/mysql-cfg  --name prueba --strategy source --labe deploy=mysql80-s2i. De todas formas es mucho más sencillo crearla con buildconfig  para testearla
+
+//-------203 Creación de imagen de testeo y despliegue
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${MYSQL_APPLICATION_NAME}-test",
+        "labels": {
+          "app": "${MYSQL_APPLICATION_NAME}",
+          "build": "${MYSQL_APPLICATION_NAME}-test"
+        }
+      }
+    },
+    {
+      "apiVersion": "build.openshift.io/v1",
+      "kind": "BuildConfig",
+      "metadata": {
+        "labels": {
+          "app": "${MYSQL_APPLICATION_NAME}",
+          "build": "${MYSQL_APPLICATION_NAME}-test"
+        },
+        "name": "${MYSQL_APPLICATION_NAME}-test",
+        "namespace": "${PROJECT_NAME}"
+      },
+      "spec": {
+        "failedBuildsHistoryLimit": 5,
+        "nodeSelector": null,
+        "output": {
+          "to": {
+            "kind": "ImageStreamTag",
+            "name": "${MYSQL_APPLICATION_NAME}-test:latest"
+          }
+        },
+        "postCommit": {
+        },
+        "resources": {
+        },
+        "runPolicy": "Serial",
+        "source": {
+          "contextDir": "test/test-app/mysql-cfg",
+          "git": {
+            "ref": "mysql80",
+            "uri": "https://github.com/samyunodos/mysql-container-1.git"
+          },
+          "type": "Git"
+        },
+        "type": "Source",
+        "strategy": {
+          "sourceStrategy": {
+            "from": {
+              "kind": "ImageStreamTag",
+              "namespace": "${PROJECT_NAME}",
+              "name": "${MYSQL_APPLICATION_NAME}-s2i:latest"
+            },
+            // "env": [
+            //   {
+            //     "name": "DB_USER",
+            //     "value": "${MYSQL_USER}"
+            //   },
+            //   {
+            //     "name": "DB_PASSWORD",
+            //     "value": "${MYSQL_PASSWORD}"
+            //   },
+            //   {
+            //     "name": "DB_NAME",
+            //     "value": "${MYSQL_DATABASE}"
+            //   },
+            //   {
+            //     "name": "DB_HOST",
+            //     "value": "${MYSQL_APPLICATION_NAME}"
+            //   },
+            //   {
+            //     "name": "DB_PORT",
+            //     "value": "${MYSQL_PORT_NAME}"
+            //   }
+            // ]
+          }
+        },
+        "triggers": [
+          {
+            // "github": {
+            //   "secret": "xdlwMqxFiVkfR9fBiIaV",
+            //   "secretReference": {
+            //     "name": "secret-php72-fpm-img"
+            //   }
+            // },
+            // "type": "GitHub"
+          },
+          {
+            "generic": {
+              "secret": "F-ilfroO9PAhjTRSWX67"
+            },
+            "type": "Generic"
+          },
+          {
+            "type": "ConfigChange"
+          },
+          {
+            "type": "ImageChange"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "Service",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${MYSQL_APPLICATION_NAME}-test",
+        "labels": {
+          "app": "${MYSQL_APPLICATION_NAME}",
+          "build": "${MYSQL_APPLICATION_NAME}-test"
+        }
+      },
+      "spec": {
+        "ports": [
+          {
+            "name": "8080-tcp",
+            "protocol": "TCP",
+            "port": 8080,
+            "targetPort": 8080
+          }
+        ],
+        "selector": {
+          "app": "${MYSQL_APPLICATION_NAME}-test",
+          "build": "${MYSQL_APPLICATION_NAME}-test"
+        }
+      }
+    },
+    {
+      "kind": "DeploymentConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${MYSQL_APPLICATION_NAME}-test",
+        "labels": {
+           "app": "${MYSQL_APPLICATION_NAME}-test",
+           "build": "${MYSQL_APPLICATION_NAME}-test"
+        }
+      },
+      "spec": {
+        "strategy": {
+          // "type": "Rolling"
+          "type": "Recreate"
+        },
+        "triggers": [
+          {
+            "type": "ConfigChange"
+          }
+        ],
+        "replicas": 1,
+        "selector": {
+          "app": "${MYSQL_APPLICATION_NAME}-test",
+          "deploymentconfig": "${MYSQL_APPLICATION_NAME}-test"
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app":  "${MYSQL_APPLICATION_NAME}-test",
+              "deploymentconfig":  "${MYSQL_APPLICATION_NAME}-test",
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "name": "mysql80",
+                "image": "${DOCKER_REGISTER}/${PROJECT_NAME}/${MYSQL_APPLICATION_NAME}-test:latest",
+                 "args": [
+                  "run-mysqld"
+                ],
+                "ports": [
+                  {
+                    "containerPort": 3306,
+                    "protocol": "TCP"
+                  }
+                ],
+                "resources": {
+                  "limits": {
+                    "memory": "512Mi"
+                  }
+                },
+                "env": [
+                  {
+                    "name": "MYSQL_DATABASE",
+                    "value": "${DB_NAME}"
+                  },
+                  {
+                    "name": "MYSQL_USER",
+                    "value": "${DB_USER}"
+                  },
+                  {
+                    "name": "MYSQL_PASSWORD",
+                    "value": "${DB_PASSWORD}"
+                  },
+           
+                  {
+                    "name": "MYSQL_ROOT_PASSWORD",
+                    "value": "${DB_ROOT_PASSWORD}"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    //#### Para crearla  oc process -f build/00_wp_deploy.json | oc apply -l build=mysql80-test -f -
+    // Necesitamos especifigar las siguientes environment variables:
+    //   MYSQL_USER (regex: '^[a-zA-Z0-9_]+$')
+    //   MYSQL_PASSWORD (regex: '^[a-zA-Z0-9_~!@#$%^&*()-=<>,.?;:|]+$') (lo pondremos como secreto)
+    //   MYSQL_DATABASE (regex: '^[a-zA-Z0-9_]+$')
+    // Esta no es necesaria pero si que la iniciaremos.
+    //   MYSQL_ROOT_PASSWORD (regex: '^[a-zA-Z0-9_~!@#$%^&*()-=<>,.?;:|]+$') (lo pondremos como secreto)
+    // Estas son opcionales:
+    //   MYSQL_LOWER_CASE_TABLE_NAMES (default: 0)
+    //   MYSQL_LOG_QUERIES_ENABLED (default: 0)
+    //   MYSQL_MAX_CONNECTIONS (default: 151)
+    //   MYSQL_FT_MIN_WORD_LEN (default: 4)
+    //   MYSQL_FT_MAX_WORD_LEN (default: 20)
+    //   MYSQL_AIO (default: 1)
+    //   MYSQL_KEY_BUFFER_SIZE (default: 32M or 10% of available memory)
+    //   MYSQL_MAX_ALLOWED_PACKET (default: 200M)
+    //   MYSQL_TABLE_OPEN_CACHE (default: 400)
+    //   MYSQL_SORT_BUFFER_SIZE (default: 256K)
+    //   MYSQL_READ_BUFFER_SIZE (default: 8M or 5% of available memory)
+    //   MYSQL_INNODB_BUFFER_POOL_SIZE (default: 32M or 50% of available memory)
+    //   MYSQL_INNODB_LOG_FILE_SIZE (default: 8M or 15% of available memory)
+    //   MYSQL_INNODB_LOG_BUFFER_SIZE (default: 8M or 15% of available memory)
+    //   Ahora nos faltaría testear dicho despliegue. Para ello vamos a utilizar la dduportal/bats que emplea bats. Necesitaremos previamente agregar el escript que nos interesa en el directorio /tests, que es WORKDIR. Primero creamos un script run.sh el cual mediante bats nos checkea si ls base de datos mysql es accessible. Este script lo creamos en un configmap y luego lo cargamos.
+    {
+     
+      "kind": "ConfigMap",
+      "metadata": {
+        "name": "${MYSQL_APPLICATION_NAME}-testeador"
+      },
+      "data": {
+        "run.sh": "@test \"Testing MariaDB is accessible\" { \nmysql -h mysql80-test -uroot -p$DB_ROOT_PASSWORD -e 'show databases;' \n}"
+      },
+       "apiVersion": "v1"
+
+    },
+    //A continuación desplegamos el test
+    {
+      "kind": "DeploymentConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${MYSQL_APPLICATION_NAME}-testeador",
+        "labels": {
+           "app": "${MYSQL_APPLICATION_NAME}-test",
+           "build": "${MYSQL_APPLICATION_NAME}-test"
+        }
+      },
+      "spec": {
+        "strategy": {
+          // "type": "Rolling"
+          "type": "Recreate"
+        },
+        "triggers": [
+          {
+            "type": "ConfigChange"
+          }
+        ],
+        "replicas": 1,
+        "selector": {
+          "app": "${MYSQL_APPLICATION_NAME}-test",
+          "deploymentconfig": "${MYSQL_APPLICATION_NAME}-test"
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app":  "${MYSQL_APPLICATION_NAME}-test",
+              "deploymentconfig":  "${MYSQL_APPLICATION_NAME}-test",
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "name": "dduportal-bats",
+                "image": "dduportal/bats:0.4.0",
+                "resources": {
+                  "limits": {
+                    "memory": "512Mi"
+                  }
+                },
+                "livenessProbe": {
+                  "initialDelaySeconds": 15,
+                  "periodSeconds": 20
+                },
+                "startupProbe": {
+
+                  "failureThreshold": 30,
+                  "periodSeconds": 10
+                },
+                "readinessProbe": {
+
+                  "initialDelaySeconds": 5,
+                  "periodSeconds": 10
+                },
+                "volumeMounts": [
+                  {
+                    "mountPath": "/tests",
+                    "name": "tests"
+                  }
+                ]
+              }
+            ],
+            "volumes": [
+              {
+                "name": "tests",
+                "configMap": {
+                  "name": "${MYSQL_APPLICATION_NAME}-testeador"
+                }
+              }
+            ] 
+          }
+        }
+      }
+ }
   ]
-}
+  }

@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-release-mariadb-tests
+data:
+  run.sh: |-
+    @test "Testing MariaDB is accessible" {
+      mysql -h my-release-mariadb -uroot -p$MARIADB_ROOT_PASSWORD -e 'show databases;'
+    }
