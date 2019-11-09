@@ -41,7 +41,7 @@ gulp.task('convertirajson', () => {
 gulp.task('watch',  function(done) {
   // gulp.watch('/opt/app-root/src/wp-content',gulp.series('tmoverwpcontent'));
   // gulp.watch('/opt/app-root/src/.htcaccess',gulp.series('tmoverwphtcaccess'));
-  gulp.watch('*.json5',gulp.series('convertirajson'));
+  gulp.watch('./*.json5',gulp.series('convertirajson'));
   done();
 });
 
