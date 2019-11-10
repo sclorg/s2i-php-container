@@ -397,14 +397,10 @@
     //   MYSQL_INNODB_LOG_BUFFER_SIZE (default: 8M or 15% of available memory)
     //   Ahora nos faltaría testear dicho despliegue. Para ello vamos a utilizar la dduportal/bats que emplea bats. Necesitaremos previamente agregar el escript que nos interesa en el directorio /tests, que es WORKDIR. Primero creamos un script run.sh el cual mediante bats nos checkea si ls base de datos mysql es accessible. Este script lo creamos en un configmap y luego lo cargamos.
     {
-     
       "kind": "ConfigMap",
       "metadata": {
-<<<<<<< HEAD
-        "name": "${MYSQL_APPLICATION_NAME}-test"
-=======
+
         "name": "${MYSQL_APPLICATION_NAME}-testeador"
->>>>>>> e14551dec23a2e6093437eae5eac6b6a3de11851
       },
       "data": {
         "run.sh": "@test \"Testing MariaDB is accessible\" { \nmysql -h mysql80-test -uroot -p$DB_ROOT_PASSWORD -e 'show databases;' \n}"
@@ -413,68 +409,15 @@
 
     },
     //A continuación desplegamos el test
-<<<<<<< HEAD
-
-    {
-      
-    }
-
-# my-release-mariadb-test-lgaix
-apiVersion: v1
-kind: Pod
-metadata:
-  name: "my-release-mariadb-test-lgaix"
-  annotations:
-    "helm.sh/hook": test-success
-spec:
-  initContainers:
-    - name: "test-framework"
-      image: "dduportal/bats:0.4.0"
-      command:
-        - "bash"
-        - "-c"
-        - |
-          set -ex
-          # copy bats to tools dir
-          cp -R /usr/local/libexec/ /tools/bats/
-      volumeMounts:
-      - mountPath: /tools
-        name: tools
-  containers:
-    - name: mariadb-test
-      image: docker.io/bitnami/mariadb:10.3.17-debian-9-r37
-      imagePullPolicy: "IfNotPresent"
-      command: ["/tools/bats/bats", "-t", "/tests/run.sh"]
-      env:
-        - name: MARIADB_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: my-release-mariadb
-              key: mariadb-root-password
-      volumeMounts:
-      - mountPath: /tests
-        name: tests
-        readOnly: true
-      - mountPath: /tools
-        name: tools
-  volumes:
-  - name: tests
-    configMap:
-      name: my-release-mariadb-tests
-  - name: tools
-    emptyDir: {}
-  restartPolicy: Never
-   ]
-}
-=======
     {
       "kind": "DeploymentConfig",
       "apiVersion": "v1",
       "metadata": {
         "name": "${MYSQL_APPLICATION_NAME}-testeador",
         "labels": {
-           "app": "${MYSQL_APPLICATION_NAME}-test",
-           "build": "${MYSQL_APPLICATION_NAME}-test"
+          "app": "${MYSQL_APPLICATION_NAME}-test",
+          "build": "${MYSQL_APPLICATION_NAME}-test",
+          "deploy":  "${MYSQL_APPLICATION_NAME}-testeador"
         }
       },
       "spec": {
@@ -510,18 +453,32 @@ spec:
                   }
                 },
                 "livenessProbe": {
-                  "initialDelaySeconds": 15,
-                  "periodSeconds": 20
+                  "exec":{
+                    "command": ["sh", "-c", "exec mysqladmin status -uroot -p$DB_ROOT_PASSWORD"]
+                  },
+                  "initialDelaySeconds": 30,
+                  "periodSeconds": 10,
+                  "timeoutSeconds": 1,
+                  "successThreshold": 1,
+                  "failureThreshold": 3
                 },
                 "startupProbe": {
-
-                  "failureThreshold": 30,
+                  "exec": {
+                    "command": ["sh", "-c", "exec mysqladmin status -uroot -p$DB_ROOT_PASSWORD"]
+                  },
+                  "successThreshold": 1,
+                  "failureThreshold": 12, // 12x10 segundos
                   "periodSeconds": 10
                 },
                 "readinessProbe": {
-
-                  "initialDelaySeconds": 5,
-                  "periodSeconds": 10
+                  "exec":{
+                    "command": ["sh", "-c", "exec mysqladmin status -uroot -p$DB_ROOT_PASSWORD"]
+                  },
+                  "initialDelaySeconds": 30,
+                  "periodSeconds": 10,
+                  "timeoutSeconds": 1,
+                  "successThreshold": 1,
+                  "failureThreshold": 3
                 },
                 "volumeMounts": [
                   {
@@ -545,4 +502,3 @@ spec:
  }
   ]
   }
->>>>>>> e14551dec23a2e6093437eae5eac6b6a3de11851

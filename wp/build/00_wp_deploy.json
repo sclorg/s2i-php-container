@@ -341,7 +341,8 @@
                 "name": "${MYSQL_APPLICATION_NAME}-testeador",
                 "labels": {
                     "app": "${MYSQL_APPLICATION_NAME}-test",
-                    "build": "${MYSQL_APPLICATION_NAME}-test"
+                    "build": "${MYSQL_APPLICATION_NAME}-test",
+                    "deploy": "${MYSQL_APPLICATION_NAME}-testeador"
                 }
             },
             "spec": {
@@ -376,16 +377,44 @@
                                     }
                                 },
                                 "livenessProbe": {
-                                    "initialDelaySeconds": 15,
-                                    "periodSeconds": 20
+                                    "exec": {
+                                        "command": [
+                                            "sh",
+                                            "-c",
+                                            "exec mysqladmin status -uroot -p$DB_ROOT_PASSWORD"
+                                        ]
+                                    },
+                                    "initialDelaySeconds": 30,
+                                    "periodSeconds": 10,
+                                    "timeoutSeconds": 1,
+                                    "successThreshold": 1,
+                                    "failureThreshold": 3
                                 },
                                 "startupProbe": {
-                                    "failureThreshold": 30,
+                                    "exec": {
+                                        "command": [
+                                            "sh",
+                                            "-c",
+                                            "exec mysqladmin status -uroot -p$DB_ROOT_PASSWORD"
+                                        ]
+                                    },
+                                    "successThreshold": 1,
+                                    "failureThreshold": 12,
                                     "periodSeconds": 10
                                 },
                                 "readinessProbe": {
-                                    "initialDelaySeconds": 5,
-                                    "periodSeconds": 10
+                                    "exec": {
+                                        "command": [
+                                            "sh",
+                                            "-c",
+                                            "exec mysqladmin status -uroot -p$DB_ROOT_PASSWORD"
+                                        ]
+                                    },
+                                    "initialDelaySeconds": 30,
+                                    "periodSeconds": 10,
+                                    "timeoutSeconds": 1,
+                                    "successThreshold": 1,
+                                    "failureThreshold": 3
                                 },
                                 "volumeMounts": [
                                     {
