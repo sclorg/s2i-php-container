@@ -400,7 +400,11 @@
      
       "kind": "ConfigMap",
       "metadata": {
+<<<<<<< HEAD
         "name": "${MYSQL_APPLICATION_NAME}-test"
+=======
+        "name": "${MYSQL_APPLICATION_NAME}-testeador"
+>>>>>>> e14551dec23a2e6093437eae5eac6b6a3de11851
       },
       "data": {
         "run.sh": "@test \"Testing MariaDB is accessible\" { \nmysql -h mysql80-test -uroot -p$DB_ROOT_PASSWORD -e 'show databases;' \n}"
@@ -409,6 +413,7 @@
 
     },
     //A continuación desplegamos el test
+<<<<<<< HEAD
 
     {
       
@@ -461,3 +466,83 @@ spec:
   restartPolicy: Never
    ]
 }
+=======
+    {
+      "kind": "DeploymentConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${MYSQL_APPLICATION_NAME}-testeador",
+        "labels": {
+           "app": "${MYSQL_APPLICATION_NAME}-test",
+           "build": "${MYSQL_APPLICATION_NAME}-test"
+        }
+      },
+      "spec": {
+        "strategy": {
+          // "type": "Rolling"
+          "type": "Recreate"
+        },
+        "triggers": [
+          {
+            "type": "ConfigChange"
+          }
+        ],
+        "replicas": 1,
+        "selector": {
+          "app": "${MYSQL_APPLICATION_NAME}-test",
+          "deploymentconfig": "${MYSQL_APPLICATION_NAME}-test"
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app":  "${MYSQL_APPLICATION_NAME}-test",
+              "deploymentconfig":  "${MYSQL_APPLICATION_NAME}-test",
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "name": "dduportal-bats",
+                "image": "dduportal/bats:0.4.0",
+                "resources": {
+                  "limits": {
+                    "memory": "512Mi"
+                  }
+                },
+                "livenessProbe": {
+                  "initialDelaySeconds": 15,
+                  "periodSeconds": 20
+                },
+                "startupProbe": {
+
+                  "failureThreshold": 30,
+                  "periodSeconds": 10
+                },
+                "readinessProbe": {
+
+                  "initialDelaySeconds": 5,
+                  "periodSeconds": 10
+                },
+                "volumeMounts": [
+                  {
+                    "mountPath": "/tests",
+                    "name": "tests"
+                  }
+                ]
+              }
+            ],
+            "volumes": [
+              {
+                "name": "tests",
+                "configMap": {
+                  "name": "${MYSQL_APPLICATION_NAME}-testeador"
+                }
+              }
+            ] 
+          }
+        }
+      }
+ }
+  ]
+  }
+>>>>>>> e14551dec23a2e6093437eae5eac6b6a3de11851
