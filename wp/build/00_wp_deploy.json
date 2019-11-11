@@ -327,10 +327,15 @@
         {
             "kind": "ConfigMap",
             "metadata": {
-                "name": "${MYSQL_APPLICATION_NAME}-testeador"
+                "name": "${MYSQL_APPLICATION_NAME}-tester",
+                "labels": {
+                    "app": "${MYSQL_APPLICATION_NAME}-test",
+                    "build": "${MYSQL_APPLICATION_NAME}-test",
+                    "deploy": "${MYSQL_APPLICATION_NAME}-tester"
+                }
             },
             "data": {
-                "run.sh": "@test \"Testing MariaDB is accessible\" { \nmysql -h mysql80-test -uroot -p$DB_ROOT_PASSWORD -e 'show databases;' \n}"
+                "run.sh": ""
             },
             "apiVersion": "v1"
         },
@@ -342,12 +347,12 @@
                 "labels": {
                     "app": "${MYSQL_APPLICATION_NAME}-test",
                     "build": "${MYSQL_APPLICATION_NAME}-test",
-                    "deploy": "${MYSQL_APPLICATION_NAME}-testeador"
+                    "deploy": "${MYSQL_APPLICATION_NAME}-tester"
                 }
             },
             "spec": {
                 "strategy": {
-                    "type": "Recreate"
+                    "type": "Rolling"
                 },
                 "triggers": [
                     {
@@ -356,14 +361,14 @@
                 ],
                 "replicas": 1,
                 "selector": {
-                    "app": "${MYSQL_APPLICATION_NAME}-test",
-                    "deploymentconfig": "${MYSQL_APPLICATION_NAME}-test"
+                    "app": "${MYSQL_APPLICATION_NAME}-tester",
+                    "deploymentconfig": "${MYSQL_APPLICATION_NAME}-tester"
                 },
                 "template": {
                     "metadata": {
                         "labels": {
-                            "app": "${MYSQL_APPLICATION_NAME}-test",
-                            "deploymentconfig": "${MYSQL_APPLICATION_NAME}-test"
+                            "app": "${MYSQL_APPLICATION_NAME}-tester",
+                            "deploymentconfig": "${MYSQL_APPLICATION_NAME}-tester"
                         }
                     },
                     "spec": {
@@ -371,50 +376,16 @@
                             {
                                 "name": "dduportal-bats",
                                 "image": "dduportal/bats:0.4.0",
+                                "command": [
+                                    "bash",
+                                    "-c",
+                                    "set- ex",
+                                    "cp -R /usr/local/libexec/ /tools/bats/"
+                                ],
                                 "resources": {
                                     "limits": {
                                         "memory": "512Mi"
                                     }
-                                },
-                                "livenessProbe": {
-                                    "exec": {
-                                        "command": [
-                                            "sh",
-                                            "-c",
-                                            "exec mysqladmin status -uroot -p$DB_ROOT_PASSWORD"
-                                        ]
-                                    },
-                                    "initialDelaySeconds": 30,
-                                    "periodSeconds": 10,
-                                    "timeoutSeconds": 1,
-                                    "successThreshold": 1,
-                                    "failureThreshold": 3
-                                },
-                                "startupProbe": {
-                                    "exec": {
-                                        "command": [
-                                            "sh",
-                                            "-c",
-                                            "exec mysqladmin status -uroot -p$DB_ROOT_PASSWORD"
-                                        ]
-                                    },
-                                    "successThreshold": 1,
-                                    "failureThreshold": 12,
-                                    "periodSeconds": 10
-                                },
-                                "readinessProbe": {
-                                    "exec": {
-                                        "command": [
-                                            "sh",
-                                            "-c",
-                                            "exec mysqladmin status -uroot -p$DB_ROOT_PASSWORD"
-                                        ]
-                                    },
-                                    "initialDelaySeconds": 30,
-                                    "periodSeconds": 10,
-                                    "timeoutSeconds": 1,
-                                    "successThreshold": 1,
-                                    "failureThreshold": 3
                                 },
                                 "volumeMounts": [
                                     {
@@ -428,8 +399,210 @@
                             {
                                 "name": "tests",
                                 "configMap": {
-                                    "name": "${MYSQL_APPLICATION_NAME}-testeador"
+                                    "name": "${MYSQL_APPLICATION_NAME}-tester"
                                 }
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "kind": "ImageStream",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "${MYSQL_APPLICATION_NAME}-img",
+                "labels": {
+                    "project": "${PROJECT_NAME}",
+                    "app": "${MYSQL_APPLICATION_NAME}",
+                    "build": "${MYSQL_APPLICATION_NAME}-s2i"
+                }
+            }
+        },
+        {
+            "apiVersion": "build.openshift.io/v1",
+            "kind": "BuildConfig",
+            "metadata": {
+                "labels": {
+                    "project": "${PROJECT_NAME}",
+                    "app": "${MYSQL_APPLICATION_NAME}",
+                    "build": "${MYSQL_APPLICATION_NAME}-s2i"
+                },
+                "name": "${MYSQL_APPLICATION_NAME}-img",
+                "namespace": "${PROJECT_NAME}"
+            },
+            "spec": {
+                "failedBuildsHistoryLimit": 5,
+                "nodeSelector": null,
+                "output": {
+                    "to": {
+                        "kind": "ImageStreamTag",
+                        "name": "${MYSQL_APPLICATION_NAME}-img:latest"
+                    }
+                },
+                "postCommit": {},
+                "resources": {},
+                "runPolicy": "Serial",
+                "source": {
+                    "contextDir": "test/test-app/mysql-cfg",
+                    "git": {
+                        "ref": "mysql80",
+                        "uri": "https://github.com/samyunodos/mysql-container-1.git"
+                    },
+                    "type": "Git"
+                },
+                "type": "Source",
+                "strategy": {
+                    "sourceStrategy": {
+                        "from": {
+                            "kind": "ImageStreamTag",
+                            "namespace": "${PROJECT_NAME}",
+                            "name": "${MYSQL_APPLICATION_NAME}-s2i:latest"
+                        }
+                    }
+                },
+                "triggers": [
+                    {},
+                    {
+                        "generic": {
+                            "secret": "F-ilfroO9PAhjTRSWX67"
+                        },
+                        "type": "Generic"
+                    },
+                    {
+                        "type": "ConfigChange"
+                    },
+                    {
+                        "type": "ImageChange"
+                    }
+                ]
+            }
+        },
+        {
+            "kind": "Service",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "${MYSQL_APPLICATION_NAME}",
+                "labels": {
+                    "project": "${PROJECT_NAME}",
+                    "app": "${MYSQL_APPLICATION_NAME}",
+                    "build": "${MYSQL_APPLICATION_NAME}-s2i"
+                }
+            },
+            "spec": {
+                "ports": [
+                    {
+                        "name": "8080-tcp",
+                        "protocol": "TCP",
+                        "port": 8080,
+                        "targetPort": 8080
+                    }
+                ],
+                "selector": {
+                    "app": "${MYSQL_APPLICATION_NAME}",
+                    "build": "${MYSQL_APPLICATION_NAME}",
+                    "deploy": "${MYSQL_APPLICATION_NAME}-deploy"
+                }
+            }
+        },
+        {
+            "kind": "DeploymentConfig",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "${MYSQL_APPLICATION_NAME}-img",
+                "labels": {
+                    "project": "${PROJECT_NAME}",
+                    "app": "${MYSQL_APPLICATION_NAME}",
+                    "build": "${MYSQL_APPLICATION_NAME}-s2i",
+                    "deploy": "${MYSQL_APPLICATION_NAME}-deploy"
+                }
+            },
+            "spec": {
+                "strategy": {
+                    "type": "Recreate"
+                },
+                "triggers": [
+                    {
+                        "type": "ConfigChange"
+                    }
+                ],
+                "replicas": 1,
+                "selector": {
+                    "app": "${MYSQL_APPLICATION_NAME}-dply",
+                    "deploymentconfig": "${MYSQL_APPLICATION_NAME}-dply"
+                },
+                "template": {
+                    "metadata": {
+                        "labels": {
+                            "app": "${MYSQL_APPLICATION_NAME}-dply",
+                            "deploymentconfig": "${MYSQL_APPLICATION_NAME}-dply"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "name": "mysql80",
+                                "image": "${DOCKER_REGISTER}/${PROJECT_NAME}/${MYSQL_APPLICATION_NAME}-img:latest",
+                                "args": [
+                                    "run-mysqld"
+                                ],
+                                "ports": [
+                                    {
+                                        "containerPort": 3306,
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {
+                                    "limits": {
+                                        "memory": "512Mi"
+                                    }
+                                },
+                                "livenessProbe": {
+                                    "exec": {
+                                        "command": [
+                                            "/usr/bin/sh",
+                                            "-c",
+                                            "/opt/rh/rh-mysql80/root/usr/bin/mysqladmin status -uroot -h$(hostnamectl) -p$MYSQL_ROOT_PASSWORD"
+                                        ]
+                                    },
+                                    "initialDelaySeconds": 30,
+                                    "periodSeconds": 10,
+                                    "timeoutSeconds": 1,
+                                    "successThreshold": 1,
+                                    "failureThreshold": 3
+                                },
+                                "readinessProbe": {
+                                    "exec": {
+                                        "command": [
+                                            "/usr/bin/sh",
+                                            "-c",
+                                            "/opt/rh/rh-mysql80/root/usr/bin/mysqladmin status -uroot -h$(hostnamectl) -p$MYSQL_ROOT_PASSWORD"
+                                        ]
+                                    },
+                                    "initialDelaySeconds": 30,
+                                    "periodSeconds": 10,
+                                    "timeoutSeconds": 1,
+                                    "successThreshold": 1,
+                                    "failureThreshold": 3
+                                },
+                                "env": [
+                                    {
+                                        "name": "MYSQL_DATABASE",
+                                        "value": "${DB_NAME}"
+                                    },
+                                    {
+                                        "name": "MYSQL_USER",
+                                        "value": "${DB_USER}"
+                                    },
+                                    {
+                                        "name": "MYSQL_PASSWORD",
+                                        "value": "${DB_PASSWORD}"
+                                    },
+                                    {
+                                        "name": "MYSQL_ROOT_PASSWORD",
+                                        "value": "${DB_ROOT_PASSWORD}"
+                                    }
+                                ]
                             }
                         ]
                     }
