@@ -557,34 +557,6 @@
                                         "memory": "512Mi"
                                     }
                                 },
-                                "livenessProbe": {
-                                    "exec": {
-                                        "command": [
-                                            "/usr/bin/sh",
-                                            "-c",
-                                            "/opt/rh/rh-mysql80/root/usr/bin/mysqladmin status -uroot -h$(hostnamectl) -p$MYSQL_ROOT_PASSWORD"
-                                        ]
-                                    },
-                                    "initialDelaySeconds": 30,
-                                    "periodSeconds": 10,
-                                    "timeoutSeconds": 1,
-                                    "successThreshold": 1,
-                                    "failureThreshold": 3
-                                },
-                                "readinessProbe": {
-                                    "exec": {
-                                        "command": [
-                                            "/usr/bin/sh",
-                                            "-c",
-                                            "/opt/rh/rh-mysql80/root/usr/bin/mysqladmin status -uroot -h$(hostnamectl) -p$MYSQL_ROOT_PASSWORD"
-                                        ]
-                                    },
-                                    "initialDelaySeconds": 30,
-                                    "periodSeconds": 10,
-                                    "timeoutSeconds": 1,
-                                    "successThreshold": 1,
-                                    "failureThreshold": 3
-                                },
                                 "env": [
                                     {
                                         "name": "MYSQL_DATABASE",
