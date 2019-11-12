@@ -478,22 +478,20 @@
                 // },
                 // "startupProbe": {
                 //   "exec": {
-                //     "command": ["sh", "-c", "exec mysqladmin status -uroot -p$DB_ROOT_PASSWORD"]
+                //     "command": [ "sh", "-c", "exec mysqladmin status -uroot -p$DB_ROOT_PASSWORD" ]
                 //   },
                 //   "successThreshold": 1,
                 //   "failureThreshold": 12, 
                 //   "periodSeconds": 10
                 // },
-                // "readinessProbe": {
-                //   "exec":{
-                //     "command": ["sh", "-c", "exec mysqladmin status -uroot -p$DB_ROOT_PASSWORD"]
-                //   },
-                //   "initialDelaySeconds": 30,
-                //   "periodSeconds": 10,
-                //   "timeoutSeconds": 1,
-                //   "successThreshold": 1,
-                //   "failureThreshold": 3
-                // },
+                "readinessProbe": {
+                  "exec":{
+                    "command": [ "sh", "-c", "exec mysqladmin status --host=$(hostname) --user=root --password=$DB_ROOT_PASSWORD" ]
+                  },
+                  "initialDelaySeconds": 300,
+                  "periodSeconds": 10,
+                  "failureThreshold": 3
+                },
                 "volumeMounts": [
                   {
                     "mountPath": "/tests",

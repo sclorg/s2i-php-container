@@ -387,6 +387,18 @@
                                         "memory": "512Mi"
                                     }
                                 },
+                                "readinessProbe": {
+                                    "exec": {
+                                        "command": [
+                                            "sh",
+                                            "-c",
+                                            "exec mysqladmin status --host=$(hostname) --user=root --password=$DB_ROOT_PASSWORD"
+                                        ]
+                                    },
+                                    "initialDelaySeconds": 300,
+                                    "periodSeconds": 10,
+                                    "failureThreshold": 3
+                                },
                                 "volumeMounts": [
                                     {
                                         "mountPath": "/tests",
