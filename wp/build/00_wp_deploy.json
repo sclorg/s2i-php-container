@@ -569,6 +569,45 @@
                                         "memory": "512Mi"
                                     }
                                 },
+                                "livenessProbe": {
+                                    "exec": {
+                                        "command": [
+                                            "/usr/bin/sh",
+                                            "-i",
+                                            "-c",
+                                            "MYSQL_PWD=\"$MYSQL_ROOT_PASSWORD\" mysqladmin status --user=root --host=$(hostname)"
+                                        ]
+                                    },
+                                    "initialDelaySeconds": 20,
+                                    "periodSeconds": 20,
+                                    "failureThreshold": 30
+                                },
+                                "startupProbe": {
+                                    "exec": {
+                                        "command": [
+                                            "/usr/bin/sh",
+                                            "-i",
+                                            "-c",
+                                            "MYSQL_PWD=\"$MYSQL_ROOT_PASSWORD\" mysqladmin status --user=root --host=$(hostname)"
+                                        ]
+                                    },
+                                    "successThreshold": 1,
+                                    "failureThreshold": 30,
+                                    "periodSeconds": 10
+                                },
+                                "readinessProbe": {
+                                    "exec": {
+                                        "command": [
+                                            "/usr/bin/sh",
+                                            "-i",
+                                            "-c",
+                                            "MYSQL_PWD=\"$MYSQL_ROOT_PASSWORD\" mysqladmin status --user=root --host=$(hostname)"
+                                        ]
+                                    },
+                                    "initialDelaySeconds": 20,
+                                    "periodSeconds": 10,
+                                    "failureThreshold": 1
+                                },
                                 "env": [
                                     {
                                         "name": "MYSQL_DATABASE",
