@@ -670,7 +670,6 @@
                 "resources": {},
                 "runPolicy": "Serial",
                 "source": {
-                    "contextDir": "contexto",
                     "git": {
                         "ref": "wp",
                         "uri": "https://github.com/samyunodos/s2i-php-container.git"
@@ -680,7 +679,6 @@
                 "strategy": {
                     "dockerStrategy": {
                         "forcePull": true,
-                        "dockerfilePath": "./../7.2/Dockerfile",
                         "from": {
                             "kind": "DockerImage",
                             "name": "docker.io/centos/s2i-base-centos7:latest"
