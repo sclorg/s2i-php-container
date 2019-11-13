@@ -799,7 +799,7 @@
         "strategy": {
           "dockerStrategy": {
             "forcePull": true,
-            // "dockerfilePath": "7.2/Dockerfile",
+            "dockerfilePath": "7.2/Dockerfile",
             "from": {
               "kind": "DockerImage",
               "name": "docker.io/centos/s2i-base-centos7:latest"
