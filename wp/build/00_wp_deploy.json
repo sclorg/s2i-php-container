@@ -635,87 +635,6 @@
             "kind": "ImageStream",
             "apiVersion": "v1",
             "metadata": {
-                "name": "php-fpm-s2i",
-                "labels": {
-                    "project": "${PROJECT_NAME}",
-                    "app": "${WP_APPLICATION_NAME}",
-                    "build": "${MYSQL_APPLICATION_NAME}-s2i",
-                    "build1": "${WP_APPLICATION_NAME}-s2i"
-                }
-            }
-        },
-        {
-            "apiVersion": "build.openshift.io/v1",
-            "kind": "BuildConfig",
-            "metadata": {
-                "labels": {
-                    "project": "${PROJECT_NAME}",
-                    "app": "${WP_APPLICATION_NAME}",
-                    "build": "${MYSQL_APPLICATION_NAME}-s2i",
-                    "build1": "${WP_APPLICATION_NAME}-s2i"
-                },
-                "name": "php-fpm-s2i",
-                "namespace": "${PROJECT_NAME}"
-            },
-            "spec": {
-                "failedBuildsHistoryLimit": 5,
-                "nodeSelector": null,
-                "output": {
-                    "to": {
-                        "kind": "ImageStreamTag",
-                        "name": "php-fpm-s2i:latest"
-                    }
-                },
-                "postCommit": {},
-                "resources": {},
-                "runPolicy": "Serial",
-                "source": {
-                    "contextDir": "7.2",
-                    "git": {
-                        "ref": "wp",
-                        "uri": "https://github.com/samyunodos/s2i-php-container.git"
-                    },
-                    "type": "Git"
-                },
-                "strategy": {
-                    "dockerStrategy": {
-                        "forcePull": true,
-                        "from": {
-                            "kind": "DockerImage",
-                            "name": "docker.io/centos/s2i-base-centos7:latest"
-                        }
-                    },
-                    "type": "Docker"
-                },
-                "triggers": [
-                    {
-                        "github": {
-                            "secret": "xdlwMqxFiVkfR9fBiIaV",
-                            "secretReference": {
-                                "name": "secret-php72-fpm-s2i"
-                            }
-                        },
-                        "type": "GitHub"
-                    },
-                    {
-                        "generic": {
-                            "secret": "F-ilfroO9PAhjTRSWX67"
-                        },
-                        "type": "Generic"
-                    },
-                    {
-                        "type": "ConfigChange"
-                    },
-                    {
-                        "type": "ImageChange"
-                    }
-                ]
-            }
-        },
-        {
-            "kind": "ImageStream",
-            "apiVersion": "v1",
-            "metadata": {
                 "name": "${WP_APPLICATION_NAME}-s2i",
                 "labels": {
                     "project": "${PROJECT_NAME}",
@@ -758,18 +677,27 @@
                     },
                     "type": "Git"
                 },
-                "type": "Source",
                 "strategy": {
-                    "sourceStrategy": {
+                    "dockerStrategy": {
+                        "forcePull": true,
+                        "dockerfilePath": "./../7.2/Dockerfile",
                         "from": {
-                            "kind": "ImageStreamTag",
-                            "namespace": "${PROJECT_NAME}",
-                            "name": "php-fpm-s2i:latest"
+                            "kind": "DockerImage",
+                            "name": "docker.io/centos/s2i-base-centos7:latest"
                         }
-                    }
+                    },
+                    "type": "Docker"
                 },
                 "triggers": [
-                    {},
+                    {
+                        "github": {
+                            "secret": "xdlwMqxFiVkfR9fBiIaV",
+                            "secretReference": {
+                                "name": "secret-php72-fpm-s2i"
+                            }
+                        },
+                        "type": "GitHub"
+                    },
                     {
                         "generic": {
                             "secret": "F-ilfroO9PAhjTRSWX67"
