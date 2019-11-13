@@ -636,7 +636,7 @@
             "kind": "ImageStream",
             "apiVersion": "v1",
             "metadata": {
-                "name": "${WP_APPLICATION_NAME}-s2i",
+                "name": "php-fpm-s2i",
                 "labels": {
                     "project": "${PROJECT_NAME}",
                     "app": "${WP_APPLICATION_NAME}",
@@ -655,7 +655,7 @@
                     "build": "${MYSQL_APPLICATION_NAME}-s2i",
                     "build1": "${WP_APPLICATION_NAME}-s2i"
                 },
-                "name": "${WP_APPLICATION_NAME}-s2i",
+                "name": "php-fpm-s2i",
                 "namespace": "${PROJECT_NAME}"
             },
             "spec": {
@@ -664,7 +664,7 @@
                 "output": {
                     "to": {
                         "kind": "ImageStreamTag",
-                        "name": "${WP_APPLICATION_NAME}-s2i:latest"
+                        "name": "php-fpm-s2i:latest"
                     }
                 },
                 "postCommit": {},

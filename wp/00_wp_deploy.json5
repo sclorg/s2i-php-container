@@ -168,7 +168,7 @@
     },
     //#### Para crearla  oc process -f build/00_wp_deploy.json | oc apply -l build=mysql80-s2i -f -
     //#### Final mysql80-s2i, comprobamos con:
-    //#### oc new-app mysql80-s2i:latest~https://github.com/samyunodos/mysql-container-1.git/#mysql80 context-dir=test/test-app/mysql-cfg  --name prueba --strategy source --labe deploy=mysql80-s2i. De todas formas es mucho más sencillo crearla con buildconfig  para testearla
+    //#### oc new-app mysql80-s2i:latest~https://github.com/samyunodos/mysql-container-1.git/#mysql80 --context-dir=test/test-app/mysql-cfg  --name prueba --strategy source --labe deploy=mysql80-s2i. De todas formas es mucho más sencillo crearla con buildconfig  para testearla
 
 //-------203 Creación de imagen de testeo y despliegue
     {
@@ -747,11 +747,12 @@
     },
     // Hasta aquí tenemos la base de datos con los Probe funcionando, sin persistencia.
     // Ahora vamos a implementar el contenedor wordpress. Este puede ser standalone (que no necesita nada, es decir, que sería una instalación nueva ) o repository ( que ya tiene wp-content, wp-config.php y .htaccess si acaso ). La estrategia es mediante s2i  realizar un compilación progresiva. Para ello partimos de s2i-php-container para realizar un builder que puede funcionar como imagen stream ( de forma standalone ) o bien como un builder para progresivamente incorporar source ( como repository). Hacer notar que hacemos las transformaciones en s2i-php-container para que funcione con fpm ( php fast ) y a su vez generamos otro build.
+    // Creamos la builder desde el repositorio llamado php-fpm-s2i
     {
       "kind": "ImageStream",
       "apiVersion": "v1",
       "metadata": {
-        "name": "${WP_APPLICATION_NAME}-s2i",
+        "name": "php-fpm-s2i",
         "labels": {
           "project": "${PROJECT_NAME}",
           "app": "${WP_APPLICATION_NAME}",
@@ -770,7 +771,7 @@
           "build": "${MYSQL_APPLICATION_NAME}-s2i",
           "build1": "${WP_APPLICATION_NAME}-s2i"
         },
-        "name":  "${WP_APPLICATION_NAME}-s2i",
+        "name":  "php-fpm-s2i",
         "namespace": "${PROJECT_NAME}"
       },
       "spec": {
@@ -779,7 +780,7 @@
         "output": {
           "to": {
             "kind": "ImageStreamTag",
-            "name": "${WP_APPLICATION_NAME}-s2i:latest"
+            "name": "php-fpm-s2i:latest"
           }
         },
         "postCommit": {
@@ -798,6 +799,7 @@
         "strategy": {
           "dockerStrategy": {
             "forcePull": true,
+            // "pathDockerfile": "7.2"
             "from": {
               "kind": "DockerImage",
               "name": "docker.io/centos/s2i-base-centos7:latest"
@@ -830,8 +832,14 @@
         ]
       }
     }
-    Para commprobar la imagen wordpress-s2i:
-    oc new-app wordpress-s2i:latest~https://github.com/samyunodos/s2i-php-container.git/#wp context-dir=test/test-app  --name prueba --strategy source -l deploy=wordpress-s2i
+    // Para commprobar la imagen wordpress-s2i:
+    // $ oc new-app wordpress-s2i:latest~https://github.com/samyunodos/s2i-php-container.git/#wp --context-dir=test/test-app  --name prueba --strategy source -l deploy=wordpress-s2i
+    // Para borrar:
+    // $ oc delete all  -l deploy=wordpress-s2i
+    // Con directorio contexto:
+    // oc new-app wordpress-s2i:latest~https://github.com/samyunodos/s2i-php-container.git/#wp --context-dir=contexto  --name prueba --strategy source -l deploy=wordpress-s2i
+
+
 
   ]
 }
