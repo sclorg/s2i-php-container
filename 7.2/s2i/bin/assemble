@@ -18,9 +18,11 @@ fix-permissions ${HTTPD_CONFIGURATION_PATH}
 download-wp () {
     ## Download  en /opt/app-root/src
     if [ -z "$WP_INSTALL_VERSION" ]; then
-        wp core download --locale='es_ES' --version='latest' --path='/opt/app-root/src'
+        # wp core download --locale='es_ES' --version='latest' --path='/opt/app-root/src'
+        wp core download  --version='latest' --locale='es_ES'  --path='/opt/app-root/src'
     else
-        wp core download --locale='es_ES' --version="$WP_INSTALL_VERSION"  --path='/opt/app-root/src'
+        # wp core download --locale='es_ES' --version="$WP_INSTALL_VERSION"  --path='/opt/app-root/src'
+        wp core download  --version="$WP_INSTALL_VERSION"   --locale='es_ES' --path='/opt/app-root/src'
     fi
 }
 
