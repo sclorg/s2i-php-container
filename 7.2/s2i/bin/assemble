@@ -4,57 +4,150 @@ set -e
 
 source ${PHP_CONTAINER_SCRIPTS_PATH}/common.sh
 
-shopt -s dotglob
+shopt -s dotglob  ## para mover los archivos ocultos
+
 echo "---> Installing application source..."
-mv /tmp/src/* ./
 
-# Fix source directory permissions
-fix-permissions ./
-fix-permissions ${HTTPD_CONFIGURATION_PATH}
+mv /tmp/src/.htcaccess ./
+mv /tmp/src/gulpfile.js ./
 
-if [ -f composer.json ]; then
-  echo "Found 'composer.json', installing dependencies using composer.phar... "
 
-  # Install Composer
-  TEMPFILE=$(mktemp)
-  RETRIES=6
-  for ((i=0; i<$RETRIES; i++)); do
 
-    if [ -z "$COMPOSER_INSTALLER" ]; then
-      export COMPOSER_INSTALLER="https://getcomposer.org/installer"
+mkdir -p /opt/app-root/s2i
+
+mv /tmp/builder/assemble /opt/app-root/s2i
+mv /tmp/builder/run /opt/app-root/s2i
+mv /tmp/builder/save-artifacts /opt/app-root/s2i
+
+
+
+mkdir -p /tmp/.s2i
+mv /tmp/builder/image_metadata.json /opt/app-root/s2i
+
+# # Fix source directory permissions
+# fix-permissions ./
+# fix-permissions ${HTTPD_CONFIGURATION_PATH}
+
+download-wp () {
+    ## Download  en /opt/app-root/src
+    if [ -z "$WP_INSTALL_VERSION" ]; then
+        # wp core download --locale='es_ES' --version='latest' --path='/opt/app-root/src'
+        wp core download  --version='latest'  --path='/opt/app-root/src'
+    else
+        # wp core download --locale='es_ES' --version="$WP_INSTALL_VERSION"  --path='/opt/app-root/src'
+        wp core download  --version="$WP_INSTALL_VERSION"  --path='/opt/app-root/src'
     fi
+}
 
-    echo "Downloading $COMPOSER_INSTALLER, attempt $((i+1))/$RETRIES"
-    curl -o $TEMPFILE $COMPOSER_INSTALLER && break
-    sleep 10
-  done
-  if [[ $i == $RETRIES ]]; then
-    echo "Download failed, giving up."
-    exit 1
-  fi
-  php <$TEMPFILE
+npm update
+npm init --yes
+npm install gulp --save
+npm install fs-extra --save
 
-  if [ "$(ls -a /tmp/artifacts/ 2>/dev/null)" ]; then
-    echo "Restoring build artifacts"
-    mv /tmp/artifacts/* $HOME/
-  fi
+## Instala wordpress en /opt/app-root/src. Eliminamos locale porque para las versiones latest igualno existe el paquete.
 
-  # Change the repo mirror if provided
-  if [ -n "$COMPOSER_MIRROR" ]; then
-    ./composer.phar config -g repositories.packagist composer $COMPOSER_MIRROR
-  fi
-
-  # Install App dependencies using Composer
-  ./composer.phar install --no-interaction --no-ansi --optimize-autoloader $COMPOSER_ARGS
-
-  if [ ! -f composer.lock ]; then
-    echo -e "\nConsider adding a 'composer.lock' file into your source repository.\n"
-  fi
-fi
+download-wp
 
 # post-assemble files
 process_extending_files ./php-post-assemble/ ${PHP_CONTAINER_SCRIPTS_PATH}/post-assemble/
 
 # Fix source directory permissions
+fix-permissions /opt/app-root
 fix-permissions ./
+fix-permissions /silo
+# fix-permissions /opt/rh/rh-nodejs10/root/usr/lib/node_modules
+fix-permissions ${HTTPD_CONFIGURATION_PATH}
+
+################################################################################################
+
+# mkdir -p /silo/wordpress
+
+# scl enable rh-nodejs10 bash
+
+# fix-permissions "/opt/rh/rh-nodejs10/root/usr/lib/node_modules"
+
+# npm init --yes
+# npm install gulp --global
+# npm install gulp-rename --global
+# npm install gulp-concat --global
+##Donde se guardaran los paquetes globales. Hay que añadir a la variable de entorno PATH=$PATH:/opt/rh/rh-php72/root/usr/bin:/opt/rh/rh-mysql80/root/usr/bin/:/opt/app-root/nodejs/.npm-global/bin. Nosotros ya lo hemos hecho en el Dockerfile. 
+
+#npm config set prefix  "/opt/app-root/src/.npm-global"
+
+## Ahora para instalar paquetes" npm install <paquete> --global"
+
+##Workround to working with fs-extra (lo instalamos en local)
+
+# npm install -D grunt-cache-bust
+# npm install -D fs-extraxs
+# mkdir -p /opt/app-root/src/.npm-global
+# npm config set prefix  "/opt/app-root/src/.npm-global"
+# npm update
+# npm init --yes
+# npm install gulp --save
+# npm install fs-extra --save
+# echo -e "const fs = require('fs-extra');\n fs.ensureDirSync('/opt/app-root/src/cartilago/a/b/c');" > mi.js
+
+# download-wp
+
+
+
+
+if [ -f "/silo/wordpress/wp-config" ] && [ -d "/silo/wordpress/wp-content" ]; then
+    gulp tlinkremovewpcontentwpconfightcaccess
+
+else
+    if [ -z "${DB_USER}" ] ||  [ -z "${DB_PASSWORD}" ] ||  [ -z "${DB_NAME}" ] ||  [ -z "${DB_HOST}" ]; then
+        echo "Procedemos desde el propio instalador php de wordpress (web)."
+    else
+        gulp default &
+
+        wp config create --dbname="${DB_NAME}" --dbuser="${DB_USER}" --dbpass="${DB_PASSWORD}" --dbhost="${DB_HOST}" --skip-check --extra-php <<PHP
+define( 'WP_DEBUG', true );
+define( 'WP_DEBUG_LOG', true );
+define('FORCE_SSL_ADMIN', true);
+define('FORCE_SSL_LOGIN', true);
+if (strpos(\$_SERVER['HTTP_X_FORWARDED_PROTO'], 'https') !== false) \$_SERVER['HTTPS']='on';
+define( 'WP_CONTENT_DIR', '/silo/wordpress');
+define( 'WP_PLUGIN_DIR', WP_CONTENT_DIR . '/plugins' );
+define('WP_HOME', 'http://' . \$_SERVER['HTTP_HOST'] . '/');
+define('WP_SITEURL', 'http://' . \$_SERVER['HTTP_HOST'] . '/');
+define('FS_METHOD', 'direct');
+if ( defined( 'WP_CLI' ) ) {
+    \$_SERVER['HTTP_HOST'] = 'localhost';
+};
+# if ( ! defined( 'WP_CLI' ) ) {
+#     // remove x-pingback HTTP header
+#     add_filter('wp_headers', function(\$headers) {
+#         unset(\$headers['X-Pingback']);
+#         return \$headers;
+#     });
+#     // disable pingbacks
+#     add_filter( 'xmlrpc_methods', function( \$methods ) {
+#             unset( \$methods['pingback.ping'] );
+#             return \$methods;
+#     });
+#     add_filter( 'auto_update_translation', '__return_false' );
+# };
+PHP
+
+
+    fi
+
+
+
+fi
+
+
+
+
+
+# post-assemble files
+process_extending_files ./php-post-assemble/ ${PHP_CONTAINER_SCRIPTS_PATH}/post-assemble/
+
+# Fix source directory permissions
+fix-permissions /opt/app-root
+fix-permissions ./
+fix-permissions /silo
+# fix-permissions /opt/rh/rh-nodejs10/root/usr/lib/node_modules
 fix-permissions ${HTTPD_CONFIGURATION_PATH}
