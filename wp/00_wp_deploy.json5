@@ -649,7 +649,7 @@
         "labels": {
           "project": "${PROJECT_NAME}",
           "app": "${MYSQL_APPLICATION_NAME}",
-          "build": "${MYSQL_APPLICATION_NAME}-s2i",
+          // "build": "${MYSQL_APPLICATION_NAME}-s2i",
           "deploy": "${MYSQL_APPLICATION_NAME}-deploy"
         }
       },
@@ -831,7 +831,7 @@
           }
         ]
       }
-    }
+    },
     // Para commprobar la imagen wordpress-s2i:
     // $ oc new-app php-fpm-s2i:latest~https://github.com/samyunodos/s2i-php-container.git/#wp --context-dir=test/test-app  --name prueba --strategy source -l deploy=wordpress-s2i
     // Para borrar:
@@ -839,7 +839,111 @@
     // Con directorio contexto:
     // oc new-app php-fpm-s2i:latest~https://github.com/samyunodos/s2i-php-container.git/#wp --context-dir=contexto  --name prueba --strategy source -l deploy=wordpress-s2i
 
-
-
+{
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${WP_APPLICATION_NAME}-s2i",
+        "labels": {
+          "project": "${PROJECT_NAME}",
+          "app": "${WP_APPLICATION_NAME}",
+          "build": "${MYSQL_APPLICATION_NAME}-s2i",
+          "build1": "${WP_APPLICATION_NAME}-s2i"
+        }
+      }
+    },
+ {
+      "apiVersion": "build.openshift.io/v1",
+      "kind": "BuildConfig",
+      "metadata": {
+        "labels": {
+          "project": "${PROJECT_NAME}",
+          "app": "${WP_APPLICATION_NAME}",
+          "build": "${MYSQL_APPLICATION_NAME}-s2i",
+          "build1": "${WP_APPLICATION_NAME}-s2i"
+         
+        },
+        "name": "${WP_APPLICATION_NAME}-s2i",
+        "namespace": "${PROJECT_NAME}"
+      },
+      "spec": {
+        "failedBuildsHistoryLimit": 5,
+        "nodeSelector": null,
+        "output": {
+          "to": {
+            "kind": "ImageStreamTag",
+            "name": "${WP_APPLICATION_NAME}-s2i:latest"
+          }
+        },
+        "postCommit": {
+        },
+        "resources": {
+        },
+        "runPolicy": "Serial",
+        "source": {
+          "contextDir": "contexto",
+          "git": {
+            "ref": "wp",
+            "uri": "https://github.com/samyunodos/s2i-php-container.git"
+          },
+          "type": "Git"
+        },
+        "type": "Source",
+        "strategy": {
+          "sourceStrategy": {
+            "from": {
+              "kind": "ImageStreamTag",
+              "namespace": "${PROJECT_NAME}",
+              "name": "php-fpm-s2i:latest"
+            },
+            // "env": [
+            //   {
+            //     "name": "DB_USER",
+            //     "value": "${MYSQL_USER}"
+            //   },
+            //   {
+            //     "name": "DB_PASSWORD",
+            //     "value": "${MYSQL_PASSWORD}"
+            //   },
+            //   {
+            //     "name": "DB_NAME",
+            //     "value": "${MYSQL_DATABASE}"
+            //   },
+            //   {
+            //     "name": "DB_HOST",
+            //     "value": "${MYSQL_APPLICATION_NAME}"
+            //   },
+            //   {
+            //     "name": "DB_PORT",
+            //     "value": "${MYSQL_PORT_NAME}"
+            //   }
+            // ]
+          }
+        },
+        "triggers": [
+          {
+            // "github": {
+            //   "secret": "xdlwMqxFiVkfR9fBiIaV",
+            //   "secretReference": {
+            //     "name": "secret-php72-fpm-img"
+            //   }
+            // },
+            // "type": "GitHub"
+          },
+          {
+            "generic": {
+              "secret": "F-ilfroO9PAhjTRSWX67"
+            },
+            "type": "Generic"
+          },
+          {
+            "type": "ConfigChange"
+          },
+          {
+            "type": "ImageChange"
+          }
+        ]
+      }
+    }
   ]
 }

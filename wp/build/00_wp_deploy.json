@@ -525,7 +525,6 @@
                 "labels": {
                     "project": "${PROJECT_NAME}",
                     "app": "${MYSQL_APPLICATION_NAME}",
-                    "build": "${MYSQL_APPLICATION_NAME}-s2i",
                     "deploy": "${MYSQL_APPLICATION_NAME}-deploy"
                 }
             },
@@ -698,6 +697,79 @@
                         },
                         "type": "GitHub"
                     },
+                    {
+                        "generic": {
+                            "secret": "F-ilfroO9PAhjTRSWX67"
+                        },
+                        "type": "Generic"
+                    },
+                    {
+                        "type": "ConfigChange"
+                    },
+                    {
+                        "type": "ImageChange"
+                    }
+                ]
+            }
+        },
+        {
+            "kind": "ImageStream",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "${WP_APPLICATION_NAME}-s2i",
+                "labels": {
+                    "project": "${PROJECT_NAME}",
+                    "app": "${WP_APPLICATION_NAME}",
+                    "build": "${MYSQL_APPLICATION_NAME}-s2i",
+                    "build1": "${WP_APPLICATION_NAME}-s2i"
+                }
+            }
+        },
+        {
+            "apiVersion": "build.openshift.io/v1",
+            "kind": "BuildConfig",
+            "metadata": {
+                "labels": {
+                    "project": "${PROJECT_NAME}",
+                    "app": "${WP_APPLICATION_NAME}",
+                    "build": "${MYSQL_APPLICATION_NAME}-s2i",
+                    "build1": "${WP_APPLICATION_NAME}-s2i"
+                },
+                "name": "${WP_APPLICATION_NAME}-s2i",
+                "namespace": "${PROJECT_NAME}"
+            },
+            "spec": {
+                "failedBuildsHistoryLimit": 5,
+                "nodeSelector": null,
+                "output": {
+                    "to": {
+                        "kind": "ImageStreamTag",
+                        "name": "${WP_APPLICATION_NAME}-s2i:latest"
+                    }
+                },
+                "postCommit": {},
+                "resources": {},
+                "runPolicy": "Serial",
+                "source": {
+                    "contextDir": "contexto",
+                    "git": {
+                        "ref": "wp",
+                        "uri": "https://github.com/samyunodos/s2i-php-container.git"
+                    },
+                    "type": "Git"
+                },
+                "type": "Source",
+                "strategy": {
+                    "sourceStrategy": {
+                        "from": {
+                            "kind": "ImageStreamTag",
+                            "namespace": "${PROJECT_NAME}",
+                            "name": "php-fpm-s2i:latest"
+                        }
+                    }
+                },
+                "triggers": [
+                    {},
                     {
                         "generic": {
                             "secret": "F-ilfroO9PAhjTRSWX67"

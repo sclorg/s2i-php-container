@@ -5,22 +5,50 @@ set -x
 shopt -s dotglob ## para mover los archivos ocultos
 set -eo pipefail
 
-## Lo instala en /opt/app-root/src
-if [ -z "$WP_INSTALL_VERSION" ]; then
-    wp core download --locale=es_ES --version=latest --path="/."
-else
-    wp core download --locale=es_ES --version="$WP_INSTALL_VERSION" --path="./"
-fi
+
+mv /tmp/src/.htcaccess ./
+mv /tmp/src/gulpfile.js ./
 
 
-# fix-permissions "/opt/rh/rh-nodejs10/root/usr/lib/node_modules"
 
+mkdir -p /opt/app-root/s2i
+
+mv /tmp/builder/assemble /opt/app-root/s2i
+mv /tmp/builder/run /opt/app-root/s2i
+mv /tmp/builder/save-artifacts /opt/app-root/s2i
+
+
+
+mkdir -p /tmp/.s2i
+mv /tmp/builder/image_metadata.json /opt/app-root/s2i
+
+download-wp () {
+    ## Download  en /opt/app-root/src
+    if [ -z "$WP_INSTALL_VERSION" ]; then
+        # wp core download --locale='es_ES' --version='latest' --path='/opt/app-root/src'
+        wp core download  --version='latest'  --path='/opt/app-root/src'
+    else
+        # wp core download --locale='es_ES' --version="$WP_INSTALL_VERSION"  --path='/opt/app-root/src'
+        wp core download  --version="$WP_INSTALL_VERSION"  --path='/opt/app-root/src'
+    fi
+}
+
+
+npm update
 npm init --yes
-npm install gulp --global
-npm install gulp-rename --global
-npm install gulp-concat --global
+npm install gulp --save
+npm install fs-extra --save
 
+## Instala wordpress en /opt/app-root/src. Eliminamos locale porque para las versiones latest igualno existe el paquete.
 
+download-wp
 
-fix-permissions ./
+# post-assemble files
+process_extending_files ./php-post-assemble/ ${PHP_CONTAINER_SCRIPTS_PATH}/post-assemble/
+
+# Fix source directory permissions
 fix-permissions /opt/app-root
+fix-permissions ./
+fix-permissions /silo
+# fix-permissions /opt/rh/rh-nodejs10/root/usr/lib/node_modules
+fix-permissions ${HTTPD_CONFIGURATION_PATH}
