@@ -881,7 +881,7 @@
         },
         "runPolicy": "Serial",
         "source": {
-          "contextDir": "vacio",
+          "contextDir": "contexto",
           "git": {
             "ref": "wp",
             "uri": "https://github.com/samyunodos/s2i-php-container.git"
