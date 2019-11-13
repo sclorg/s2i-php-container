@@ -455,8 +455,7 @@
               {
                 "name": "dduportal-bats",
                 "image": "dduportal/bats:0.4.0",
-                "command": [
-                  "bash", "-c", "set- ex", "cp -R /usr/local/libexec/ /tools/bats/"
+                "command": [ "bash", "-c", "set- ex", "cp -R /usr/local/libexec/ /tools/bats/"
                 ],
                 // "args": [
                 //   "run.sh"
@@ -478,22 +477,20 @@
                 // },
                 // "startupProbe": {
                 //   "exec": {
-                //     "command": ["sh", "-c", "exec mysqladmin status -uroot -p$DB_ROOT_PASSWORD"]
+                //     "command": [ "sh", "-c", "exec mysqladmin status -uroot -p$DB_ROOT_PASSWORD" ]
                 //   },
                 //   "successThreshold": 1,
                 //   "failureThreshold": 12, 
                 //   "periodSeconds": 10
                 // },
-                // "readinessProbe": {
-                //   "exec":{
-                //     "command": ["sh", "-c", "exec mysqladmin status -uroot -p$DB_ROOT_PASSWORD"]
-                //   },
-                //   "initialDelaySeconds": 30,
-                //   "periodSeconds": 10,
-                //   "timeoutSeconds": 1,
-                //   "successThreshold": 1,
-                //   "failureThreshold": 3
-                // },
+                "readinessProbe": {
+                  "exec":{
+                    "command": [ "sh", "-c", "exec mysqladmin status --host=$(hostname) --user=root --password=$DB_ROOT_PASSWORD" ]
+                  },
+                  "initialDelaySeconds": 300,
+                  "periodSeconds": 10,
+                  "failureThreshold": 3
+                },
                 "volumeMounts": [
                   {
                     "mountPath": "/tests",
@@ -697,30 +694,32 @@
                     "memory": "512Mi"
                   }
                 },
-                //   "livenessProbe": {
-                //   "exec":{
-                //     "command": [ "mysqladmin status --user=root --host=$(hostname) --password=$MYSQL_ROOT_PASSWORD" ]
-                //   },
-                //   "initialDelaySeconds": 15,
-                //   "periodSeconds": 20,
-                //   "failureThreshold": 30
-                // },
-                // "startupProbe": {
-                //   "exec": {
-                //     "command": [ "/opt/rh/rh-mysql80/root/usr/bin/mysqladmin status   -uroot -h$(hostname) -p$MYSQL_ROOT_PASSWORD"]
-                //   },
-                //   "successThreshold": 1,
-                //   "failureThreshold": 30, 
-                //   "periodSeconds": 10
-                // },
-                // "readinessProbe": {
-                //   "exec":{
-                //     "command": [ "mysqladmin status --user=root --host=$(hostname) --password=$MYSQL_ROOT_PASSWORD" ]
-                //   },
-                //   "initialDelaySeconds": 5,
-                //   "periodSeconds": 10,
-                //   "failureThreshold": 60
-                // },
+                  "livenessProbe": {
+                    "exec":{
+                       "command": [ "/usr/bin/sh", "-i", "-c","MYSQL_PWD=\"$MYSQL_ROOT_PASSWORD\" mysqladmin status --user=root --host=$(hostname)" ]
+                    
+                  },
+                  "initialDelaySeconds": 20,
+                  "periodSeconds": 20,
+                  "failureThreshold": 30
+                },
+                "startupProbe": {
+                  "exec": {
+                     "command": [ "/usr/bin/sh", "-i", "-c","MYSQL_PWD=\"$MYSQL_ROOT_PASSWORD\" mysqladmin status --user=root --host=$(hostname)" ]
+                  },
+                  "successThreshold": 1,
+                  "failureThreshold": 30, 
+                  "periodSeconds": 10
+                },
+                "readinessProbe": {
+                  "exec":{
+                    // "command": [ "mysqladmin status --user=root --host=$(hostname) --password=$MYSQL_ROOT_PASSWORD" ]
+                   "command": [ "/usr/bin/sh", "-i", "-c","MYSQL_PWD=\"$MYSQL_ROOT_PASSWORD\" mysqladmin status --user=root --host=$(hostname)" ]
+                  },
+                  "initialDelaySeconds": 20,
+                  "periodSeconds": 10,
+                  "failureThreshold": 1
+                },
                 "env": [
                   {
                     "name": "MYSQL_DATABASE",
