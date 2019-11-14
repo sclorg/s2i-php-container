@@ -65,6 +65,11 @@
             "description": "El password del root de msql (MYSQL_ROOT_PASSWORD).  Posteriormente la introudciremos como un secreto de kubernetes.",
             "from": "[a-zA-Z0-9]{12}",
             "value": "passroot"
+        },
+        {
+            "name": "DB_HOST",
+            "description": "El password del root de msql (MYSQL_ROOT_PASSWORD).  Posteriormente la introudciremos como un secreto de kubernetes.",
+            "value": "mysql80"
         }
     ],
     "objects": [
@@ -205,7 +210,29 @@
                             "kind": "ImageStreamTag",
                             "namespace": "${PROJECT_NAME}",
                             "name": "${MYSQL_APPLICATION_NAME}-s2i:latest"
-                        }
+                        },
+                        "env": [
+                            {
+                                "name": "DB_USER",
+                                "value": "${MYSQL_USER}"
+                            },
+                            {
+                                "name": "DB_PASSWORD",
+                                "value": "${MYSQL_PASSWORD}"
+                            },
+                            {
+                                "name": "DB_NAME",
+                                "value": "${MYSQL_DATABASE}"
+                            },
+                            {
+                                "name": "DB_HOST",
+                                "value": "${MYSQL_APPLICATION_NAME}"
+                            },
+                            {
+                                "name": "DB_PORT",
+                                "value": "${MYSQL_PORT_NAME}"
+                            }
+                        ]
                     }
                 },
                 "triggers": [
@@ -238,10 +265,10 @@
             "spec": {
                 "ports": [
                     {
-                        "name": "8080-tcp",
+                        "name": "3306-tcp",
                         "protocol": "TCP",
-                        "port": 8080,
-                        "targetPort": 8080
+                        "port": 3306,
+                        "targetPort": 3306
                     }
                 ],
                 "selector": {
@@ -504,13 +531,14 @@
             "spec": {
                 "ports": [
                     {
-                        "name": "8080-tcp",
+                        "name": "3306-tcp",
                         "protocol": "TCP",
-                        "port": 8080,
-                        "targetPort": 8080
+                        "port": 3306,
+                        "targetPort": 3306
                     }
                 ],
                 "selector": {
+                    "project": "${PROJECT_NAME}",
                     "app": "${MYSQL_APPLICATION_NAME}",
                     "build": "${MYSQL_APPLICATION_NAME}",
                     "deploy": "${MYSQL_APPLICATION_NAME}-deploy"
@@ -525,6 +553,7 @@
                 "labels": {
                     "project": "${PROJECT_NAME}",
                     "app": "${MYSQL_APPLICATION_NAME}",
+                    "build": "${MYSQL_APPLICATION_NAME}-s2i",
                     "deploy": "${MYSQL_APPLICATION_NAME}-deploy"
                 }
             },
@@ -539,14 +568,18 @@
                 ],
                 "replicas": 1,
                 "selector": {
-                    "app": "${MYSQL_APPLICATION_NAME}-dply",
-                    "deploymentconfig": "${MYSQL_APPLICATION_NAME}-dply"
+                    "project": "${PROJECT_NAME}",
+                    "app": "${MYSQL_APPLICATION_NAME}",
+                    "build": "${MYSQL_APPLICATION_NAME}",
+                    "deploy": "${MYSQL_APPLICATION_NAME}-deploy"
                 },
                 "template": {
                     "metadata": {
                         "labels": {
-                            "app": "${MYSQL_APPLICATION_NAME}-dply",
-                            "deploymentconfig": "${MYSQL_APPLICATION_NAME}-dply"
+                            "project": "${PROJECT_NAME}",
+                            "app": "${MYSQL_APPLICATION_NAME}",
+                            "build": "${MYSQL_APPLICATION_NAME}",
+                            "deploy": "${MYSQL_APPLICATION_NAME}-deploy"
                         }
                     },
                     "spec": {
@@ -574,7 +607,7 @@
                                             "/usr/bin/sh",
                                             "-i",
                                             "-c",
-                                            "MYSQL_PWD=\"$MYSQL_ROOT_PASSWORD\" mysqladmin status --user=root --host=$(hostname)"
+                                            "MYSQL_PWD=\"$MYSQL_PASSWORD\" mysqladmin status --user=userdb --host=${HOSTNAME}"
                                         ]
                                     },
                                     "initialDelaySeconds": 20,
@@ -587,7 +620,7 @@
                                             "/usr/bin/sh",
                                             "-i",
                                             "-c",
-                                            "MYSQL_PWD=\"$MYSQL_ROOT_PASSWORD\" mysqladmin status --user=root --host=$(hostname)"
+                                            "MYSQL_PWD=\"$MYSQL_PASSWORD\" mysqladmin status --user=userdb  --host=${HOSTNAME}"
                                         ]
                                     },
                                     "successThreshold": 1,
@@ -600,7 +633,7 @@
                                             "/usr/bin/sh",
                                             "-i",
                                             "-c",
-                                            "MYSQL_PWD=\"$MYSQL_ROOT_PASSWORD\" mysqladmin status --user=root --host=$(hostname)"
+                                            "MYSQL_PWD=\"$MYSQL_PASSWORD\" mysqladmin status --user=userdb  --host=${HOSTNAME}"
                                         ]
                                     },
                                     "initialDelaySeconds": 20,
