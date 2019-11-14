@@ -23,14 +23,18 @@ set -eo pipefail
 #     echo "el 0 es true"
 # done
 
-rm -fr /opt/app-root/silo/wordpress/*
+mkdir -p /opt/app-root/silo/wordpress
+
+mv /tmp/src/* /opt/app-root/silo/wordpress
+
+# rm -fr /opt/app-root/silo/wordpress/*
 
 # export APP_DATA="/opt/app-root/silo/wordpress"
 
-mv /tmp/src/* /opt/app-root/silo/wordpress/ 
+# mv /tmp/src/* /opt/app-root/silo/wordpress/ 
 
-rm -f /opt/app-root/silo/wordpress/README.md
-rm -fr /opt/app-root/silo/wordpress/.git
+# rm -f /opt/app-root/silo/wordpress/README.md
+# rm -fr /opt/app-root/silo/wordpress/.git
 
 fix-permissions ./
 fix-permissions /opt/app-root

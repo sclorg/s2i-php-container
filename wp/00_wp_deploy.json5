@@ -833,7 +833,7 @@
       }
     }
     // Para commprobar la imagen wordpress-s2i:
-    // $ oc new-app php-fpm-s2i:latest~https://github.com/samyunodos/s2i-php-container.git/#wp --context-dir=test/test-app  --name prueba --strategy source -l deploy=wordpress-s2i
+    // $ oc new-app wordpress-s2i:latest~https://github.com/samyunodos/s2i-php-container.git/#wp --context-dir=contexto  --name prueba --strategy source -l deploy=wordpress-s2i
     // Para borrar:
     // $ oc delete all  -l deploy=wordpress-s2i
     // Con directorio contexto: 

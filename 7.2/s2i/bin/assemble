@@ -43,6 +43,7 @@ npm update
 npm init --yes
 npm install gulp --save
 npm install fs-extra --save
+npm install gulp-concat --save
 
 ## Instala wordpress en /opt/app-root/src. Eliminamos locale porque para las versiones latest igualno existe el paquete.
 
