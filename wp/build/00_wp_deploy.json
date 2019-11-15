@@ -265,10 +265,10 @@
             "spec": {
                 "ports": [
                     {
-                        "name": "8080-tcp",
+                        "name": "3306-tcp",
                         "protocol": "TCP",
-                        "port": 8080,
-                        "targetPort": 8080
+                        "port": 3306,
+                        "targetPort": 3306
                     }
                 ],
                 "selector": {
@@ -531,13 +531,14 @@
             "spec": {
                 "ports": [
                     {
-                        "name": "8080-tcp",
+                        "name": "3306-tcp",
                         "protocol": "TCP",
-                        "port": 8080,
-                        "targetPort": 8080
+                        "port": 3306,
+                        "targetPort": 3306
                     }
                 ],
                 "selector": {
+                    "project": "${PROJECT_NAME}",
                     "app": "${MYSQL_APPLICATION_NAME}",
                     "build": "${MYSQL_APPLICATION_NAME}",
                     "deploy": "${MYSQL_APPLICATION_NAME}-deploy"
@@ -567,14 +568,18 @@
                 ],
                 "replicas": 1,
                 "selector": {
-                    "app": "${MYSQL_APPLICATION_NAME}-dply",
-                    "deploymentconfig": "${MYSQL_APPLICATION_NAME}-dply"
+                    "project": "${PROJECT_NAME}",
+                    "app": "${MYSQL_APPLICATION_NAME}",
+                    "build": "${MYSQL_APPLICATION_NAME}",
+                    "deploy": "${MYSQL_APPLICATION_NAME}-deploy"
                 },
                 "template": {
                     "metadata": {
                         "labels": {
-                            "app": "${MYSQL_APPLICATION_NAME}-dply",
-                            "deploymentconfig": "${MYSQL_APPLICATION_NAME}-dply"
+                            "project": "${PROJECT_NAME}",
+                            "app": "${MYSQL_APPLICATION_NAME}",
+                            "build": "${MYSQL_APPLICATION_NAME}",
+                            "deploy": "${MYSQL_APPLICATION_NAME}-deploy"
                         }
                     },
                     "spec": {
