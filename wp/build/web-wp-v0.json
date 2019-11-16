@@ -1,0 +1,160 @@
+{
+    "kind": "Template",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "Web-Wordpress-Mysql",
+        "annotations": {
+            "openshift.io/display-name": "Wordpress con mysql",
+            "description": "Creamos la imagen mysql y de wordpress a partir de software collection. Después desplegamos.",
+            "tags": "wordpress,mysql",
+            "iconClass": "icon-wordpress"
+        },
+        "labels": {
+            "template": "wordpress-mysql"
+        }
+    },
+    "parameters": [
+        {
+            "name": "APP_NAME",
+            "description": "Nombre de la aplicación.",
+            "value": "web"
+        },
+        {
+            "name": "WP_SVC",
+            "description": "Servicio de wordpress.",
+            "value": "wp",
+            "required": true
+        },
+        {
+            "name": "MYSQL_SVC",
+            "description": "Servicio de mysql.",
+            "value": "mysql",
+            "required": true
+        },
+        {
+            "name": "SOURCE_REPOSITORY_MYSQL_URL",
+            "description": "The URL of the quickstart Git repository.",
+            "value": "https://github.com/samyunodos/mysql-container-1.git",
+            "required": true
+        },
+        {
+            "name": "SOURCE_REPOSITORY_MYSQL_TAG",
+            "description": "The tagged version of the source repository to use.",
+            "value": "mysql80",
+            "required": true
+        },
+        {
+            "name": "SOURCE_REPOSITORY_WP_URL",
+            "description": "The URL of the quickstart Git repository.",
+            "value": "https://github.com/samyunodos/s2i-php-container.git",
+            "required": true
+        },
+        {
+            "name": "SOURCE_REPOSITORY_WP_TAG",
+            "description": "The tagged version of the source repository to use.",
+            "value": "wp",
+            "required": true
+        },
+        {
+            "name": "DOCKER_REGISTER",
+            "description": "The password for the database user.",
+            "value": "docker-registry.default.svc:5000"
+        },
+        {
+            "name": "WP_DB_NAME",
+            "description": "Nombre de la base de datos (MYSQL_DATABASE).",
+            "value": "wp-db"
+        },
+        {
+            "name": "WP_DB_USER",
+            "description": "Usuario de la base de datos (MYSQL_USER).",
+            "value": "user-db"
+        },
+        {
+            "name": "WP_DB_PASSWORD",
+            "description": "La contraseña del usuario para la base de datos (MYSQL_PASSWORD). Posteriormente la introudciremos como un secreto de kubernetes.",
+            "value": "passuserdb"
+        },
+        {
+            "name": "WP_ROOT_DB_PASSWORD",
+            "description": "El password del root de msql (MYSQL_ROOT_PASSWORD).  Posteriormente la introudciremos como un secreto de kubernetes.",
+            "from": "[a-zA-Z0-9]{12}",
+            "value": "passroot"
+        },
+        {
+            "name": "WP_DB_HOST",
+            "description": "El nombre del host dónde se encuentra la base de datos. Generalmente suele ser el nombre del servicio que expone la base de datos.",
+            "value": "wp-mysql"
+        },
+        {
+            "name": "WP_DB_PORT_NUMBER",
+            "description": "El puerto para comunicarse con la base de datos.",
+            "value": "3306"
+        }
+    ],
+    "objects": [
+        {
+            "kind": "ImageStream",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "${APP_NAME}-${MYSQL_SVC}-img-0",
+                "labels": {
+                    "app": "${APP_NAME}",
+                    "app-service": "${APP_NAME}-${MYSQL_SVC}",
+                    "build": "${APP_NAME}-${MYSQL_SVC}"
+                }
+            }
+        },
+        {
+            "kind": "BuildConfig",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "${APP_NAME}-${MYSQL_SVC}-img-0",
+                "labels": {
+                    "app": "${APP_NAME}",
+                    "app-service": "${APP_NAME}-${MYSQL_SVC}",
+                    "build": "${APP_NAME}-${MYSQL_SVC}"
+                }
+            },
+            "spec": {
+                "failedBuildsHistoryLimit": 5,
+                "nodeSelector": null,
+                "output": {
+                    "to": {
+                        "kind": "ImageStreamTag",
+                        "name": "${APP_NAME}-${MYSQL_SVC}-img-0:latest"
+                    }
+                },
+                "postCommit": {},
+                "resources": {},
+                "triggers": [
+                    {
+                        "type": "ConfigChange"
+                    },
+                    {
+                        "type": "ImageChange"
+                    }
+                ],
+                "runPolicy": "Serial",
+                "source": {
+                    "type": "Git",
+                    "contextDir": "8.0",
+                    "git": {
+                        "uri": "${SOURCE_REPOSITORY_MYSQL_URL}",
+                        "ref": "${SOURCE_REPOSITORY_MYSQL_TAG}"
+                    }
+                },
+                "strategy": {
+                    "type": "Docker",
+                    "dockerStrategy": {
+                        "forcePull": true,
+                        "from": {
+                            "kind": "DockerImage",
+                            "name": "docker.io/centos/s2i-core-centos7:latest"
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}
