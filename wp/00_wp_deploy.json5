@@ -24,7 +24,7 @@
     {
       "name": "APPLICATION_NAME",
       "description": "Instancia de wordpress con mysql sin persistencia.",
-      "value": "wordpress",
+      "value": "wp",
       "required": true
     },
     {
@@ -68,7 +68,7 @@
     {
       "name": "DB_HOST",
       "description": "El nombre del host dónde se encuentra la base de datos. Generalmente suele ser el nombre del servicio que expone la base de datos.",
-      "value": "wordpress-mysql"
+      "value": "wp-mysql"
     },
     {
       "name": "DB_PORT_NUMBER",
@@ -82,7 +82,7 @@
   // # Secreto WebHook para samyunodos/mysql-container.git/#mysql80
   // #############################################################################
   // #############################################################################
-  // #  Image stream wordpress-mysql-img-0
+  // #  Image stream wp-mysql-img-0
   // #############################################################################
   {
     "kind": "ImageStream",
@@ -97,7 +97,7 @@
     }
   },
   // #############################################################################
-  // #  Creación image stream wordpress-mysql-img-0
+  // #  Creación image stream wp-mysql-img-0
   // #############################################################################
   {
     "kind": "BuildConfig",
@@ -130,14 +130,14 @@
           {
             "type": "ImageChange"
           },
-          {
-            "type": "GitHub",
-            "github": {
-              "secretReference": {
-                "name": "${APPLICATION_NAME}-mysql"
-              }
-            }
-          }
+          // {
+          //   "type": "GitHub",
+          //   "github": {
+          //     "secretReference": {
+          //       "name": "${APPLICATION_NAME}-mysql"
+          //     }
+          //   }
+          // }
         ],
         "source": {
           "type": "Git",
@@ -160,18 +160,18 @@
       }
     },
   // #############################################################################
-  // # Creamos con: oc process -f build/00_wp_deploy.json | oc apply -l build0=wordpress-mysql-img-0 -f -
-  // # Comprobamos con: oc new-app wordpress-mysql-img-0:latest~https://github.com/samyunodos/mysql-container-1.git/#mysql80 --context-dir=test/test-app/mysql-cfg  --name prueba --strategy source --label build0=wordpress-mysql-img-0.
+  // # Creamos con: oc process -f build/00_wp_deploy.json | oc apply -l build0=wp-mysql-img-0 -f -
+  // # Comprobamos con: oc new-app wp-mysql-img-0:latest~https://github.com/samyunodos/mysql-container-1.git/#mysql80 --context-dir=test/test-app/mysql-cfg  --name prueba --strategy source --label build0=wp-mysql-img-0.
   // # Para eliminarla:
-  // # oc delele all -l build0=wordpress-mysql-img-0
+  // # oc delele all -l build0=wp-mysql-img-0
   // # De todas formas es mucho más sencillo crearla con buildconfig  para testearla.
   // # Creación de imagen de testeo y despliegue
   // #############################################################################
 
     
   // #############################################################################
-  // #  Para examinar la imagen:  oc process -f build/00_wp_deploy.json | oc apply -l build0=wordpress-mysql-img-0-test -f -
-  // # Para eliminarla oc process -f build/00_wp_deploy.json | oc delete -l build0=wordpress-mysql-img-0-test -f -
+  // #  Para examinar la imagen:  oc process -f build/00_wp_deploy.json | oc apply -l build0=wp-mysql-img-0-test -f -
+  // # Para eliminarla oc process -f build/00_wp_deploy.json | oc delete -l build0=wp-mysql-img-0-test -f -
   // #############################################################################
 
     {
@@ -285,7 +285,7 @@
   // #############################################################################
   // #  Ahora vamos a desplegar mysql
   // #############################################################################
-    //#### Para crearla  oc process -f build/00_wp_deploy.json | oc apply -l build=wordpress-mysql -f -
+    //#### Para crearla  oc process -f build/00_wp_deploy.json | oc apply -l build=wp-mysql -f -
     // Necesitamos especifigar las siguientes environment variables:
     //   MYSQL_USER (regex: '^[a-zA-Z0-9_]+$')
     //   MYSQL_PASSWORD (regex: '^[a-zA-Z0-9_~!@#$%^&*()-=<>,.?;:|]+$') (lo pondremos como secreto)
@@ -309,7 +309,7 @@
     //   MYSQL_INNODB_LOG_BUFFER_SIZE (default: 8M or 15% of available memory)
     //   Ahora nos faltaría testear dicho despliegue. Para ello vamos a utilizar la dduportal/bats que emplea bats. Necesitaremos previamente agregar el escript que nos interesa en el directorio /tests, que es WORKDIR. Primero creamos un script run.sh el cual mediante bats nos checkea si ls base de datos mysql es accessible. Este script lo creamos en un configmap y luego lo cargamos.
    
-    // #############################################################################
+  // #############################################################################
   // #  Ahora vamos a crear el servicio para el posterior despliegue de mysql
   // #############################################################################
 
@@ -334,8 +334,8 @@
           }
         ],
         "selector": {
-          "app": "${APPLICATION_NAME}-mysql",
-          "deployconfig": "${APPLICATION_NAME}-mysql-deploy"
+          "app": "${APPLICATION_NAME}",
+          "deployconfig": "${APPLICATION_NAME}-mysql"
         }
       }
      },
@@ -365,17 +365,23 @@
         ],
         "replicas": 1,
         "selector": {
-          "app": "${APPLICATION_NAME}-mysql",
-          "deployconfig": "${APPLICATION_NAME}-mysql-deploy" 
+          "app": "${APPLICATION_NAME}",
+          "deployconfig": "${APPLICATION_NAME}-mysql" 
         },
         "template": {
           "metadata": {
             "labels": {
-              "app": "${APPLICATION_NAME}-mysql",
-              "deployconfig": "${APPLICATION_NAME}-mysql-deploy" 
+              "app": "${APPLICATION_NAME}",
+              "deployconfig": "${APPLICATION_NAME}-mysql" 
             }
           },
           "spec": {
+            // "serviceAccountName": "default",
+            "securityContext": {
+              "fsGroup": "0",
+              "runAsUser": "27",
+               "runAsGroup": "0"
+            },
             "containers": [
               {
                 "name": "${APPLICATION_NAME}-mysql",
@@ -394,7 +400,7 @@
                     "memory": "512Mi"
                   }
                 },
-                  "livenessProbe": {
+                "livenessProbe": {
                     "exec":{
                        "command": [ "/usr/bin/sh", "-i", "-c","MYSQL_PWD=\"$MYSQL_PASSWORD\" mysqladmin status --user=userdb --host=${HOSTNAME}" ]
                     
@@ -437,224 +443,409 @@
                   {
                     "name": "MYSQL_ROOT_PASSWORD",
                     "value": "${DB_ROOT_PASSWORD}"
-                  // },
-                  // {
-                  //   "name": "MYSQL_HOST",
-                  //   "value": "${DB_HOST}"
-                  // },
+                  },
+                  {
+                    "name": "MYSQL_HOST",
+                    "value": "${DB_HOST}"
+                  },
                   // {
                   //   "name": "MYSQL_PORT_NUMBER",
                   //   "value": "${DB_PORT_NUMBER}"
-                  }
+                  //}
                 ]
               }
             ]
           }
         }
       }
+    },
+
+ // #############################################################################
+  // #  Hasta aquí tenemos la base de datos con los Probe funcionando, sin persistencia.
+  // # Ahora vamos a implementar el contenedor wordpress. Este puede ser standalone (que no necesita nada, es decir, que sería una instalación nueva ) o repository ( que ya tiene wp-content, wp-config.php y .htaccess si acaso ). La estrategia es mediante s2i  realizar un compilación progresiva. Para ello partimos de s2i-php-container para realizar un builder que puede funcionar como imagen stream ( de forma standalone ) o bien como un builder para progresivamente incorporar source ( como repository). Hacer notar que hacemos las transformaciones en s2i-php-container para que funcione con fpm ( php fast ) y a su vez generamos otro build.
+  // # Creamos la builder desde el repositorio llamado php-fpm-s2iAhora vamos a desplegar mysql
+  // #############################################################################
+  {
+    "kind": "ImageStream",
+    "apiVersion": "v1",
+    "metadata": {
+      "name": "${APPLICATION_NAME}-img-0",
+      "labels": {
+        "project": "${PROJECT_NAME}",
+        "app": "${APPLICATION_NAME}",
+        "build": "${APPLICATION_NAME}-mysql",
+        "build1": "${APPLICATION_NAME}-mysql-1"
+      }
     }
+  },
+  {
+    "apiVersion": "build.openshift.io/v1",
+    "kind": "BuildConfig",
+    "metadata": {
+      "labels": {
+        "project": "${PROJECT_NAME}",
+        "app": "${APPLICATION_NAME}",
+        "build": "${APPLICATION_NAME}-mysql",
+        "build1": "${APPLICATION_NAME}-mysql-1"
+      },
+      "name":  "${APPLICATION_NAME}-img-0",
+      "namespace": "${PROJECT_NAME}"
+    },
+    "spec": {
+      "failedBuildsHistoryLimit": 5,
+      "nodeSelector": null,
+      "output": {
+        "to": { 
+          "kind": "ImageStreamTag",
+          "name": "${APPLICATION_NAME}-img-0:latest"
+        }
+      },
+      "postCommit": {
+      },
+      "resources": {
+      },
+      "runPolicy": "Serial",
+      "source": {
+        "contextDir": "7.2",
+        "git": {
+          "ref": "wp",
+          "uri": "https://github.com/samyunodos/s2i-php-container.git"
+        },
+        "type": "Git"
+      },
+      "strategy": {
+        "dockerStrategy": {
+          "forcePull": true,
+          // "dockerfilePath": "7.2/Dockerfile",
+          "from": {
+            "kind": "DockerImage",
+            "name": "docker.io/centos/s2i-base-centos7:latest"
+          }
+        },
+        "type": "Docker"
+      },
+      "triggers": [
+        // {
+        //   "github": {
+        //     "secret": "xdlwMqxFiVkfR9fBiIaV",
+        //     "secretReference": {
+        //       "name": "secret-php72-fpm-s2i"
+        //     }
+        //   },
+        //   "type": "GitHub"
+        // },
+        {
+          "generic": {
+            "secret": "F-ilfroO9PAhjTRSWX67"
+          },
+          "type": "Generic"
+        },
+        {
+          "type": "ConfigChange"
+        },
+        {
+          "type": "ImageChange"
+        }
+      ]
+    }
+  },
+  // #############################################################################
+  // # Para commprobar la imagen wordpress-s2i:
+  // # $ oc new-app wordpress-s2i:latest~https://github.com/samyunodos/s2i-php-container.git/#wp --context-dir=contexto  --name prueba --strategy source -l deploy=wordpress-s2i
+  // # Para borrar:
+  // # $ oc delete all  -l deploy=wordpress-s2i
+  // # Con directorio contexto: 
+  // # oc new-app php-fpm-s2i:latest~https://github.com/samyunodos/s2i-php-container.git/#wp --context-dir=contexto  --name prueba --strategy source -l deploy=wordpress-s2
+  // #############################################################################
+  {
+    "kind": "ImageStream",
+    "apiVersion": "v1",
+    "metadata": {
+      "name": "${APPLICATION_NAME}-img-1",
+      "labels": {
+        "project": "${PROJECT_NAME}",
+        "app": "${APPLICATION_NAME}",
+        "build": "${APPLICATION_NAME}-mysql",
+         "build1": "${APPLICATION_NAME}-mysql-1"
+      }
+    }
+  },
+  {
+    "apiVersion": "build.openshift.io/v1",
+    "kind": "BuildConfig",
+    "metadata": {
+      "labels": {
+        "project": "${PROJECT_NAME}",
+        "app": "${APPLICATION_NAME}",
+        "build": "${APPLICATION_NAME}-mysql",
+        "build1": "${APPLICATION_NAME}-mysql-1"
+        },
+      "name": "${APPLICATION_NAME}-img-1",
+      "namespace": "${PROJECT_NAME}"
+    },
+    "spec": {
+      "failedBuildsHistoryLimit": 5,
+      "nodeSelector": null,
+      "output": {
+        "to": {
+          "kind": "ImageStreamTag",
+          "name": "${APPLICATION_NAME}-img-1:latest"
+        }
+      },
+      "postCommit": {
+      },
+      "resources": {
+      },
+      "runPolicy": "Serial",
+      "source": {
+        "contextDir": "contexto",
+        "git": {
+          "ref": "wp",
+          "uri": "https://github.com/samyunodos/s2i-php-container.git"
+        },
+        "type": "Git"
+      },
+      "type": "Source",
+      "strategy": {
+        "sourceStrategy": {
+          "from": {
+            "kind": "ImageStreamTag",
+            "namespace": "${PROJECT_NAME}",
+            "name": "${APPLICATION_NAME}-img-0:latest"
+          }
+          // "env": [
+          //   {
+          //     "name": "DB_USER",
+          //     "value": "${MYSQL_USER}"
+          //   },
+          //   {
+          //     "name": "DB_PASSWORD",
+          //     "value": "${MYSQL_PASSWORD}"
+          //   },
+          //   {
+          //     "name": "DB_NAME",
+          //     "value": "${MYSQL_DATABASE}"
+          //   },
+          //   {
+          //     "name": "DB_HOST",
+          //     "value": "${MYSQL_APPLICATION_NAME}"
+          //   },
+          //   {
+          //     "name": "DB_PORT",
+          //     "value": "${MYSQL_PORT_NAME}"
+          //   }
+          // ]
+        }
+      },
+      "triggers": [
+          {
+            // "github": {
+            //   "secret": "xdlwMqxFiVkfR9fBiIaV",
+            //   "secretReference": {
+            //     "name": "secret-php72-fpm-img"
+            //   }
+            // },
+            // "type": "GitHub"
+          },
+          {
+            "generic": {
+              "secret": "F-ilfroO9PAhjTRSWX67"
+            },
+            "type": "Generic"
+          },
+          {
+            "type": "ConfigChange"
+           },
+          {
+            "type": "ImageChange"
+          }
+      ]
+    }
+  },
+  // #############################################################################
+  // #  Ahora vamos a crear el servicio y la route para el posterior despliegue de wordpress
+  // #############################################################################
+  {
+    "kind": "Service",
+    "apiVersion": "v1",
+    "metadata": {
+      "name": "${APPLICATION_NAME}",
+      "labels": {
+        "project": "${PROJECT_NAME}",
+        "app": "${APPLICATION_NAME}",
+        "build": "${APPLICATION_NAME}-mysql",
+        "deploy": "${APPLICATION_NAME}"
+        }
+      },
+      "spec": {
+        "ports": [
+          {
+            "name": "8080-tcp",
+            "protocol": "TCP",
+            "port": 8080,
+            "targetPort": 8080
+          },
+           {
+            "name": "8443-tcp",
+            "protocol": "TCP",
+            "port": 8443,
+            "targetPort": 8443
+          }
 
-
-
-    // Hasta aquí tenemos la base de datos con los Probe funcionando, sin persistencia.
-    // Ahora vamos a implementar el contenedor wordpress. Este puede ser standalone (que no necesita nada, es decir, que sería una instalación nueva ) o repository ( que ya tiene wp-content, wp-config.php y .htaccess si acaso ). La estrategia es mediante s2i  realizar un compilación progresiva. Para ello partimos de s2i-php-container para realizar un builder que puede funcionar como imagen stream ( de forma standalone ) o bien como un builder para progresivamente incorporar source ( como repository). Hacer notar que hacemos las transformaciones en s2i-php-container para que funcione con fpm ( php fast ) y a su vez generamos otro build.
-    // Creamos la builder desde el repositorio llamado php-fpm-s2i
-    // {
-    //   "kind": "ImageStream",
-    //   "apiVersion": "v1",
-    //   "metadata": {
-    //     "name": "${APPLICATION_NAME}-s2i",
-    //     "labels": {
-    //       "project": "${PROJECT_NAME}",
-    //       "app": "${APPLICATION_NAME}",
-    //       "build": "${MYSQL_APPLICATION_NAME}-s2i",
-    //       "build1": "${APPLICATION_NAME}-s2i"
-    //     }
-    //   }
-    // },
-    // {
-    //   "apiVersion": "build.openshift.io/v1",
-    //   "kind": "BuildConfig",
-    //   "metadata": {
-    //     "labels": {
-    //       "project": "${PROJECT_NAME}",
-    //       "app": "${APPLICATION_NAME}",
-    //       "build": "${MYSQL_APPLICATION_NAME}-s2i",
-    //       "build1": "${APPLICATION_NAME}-s2i"
-    //     },
-    //     "name":  "${APPLICATION_NAME}-s2i",
-    //     "namespace": "${PROJECT_NAME}"
-    //   },
-    //   "spec": {
-    //     "failedBuildsHistoryLimit": 5,
-    //     "nodeSelector": null,
-    //     "output": {
-    //       "to": {
-    //         "kind": "ImageStreamTag",
-    //         "name": "${APPLICATION_NAME}-s2i:latest"
-    //       }
-    //     },
-    //     "postCommit": {
-    //     },
-    //     "resources": {
-    //     },
-    //     "runPolicy": "Serial",
-    //     "source": {
-    //       "contextDir": "7.2",
-    //       "git": {
-    //         "ref": "wp",
-    //         "uri": "https://github.com/samyunodos/s2i-php-container.git"
-    //       },
-    //       "type": "Git"
-    //     },
-    //     "strategy": {
-    //       "dockerStrategy": {
-    //         "forcePull": true,
-    //         // "dockerfilePath": "7.2/Dockerfile",
-    //         "from": {
-    //           "kind": "DockerImage",
-    //           "name": "docker.io/centos/s2i-base-centos7:latest"
-    //         }
-    //       },
-    //       "type": "Docker"
-    //     },
-    //     "triggers": [
-    //       {
-    //         "github": {
-    //           "secret": "xdlwMqxFiVkfR9fBiIaV",
-    //           "secretReference": {
-    //             "name": "secret-php72-fpm-s2i"
-    //           }
-    //         },
-    //         "type": "GitHub"
-    //       },
-    //       {
-    //         "generic": {
-    //           "secret": "F-ilfroO9PAhjTRSWX67"
-    //         },
-    //         "type": "Generic"
-    //       },
-    //       {
-    //         "type": "ConfigChange"
-    //       },
-    //       {
-    //         "type": "ImageChange"
-    //       }
-    //     ]
-    //   }
-    // }
-    // Para commprobar la imagen wordpress-s2i:
-    // $ oc new-app wordpress-s2i:latest~https://github.com/samyunodos/s2i-php-container.git/#wp --context-dir=contexto  --name prueba --strategy source -l deploy=wordpress-s2i
-    // Para borrar:
-    // $ oc delete all  -l deploy=wordpress-s2i
-    // Con directorio contexto: 
-    // oc new-app php-fpm-s2i:latest~https://github.com/samyunodos/s2i-php-container.git/#wp --context-dir=contexto  --name prueba --strategy source -l deploy=wordpress-s2i
-
-// {
-//       "kind": "ImageStream",
-//       "apiVersion": "v1",
-//       "metadata": {
-//         "name": "${APPLICATION_NAME}-s2i",
-//         "labels": {
-//           "project": "${PROJECT_NAME}",
-//           "app": "${APPLICATION_NAME}",
-//           "build": "${MYSQL_APPLICATION_NAME}-s2i",
-//           "build1": "${APPLICATION_NAME}-s2i"
-//         }
-//       }
-//     },
-//  {
-//       "apiVersion": "build.openshift.io/v1",
-//       "kind": "BuildConfig",
-//       "metadata": {
-//         "labels": {
-//           "project": "${PROJECT_NAME}",
-//           "app": "${APPLICATION_NAME}",
-//           "build": "${MYSQL_APPLICATION_NAME}-s2i",
-//           "build1": "${APPLICATION_NAME}-s2i"
-         
-//         },
-//         "name": "${APPLICATION_NAME}-s2i",
-//         "namespace": "${PROJECT_NAME}"
-//       },
-//       "spec": {
-//         "failedBuildsHistoryLimit": 5,
-//         "nodeSelector": null,
-//         "output": {
-//           "to": {
-//             "kind": "ImageStreamTag",
-//             "name": "${APPLICATION_NAME}-s2i:latest"
-//           }
-//         },
-//         "postCommit": {
-//         },
-//         "resources": {
-//         },
-//         "runPolicy": "Serial",
-//         "source": {
-//           "contextDir": "contexto",
-//           "git": {
-//             "ref": "wp",
-//             "uri": "https://github.com/samyunodos/s2i-php-container.git"
-//           },
-//           "type": "Git"
-//         },
-//         "type": "Source",
-//         "strategy": {
-//           "sourceStrategy": {
-//             "from": {
-//               "kind": "ImageStreamTag",
-//               "namespace": "${PROJECT_NAME}",
-//               "name": "${APPLICATION_NAME}-s2i:latest"
-//             },
-//             // "env": [
-//             //   {
-//             //     "name": "DB_USER",
-//             //     "value": "${MYSQL_USER}"
-//             //   },
-//             //   {
-//             //     "name": "DB_PASSWORD",
-//             //     "value": "${MYSQL_PASSWORD}"
-//             //   },
-//             //   {
-//             //     "name": "DB_NAME",
-//             //     "value": "${MYSQL_DATABASE}"
-//             //   },
-//             //   {
-//             //     "name": "DB_HOST",
-//             //     "value": "${MYSQL_APPLICATION_NAME}"
-//             //   },
-//             //   {
-//             //     "name": "DB_PORT",
-//             //     "value": "${MYSQL_PORT_NAME}"
-//             //   }
-//             // ]
-//           }
-//         },
-//         "triggers": [
-//           {
-//             // "github": {
-//             //   "secret": "xdlwMqxFiVkfR9fBiIaV",
-//             //   "secretReference": {
-//             //     "name": "secret-php72-fpm-img"
-//             //   }
-//             // },
-//             // "type": "GitHub"
-//           },
-//           {
-//             "generic": {
-//               "secret": "F-ilfroO9PAhjTRSWX67"
-//             },
-//             "type": "Generic"
-//           },
-//           {
-//             "type": "ConfigChange"
-//            },
-//           {
-//             "type": "ImageChange"
-//           }
-//         ]
-//       }
-//     }
-  ]
+        ],
+        "selector": {
+          "app": "${APPLICATION_NAME}",
+          "deployconfig": "${APPLICATION_NAME}-wp-deploy"
+        }
+      }
+  },
+  {
+     "kind": "Route",
+    "apiVersion": "v1",
+    "metadata": {
+      "name": "${APPLICATION_NAME}",
+      "labels": {
+        "project": "${PROJECT_NAME}",
+        "app": "${APPLICATION_NAME}",
+        "build": "${APPLICATION_NAME}-mysql",
+        "deploy": "${APPLICATION_NAME}"
+        }
+      },
+      "spec": {
+        // "host": "my.wordpress.ejemplo.org",
+        // "path": "/",
+        "to":{
+          "kind": "Service",
+          "name": "${APPLICATION_NAME}"
+        },
+        "tls": {
+          "termination": "edge",
+          "insecureEdgeTerminationPolicy": "Allow" 
+        }
+      }
+  },
+  // #############################################################################
+  // #  Ahora vamos a desplegar wordpress
+  // #############################################################################
+  {
+    "kind": "DeploymentConfig",
+    "apiVersion": "v1",
+    "metadata": {
+      "name": "${APPLICATION_NAME}",
+      "labels": {
+        "project": "${PROJECT_NAME}",
+        "app": "${APPLICATION_NAME}",
+        "build": "${APPLICATION_NAME}-mysql",
+        "deploy": "${APPLICATION_NAME}"
+      }
+    },
+    "spec": {
+      "strategy": {
+        // "type": "Rolling"
+        "type": "Recreate"
+      },
+      "triggers": [
+        {
+          "type": "ConfigChange"
+        }
+      ],
+      "replicas": 1,
+      "selector": {
+        "app": "${APPLICATION_NAME}",
+        "deployconfig": "${APPLICATION_NAME}-wp-deploy" 
+      },
+      "template": {
+        "metadata": {
+          "labels": {
+            "app": "${APPLICATION_NAME}",
+            "deployconfig": "${APPLICATION_NAME}-wp-deploy" 
+          }
+        },
+        "spec": {
+          // "serviceAccountName": "default",
+            "securityContext": {
+              "fsGroup": "0",
+              "runAsUser": "1001",
+              "runAsGroup": "0"
+            },
+          "containers": [
+            {
+              "name": "${APPLICATION_NAME}",
+              "image": "${DOCKER_REGISTER}/${PROJECT_NAME}/${APPLICATION_NAME}-img-1:latest",
+              "ports": [
+                {
+                  "containerPort": 8080,
+                  "protocol": "TCP"
+                },
+                {
+                  "containerPort": 8443,
+                  "protocol": "TCP"
+                }
+              ],
+              "resources": {
+                "limits": {
+                  "memory": "512Mi"
+                }
+              },
+              // "livenessProbe": {
+              //   "exec":{
+              //     "command": [ "/usr/bin/sh", "-i", "-c","MYSQL_PWD=\"$MYSQL_PASSWORD\" mysqladmin status --user=userdb --host=${HOSTNAME}" ]
+              //   },
+              //   "initialDelaySeconds": 20,
+              //   "periodSeconds": 20,
+              //   "failureThreshold": 30
+              // },
+              // "startupProbe": {
+              //   "exec": {
+              //     "command": [ "/usr/bin/sh", "-i", "-c","MYSQL_PWD=\"$MYSQL_PASSWORD\" mysqladmin status --user=userdb  --host=${HOSTNAME}" ]
+              //   },
+              //   "successThreshold": 1,
+              //   "failureThreshold": 30, 
+              //   "periodSeconds": 10
+              // },
+              // "readinessProbe": {
+              //   "exec":{
+              //     // "command": [ "mysqladmin status --user=root --host=$(hostname) --password=$MYSQL_ROOT_PASSWORD" ]
+              //     "command": [ "/usr/bin/sh", "-i", "-c","MYSQL_PWD=\"$MYSQL_PASSWORD\" mysqladmin status --user=userdb  --host=${HOSTNAME}" ]
+              //   },
+              //   "initialDelaySeconds": 20,
+              //   "periodSeconds": 10,
+              //   "failureThreshold": 1
+              // },
+              "env": [
+                {
+                  "name": "DB_NAME",
+                  "value": "${DB_NAME}"
+                },
+                {
+                  "name": "DB_USER",
+                  "value": "${DB_USER}"
+                },
+                {
+                  "name": "DB_PASSWORD",
+                  "value": "${DB_PASSWORD}"
+                },
+                {
+                  "name": "DB_ROOT_PASSWORD",
+                  "value": "${DB_ROOT_PASSWORD}"
+                },
+                {
+                  "name": "DB_HOST",
+                  "value": "${DB_HOST}"
+                }
+                // {
+                //   "name": "DB_PORT_NUMBER",
+                //   "value": "${DB_PORT_NUMBER}"
+                //}
+              ]
+            } 
+          ],
+          "dnsPolicy": "ClusterFirst",
+          "restartPolicy": "Always",
+          "terminationGracePeriodSeconds": "30"
+        }
+      }
+    }
+  }
+]
 }

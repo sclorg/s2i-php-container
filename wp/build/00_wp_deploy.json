@@ -22,7 +22,7 @@
         {
             "name": "APPLICATION_NAME",
             "description": "Instancia de wordpress con mysql sin persistencia.",
-            "value": "wordpress",
+            "value": "wp",
             "required": true
         },
         {
@@ -66,7 +66,7 @@
         {
             "name": "DB_HOST",
             "description": "El nombre del host dónde se encuentra la base de datos. Generalmente suele ser el nombre del servicio que expone la base de datos.",
-            "value": "wordpress-mysql"
+            "value": "wp-mysql"
         },
         {
             "name": "DB_PORT_NUMBER",
@@ -115,14 +115,6 @@
                     },
                     {
                         "type": "ImageChange"
-                    },
-                    {
-                        "type": "GitHub",
-                        "github": {
-                            "secretReference": {
-                                "name": "${APPLICATION_NAME}-mysql"
-                            }
-                        }
                     }
                 ],
                 "source": {
@@ -237,8 +229,8 @@
                     }
                 ],
                 "selector": {
-                    "app": "${APPLICATION_NAME}-mysql",
-                    "deployconfig": "${APPLICATION_NAME}-mysql-deploy"
+                    "app": "${APPLICATION_NAME}",
+                    "deployconfig": "${APPLICATION_NAME}-mysql"
                 }
             }
         },
@@ -264,17 +256,22 @@
                 ],
                 "replicas": 1,
                 "selector": {
-                    "app": "${APPLICATION_NAME}-mysql",
-                    "deployconfig": "${APPLICATION_NAME}-mysql-deploy"
+                    "app": "${APPLICATION_NAME}",
+                    "deployconfig": "${APPLICATION_NAME}-mysql"
                 },
                 "template": {
                     "metadata": {
                         "labels": {
-                            "app": "${APPLICATION_NAME}-mysql",
-                            "deployconfig": "${APPLICATION_NAME}-mysql-deploy"
+                            "app": "${APPLICATION_NAME}",
+                            "deployconfig": "${APPLICATION_NAME}-mysql"
                         }
                     },
                     "spec": {
+                        "securityContext": {
+                            "fsGroup": "0",
+                            "runAsUser": "27",
+                            "runAsGroup": "0"
+                        },
                         "containers": [
                             {
                                 "name": "${APPLICATION_NAME}-mysql",
@@ -348,10 +345,304 @@
                                     {
                                         "name": "MYSQL_ROOT_PASSWORD",
                                         "value": "${DB_ROOT_PASSWORD}"
+                                    },
+                                    {
+                                        "name": "MYSQL_HOST",
+                                        "value": "${DB_HOST}"
                                     }
                                 ]
                             }
                         ]
+                    }
+                }
+            }
+        },
+        {
+            "kind": "ImageStream",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "${APPLICATION_NAME}-img-0",
+                "labels": {
+                    "project": "${PROJECT_NAME}",
+                    "app": "${APPLICATION_NAME}",
+                    "build": "${APPLICATION_NAME}-mysql",
+                    "build1": "${APPLICATION_NAME}-mysql-1"
+                }
+            }
+        },
+        {
+            "apiVersion": "build.openshift.io/v1",
+            "kind": "BuildConfig",
+            "metadata": {
+                "labels": {
+                    "project": "${PROJECT_NAME}",
+                    "app": "${APPLICATION_NAME}",
+                    "build": "${APPLICATION_NAME}-mysql",
+                    "build1": "${APPLICATION_NAME}-mysql-1"
+                },
+                "name": "${APPLICATION_NAME}-img-0",
+                "namespace": "${PROJECT_NAME}"
+            },
+            "spec": {
+                "failedBuildsHistoryLimit": 5,
+                "nodeSelector": null,
+                "output": {
+                    "to": {
+                        "kind": "ImageStreamTag",
+                        "name": "${APPLICATION_NAME}-img-0:latest"
+                    }
+                },
+                "postCommit": {},
+                "resources": {},
+                "runPolicy": "Serial",
+                "source": {
+                    "contextDir": "7.2",
+                    "git": {
+                        "ref": "wp",
+                        "uri": "https://github.com/samyunodos/s2i-php-container.git"
+                    },
+                    "type": "Git"
+                },
+                "strategy": {
+                    "dockerStrategy": {
+                        "forcePull": true,
+                        "from": {
+                            "kind": "DockerImage",
+                            "name": "docker.io/centos/s2i-base-centos7:latest"
+                        }
+                    },
+                    "type": "Docker"
+                },
+                "triggers": [
+                    {
+                        "generic": {
+                            "secret": "F-ilfroO9PAhjTRSWX67"
+                        },
+                        "type": "Generic"
+                    },
+                    {
+                        "type": "ConfigChange"
+                    },
+                    {
+                        "type": "ImageChange"
+                    }
+                ]
+            }
+        },
+        {
+            "kind": "ImageStream",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "${APPLICATION_NAME}-img-1",
+                "labels": {
+                    "project": "${PROJECT_NAME}",
+                    "app": "${APPLICATION_NAME}",
+                    "build": "${APPLICATION_NAME}-mysql",
+                    "build1": "${APPLICATION_NAME}-mysql-1"
+                }
+            }
+        },
+        {
+            "apiVersion": "build.openshift.io/v1",
+            "kind": "BuildConfig",
+            "metadata": {
+                "labels": {
+                    "project": "${PROJECT_NAME}",
+                    "app": "${APPLICATION_NAME}",
+                    "build": "${APPLICATION_NAME}-mysql",
+                    "build1": "${APPLICATION_NAME}-mysql-1"
+                },
+                "name": "${APPLICATION_NAME}-img-1",
+                "namespace": "${PROJECT_NAME}"
+            },
+            "spec": {
+                "failedBuildsHistoryLimit": 5,
+                "nodeSelector": null,
+                "output": {
+                    "to": {
+                        "kind": "ImageStreamTag",
+                        "name": "${APPLICATION_NAME}-img-1:latest"
+                    }
+                },
+                "postCommit": {},
+                "resources": {},
+                "runPolicy": "Serial",
+                "source": {
+                    "contextDir": "contexto",
+                    "git": {
+                        "ref": "wp",
+                        "uri": "https://github.com/samyunodos/s2i-php-container.git"
+                    },
+                    "type": "Git"
+                },
+                "type": "Source",
+                "strategy": {
+                    "sourceStrategy": {
+                        "from": {
+                            "kind": "ImageStreamTag",
+                            "namespace": "${PROJECT_NAME}",
+                            "name": "${APPLICATION_NAME}-img-0:latest"
+                        }
+                    }
+                },
+                "triggers": [
+                    {},
+                    {
+                        "generic": {
+                            "secret": "F-ilfroO9PAhjTRSWX67"
+                        },
+                        "type": "Generic"
+                    },
+                    {
+                        "type": "ConfigChange"
+                    },
+                    {
+                        "type": "ImageChange"
+                    }
+                ]
+            }
+        },
+        {
+            "kind": "Service",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "${APPLICATION_NAME}",
+                "labels": {
+                    "project": "${PROJECT_NAME}",
+                    "app": "${APPLICATION_NAME}",
+                    "build": "${APPLICATION_NAME}-mysql",
+                    "deploy": "${APPLICATION_NAME}"
+                }
+            },
+            "spec": {
+                "ports": [
+                    {
+                        "name": "8080-tcp",
+                        "protocol": "TCP",
+                        "port": 8080,
+                        "targetPort": 8080
+                    },
+                    {
+                        "name": "8443-tcp",
+                        "protocol": "TCP",
+                        "port": 8443,
+                        "targetPort": 8443
+                    }
+                ],
+                "selector": {
+                    "app": "${APPLICATION_NAME}",
+                    "deployconfig": "${APPLICATION_NAME}-wp-deploy"
+                }
+            }
+        },
+        {
+            "kind": "Route",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "${APPLICATION_NAME}",
+                "labels": {
+                    "project": "${PROJECT_NAME}",
+                    "app": "${APPLICATION_NAME}",
+                    "build": "${APPLICATION_NAME}-mysql",
+                    "deploy": "${APPLICATION_NAME}"
+                }
+            },
+            "spec": {
+                "to": {
+                    "kind": "Service",
+                    "name": "${APPLICATION_NAME}"
+                },
+                "tls": {
+                    "termination": "edge",
+                    "insecureEdgeTerminationPolicy": "Allow"
+                }
+            }
+        },
+        {
+            "kind": "DeploymentConfig",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "${APPLICATION_NAME}",
+                "labels": {
+                    "project": "${PROJECT_NAME}",
+                    "app": "${APPLICATION_NAME}",
+                    "build": "${APPLICATION_NAME}-mysql",
+                    "deploy": "${APPLICATION_NAME}"
+                }
+            },
+            "spec": {
+                "strategy": {
+                    "type": "Recreate"
+                },
+                "triggers": [
+                    {
+                        "type": "ConfigChange"
+                    }
+                ],
+                "replicas": 1,
+                "selector": {
+                    "app": "${APPLICATION_NAME}",
+                    "deployconfig": "${APPLICATION_NAME}-wp-deploy"
+                },
+                "template": {
+                    "metadata": {
+                        "labels": {
+                            "app": "${APPLICATION_NAME}",
+                            "deployconfig": "${APPLICATION_NAME}-wp-deploy"
+                        }
+                    },
+                    "spec": {
+                        "securityContext": {
+                            "fsGroup": "0",
+                            "runAsUser": "1001",
+                            "runAsGroup": "0"
+                        },
+                        "containers": [
+                            {
+                                "name": "${APPLICATION_NAME}",
+                                "image": "${DOCKER_REGISTER}/${PROJECT_NAME}/${APPLICATION_NAME}-img-1:latest",
+                                "ports": [
+                                    {
+                                        "containerPort": 8080,
+                                        "protocol": "TCP"
+                                    },
+                                    {
+                                        "containerPort": 8443,
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {
+                                    "limits": {
+                                        "memory": "512Mi"
+                                    }
+                                },
+                                "env": [
+                                    {
+                                        "name": "DB_NAME",
+                                        "value": "${DB_NAME}"
+                                    },
+                                    {
+                                        "name": "DB_USER",
+                                        "value": "${DB_USER}"
+                                    },
+                                    {
+                                        "name": "DB_PASSWORD",
+                                        "value": "${DB_PASSWORD}"
+                                    },
+                                    {
+                                        "name": "DB_ROOT_PASSWORD",
+                                        "value": "${DB_ROOT_PASSWORD}"
+                                    },
+                                    {
+                                        "name": "DB_HOST",
+                                        "value": "${DB_HOST}"
+                                    }
+                                ]
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "terminationGracePeriodSeconds": "30"
                     }
                 }
             }
