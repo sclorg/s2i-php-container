@@ -155,6 +155,76 @@
                     }
                 }
             }
+        },
+        {
+            "kind": "ImageStream",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "${APP_NAME}-${MYSQL_SVC}-img-1",
+                "labels": {
+                    "app": "${APP_NAME}",
+                    "app-service": "${APP_NAME}-${MYSQL_SVC}",
+                    "build": "${APP_NAME}-${MYSQL_SVC}",
+                    "build1": "${APP_NAME}-${MYSQL_SVC}"
+                }
+            }
+        },
+        {
+            "apiVersion": "build.openshift.io/v1",
+            "kind": "BuildConfig",
+            "metadata": {
+                "name": "${APP_NAME}-${MYSQL_SVC}-img-1",
+                "labels": {
+                    "app": "${APP_NAME}",
+                    "app-service": "${APP_NAME}-${MYSQL_SVC}",
+                    "build": "${APP_NAME}-${MYSQL_SVC}",
+                    "build1": "${APP_NAME}-${MYSQL_SVC}"
+                }
+            },
+            "spec": {
+                "failedBuildsHistoryLimit": 5,
+                "nodeSelector": null,
+                "output": {
+                    "to": {
+                        "kind": "ImageStreamTag",
+                        "name": "${APP_NAME}-${MYSQL_SVC}-img-1:latest"
+                    }
+                },
+                "postCommit": {},
+                "resources": {},
+                "runPolicy": "Serial",
+                "source": {
+                    "contextDir": "test/test-app/mysql-cfg",
+                    "git": {
+                        "ref": "${SOURCE_REPOSITORY_MYSQL_TAG}",
+                        "uri": "${SOURCE_REPOSITORY_MYSQL_URL}"
+                    },
+                    "type": "Git"
+                },
+                "type": "Source",
+                "strategy": {
+                    "sourceStrategy": {
+                        "from": {
+                            "kind": "ImageStreamTag",
+                            "name": "${APP_NAME}-${MYSQL_SVC}-img-0:latest"
+                        }
+                    }
+                },
+                "triggers": [
+                    {
+                        "generic": {
+                            "secret": "F-ilfroO9PAhjTRSWX67"
+                        },
+                        "type": "Generic"
+                    },
+                    {
+                        "type": "ConfigChange"
+                    },
+                    {
+                        "type": "ImageChange"
+                    }
+                ]
+            }
         }
     ]
 }
