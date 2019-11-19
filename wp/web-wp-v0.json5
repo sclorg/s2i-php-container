@@ -59,16 +59,21 @@
       "description": "The password for the database user.",
       "value": "docker-registry.default.svc:5000"
     },
+    {
+      "name": "PROJECT_NAME",
+      "description": "Nombre de la aplicación.",
+      "value": "image-wp"
+    },
     //#### Todas las variables que empiezan por DB se introducencen desde el contenedor wordpress asi como las que aún no homos usado DB_HOST y DB_TABLE_PREFIX.
     {
       "name": "WP_DB_NAME",
       "description": "Nombre de la base de datos (MYSQL_DATABASE).",
-      "value": "wp-db"
+      "value": "wpdb"
     },
     {
       "name": "WP_DB_USER",
       "description": "Usuario de la base de datos (MYSQL_USER).",
-      "value": "user-db"
+      "value": "userdb"
     },
     {
       "name": "WP_DB_PASSWORD",
@@ -232,6 +237,153 @@
             "type": "ImageChange"
           }
        ]
+      }
+    },
+     {
+      "kind": "Service",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${APP_NAME}-${MYSQL_SVC}",
+        "labels": {
+          "app": "${APP_NAME}",
+          "app-service": "${APP_NAME}-${MYSQL_SVC}",
+          "build": "${APP_NAME}-${MYSQL_SVC}",
+          "build1": "${APP_NAME}-${MYSQL_SVC}",
+          "deploy": "${APP_NAME}-${MYSQL_SVC}"
+        }
+      },
+       "spec": {
+         "ports": [
+           {
+             "name": "3306-tcp",
+             "protocol": "TCP",
+             "port": 3306,
+             "targetPort": 3306
+           }
+         ],
+         "selector": {
+           "app": "${APP_NAME}",
+           "deployconfig":  "${APP_NAME}-${MYSQL_SVC}"
+         }
+       } 
+     },
+    {
+      "kind": "DeploymentConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${APP_NAME}-${MYSQL_SVC}",
+        
+        "labels": {
+          "app": "${APP_NAME}",
+          "app-service": "${APP_NAME}-${MYSQL_SVC}",
+          "build": "${APP_NAME}-${MYSQL_SVC}",
+          "build1": "${APP_NAME}-${MYSQL_SVC}",
+          "deploy": "${APP_NAME}-${MYSQL_SVC}"
+        }
+      },
+      "spec": {
+        "strategy": {
+          // "type": "Rolling"
+          "type": "Recreate"
+        },
+        "triggers": [
+          {
+            "type": "ConfigChange"
+          }
+        ],
+        "replicas": 1,
+        "selector": {
+          "app": "${APP_NAME}",
+          "deployconfig":  "${APP_NAME}-${MYSQL_SVC}"
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "${APP_NAME}",
+              "deployconfig":  "${APP_NAME}-${MYSQL_SVC}"
+            }
+          },
+          "spec": {
+            // "serviceAccountName": "default",
+            "securityContext": {
+              "fsGroup": "0",
+              "runAsUser": "27",
+               "runAsGroup": "0"
+            },
+            "containers": [
+              {
+                "name": "${APP_NAME}-${MYSQL_SVC}",
+                "image": "${DOCKER_REGISTER}/${PROJECT_NAME}/${APP_NAME}-${MYSQL_SVC}-img-1:latest",
+                 "args": [
+                  "run-mysqld"
+                ],
+                "ports": [
+                  {
+                    "containerPort": 3306,
+                    "protocol": "TCP"
+                  }
+                ],
+                "resources": {
+                  "limits": {
+                    "memory": "512Mi"
+                  }
+                },
+                "livenessProbe": {
+                    "exec":{
+                       "command": [ "/usr/bin/sh", "-i", "-c","MYSQL_PWD=\"$MYSQL_PASSWORD\" mysqladmin status --user=userdb --host=${HOSTNAME}" ]
+                    
+                  },
+                  "initialDelaySeconds": 20,
+                  "periodSeconds": 20,
+                  "failureThreshold": 30
+                },
+                "startupProbe": {
+                  "exec": {
+                     "command": [ "/usr/bin/sh", "-i", "-c","MYSQL_PWD=\"$MYSQL_PASSWORD\" mysqladmin status --user=userdb  --host=${HOSTNAME}" ]
+                  },
+                  "successThreshold": 1,
+                  "failureThreshold": 30, 
+                  "periodSeconds": 10
+                },
+                "readinessProbe": {
+                  "exec":{
+                    // "command": [ "mysqladmin status --user=root --host=$(hostname) --password=$MYSQL_ROOT_PASSWORD" ]
+                   "command": [ "/usr/bin/sh", "-i", "-c","MYSQL_PWD=\"$MYSQL_PASSWORD\" mysqladmin status --user=userdb  --host=${HOSTNAME}" ]
+                  },
+                  "initialDelaySeconds": 20,
+                  "periodSeconds": 10,
+                  "failureThreshold": 1
+                },
+                "env": [
+                  {
+                    "name": "MYSQL_DATABASE",
+                    "value": "${WP_DB_NAME}"
+                  },
+                  {
+                    "name": "MYSQL_USER",
+                    "value": "${WP_DB_USER}"
+                  },
+                  {
+                    "name": "MYSQL_PASSWORD",
+                    "value": "${WP_DB_PASSWORD}"
+                  },
+                  {
+                    "name": "MYSQL_ROOT_PASSWORD",
+                    "value": "${WP_ROOT_DB_PASSWORD}"
+                  }
+                  // {
+                  //   "name": "MYSQL_HOST",
+                  //   "value": "${WP_DB_HOST}"
+                  // },
+                  // {
+                  //   "name": "MYSQL_PORT_NUMBER",
+                  //   "value": "${WP_DB_PORT_NUMBER}"
+                  //}
+                ]
+              }
+            ]
+          }
+        }
       }
     }
 
