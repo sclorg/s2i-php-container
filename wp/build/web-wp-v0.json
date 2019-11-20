@@ -89,7 +89,7 @@
         {
             "name": "WP_DB_HOST",
             "description": "El nombre del host dónde se encuentra la base de datos. Generalmente suele ser el nombre del servicio que expone la base de datos.",
-            "value": "wp-mysql"
+            "value": "web-mysql"
         },
         {
             "name": "WP_DB_PORT_NUMBER",
@@ -539,6 +539,7 @@
                 }
             },
             "spec": {
+                "clusterIP": "None",
                 "ports": [
                     {
                         "name": "8080-tcp",
@@ -556,33 +557,6 @@
                 "selector": {
                     "app": "${APP_NAME}",
                     "deployconfig": "${APP_NAME}-${WP_SVC}"
-                }
-            }
-        },
-        {
-            "kind": "Route",
-            "apiVersion": "v1",
-            "metadata": {
-                "name": "${APP_NAME}-${WP_SVC}",
-                "labels": {
-                    "app": "${APP_NAME}",
-                    "app-service": "${APP_NAME}-${WP_SVC}",
-                    "build": "${APP_NAME}-${WP_SVC}",
-                    "build1": "${APP_NAME}-${WP_SVC}",
-                    "deploy": "${APP_NAME}-${WP_SVC}"
-                }
-            },
-            "spec": {
-                "port": {
-                    "targetPort": "8080-tcp"
-                },
-                "to": {
-                    "kind": "Service",
-                    "name": "${APP_NAME}-${WP_SVC}"
-                },
-                "tls": {
-                    "termination": "edge",
-                    "insecureEdgeTerminationPolicy": "Allow"
                 }
             }
         },
