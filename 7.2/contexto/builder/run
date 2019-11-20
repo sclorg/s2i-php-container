@@ -8,6 +8,16 @@ shopt -s dotglob ## para mover los archivos ocultos
 
 
 
+if [ -f "/opt/app-root/silo/wp-config.php" ] && [ -d "/opt/app-root/silo/wordpress/wp-content" ];then
+    gulp tmoverwpconfigpriv
+
+else
+fi
+
+
+
+
+
 
 if [ -f "/opt/app-root/silo/wp-config.php" ];then
     # rm -f "/opt/app-root/src/wp-config.php"
