@@ -13,10 +13,12 @@ if [ -f "/opt/app-root/silo/wordpress/wp-config.php" ] && [ -d "/opt/app-root/si
     gulp tmoverwpcontentpriv
     gulp tmoverwphtcaccesspriv
     gulp enlacesSymlinkpriv
-else
-    gulp default &
+   
 fi
 
+gulp default &
+
+sleep(5)
 
 
 if [ -f "/opt/app-root/src/wp-config-sample.php" ] && [ -d "/opt/app-root/src/wp-content" ];then
@@ -87,4 +89,4 @@ fi
 
 # Execute the original run script, replacing this script as current process.
 
-# exec /usr/libexec/s2i/run
+exec /usr/libexec/s2i/run
