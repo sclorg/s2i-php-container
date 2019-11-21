@@ -224,7 +224,7 @@ gulp.task('removewpconfig', async function(done) {
          
 
 gulp.task('tmoveyaddwpconfig', function() {
-  if ( (fs.pathExists(srcwpconfig)) && (! fs.existsSync(dstwpconfig) )) {
+  if ( (fs.pathExists(srcwpconfig)) && (! fs.pathExists(dstwpconfig) )) {
     // return gulp.src([srcwpconfig,'/opt/app-root/src/add-wp-config-php'],{ sourcemaps: true }, {allowEmpty:true})
     return gulp.src([srcwpconfig,'/opt/app-root/src/add-wp-config-php'],{allowEmpty:true})
     .pipe(concat( 'wp-config.php'))
@@ -235,11 +235,6 @@ gulp.task('tmoveyaddwpconfig', function() {
    };
   
 });
-
-
-gulp.task('enlacesSymlinkpriv', gulp.series('createSymlinkwpconfig','createSymlinkhtcaccess'));
-
-
           
 
 gulp.task('task-kill', function() {
@@ -254,7 +249,7 @@ gulp.task('task-kill', function() {
 gulp.task('watch',  function(done) {
   // gulp.watch('/opt/app-root/src/wp-content',gulp.series('tmoverwpcontent'));
   // gulp.watch('/opt/app-root/src/.htcaccess',gulp.series('tmoverwphtcaccess'));
-  gulp.watch('/opt/app-root/src/**/wp-confi?.php',  gulp.series('tmoveyaddwpconfig','removewpconfig','createSymlinkwpconfig', 'tmoverwpcontent','tmoverwphtcaccess','createSymlinkhtcaccess',));
+  gulp.watch('/opt/app-root/src/**/wp-confi?.php',  gulp.series('tmoveyaddwpconfig','removewpconfig','tmoverwpconfig', 'tmoverwphtcaccess'));
   // gulp.watch('/silo/wordpdres/*',  gulp.series('createSymlinkwpconfig', 'createSymlinkhtcaccess'));
   // gulp.watch('/opt/silo/wordpdres/*',  gulp.series('createSymlinkwpconfig', 'createSymlinkhtcaccess', 'task-kill'));
 

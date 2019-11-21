@@ -6,12 +6,15 @@ set -eo pipefail
 
 shopt -s dotglob ## para mover los archivos ocultos
 
-gulp default &
+
 
 if [ -f "/opt/app-root/silo/wordpress/wp-config.php" ] && [ -d "/opt/app-root/silo/wordpress/wp-content" ];then
     gulp tmoverwpconfigpriv
     gulp tmoverwpcontentpriv
     gulp tmoverwphtcaccesspriv
+    gulp enlacesSymlinkpriv
+else
+    gulp default &
 fi
 
 
@@ -84,4 +87,4 @@ fi
 
 # Execute the original run script, replacing this script as current process.
 
-exec /usr/libexec/s2i/run
+# exec /usr/libexec/s2i/run
