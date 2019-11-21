@@ -629,22 +629,22 @@
             "name": "${APP_NAME}-${WP_SVC}-img-2:latest"
           },
           "imageLabels": [
-            {
-              "name": "io.k8s.display-name",
-              "value": "${APP_NAME}"
-            },
-            {
-              "name": "io.k8s.description",
-              "value": "wordpress application and S2I builder."
-            },
-            {
-              "name": "io.openshift.s2i.scripts-url",
-              "value": "image:///opt/app-root/s2i"
-            },
-            {
-              "name": "io.s2i.scripts-url",
-              "value": "image:///opt/app-root/s2i"
-            }
+            // {
+            //   "name": "io.k8s.display-name",
+            //   "value": "${APP_NAME}"
+            // },
+            // {
+            //   "name": "io.k8s.description",
+            //   "value": "wordpress application and S2I builder."
+            // },
+            // {
+            //   "name": "io.openshift.s2i.scripts-url",
+            //   "value": "image:///opt/app-root/s2i"
+            // },
+            // {
+            //   "name": "io.s2i.scripts-url",
+            //   "value": "image:///opt/app-root/s2i"
+            // }
           ]
         },
         "postCommit": {
@@ -718,42 +718,42 @@
           }
         ]
       }
-    }
-    // {
-    //   "kind": "Service",
-    //   "apiVersion": "v1",
-    //   "metadata": {
-    //     "name":  "${APP_NAME}-${WP_SVC}",
-    //     "labels": {
-    //       "app": "${APP_NAME}",
-    //       "app-service": "${APP_NAME}-${WP_SVC}",
-    //       "build": "${APP_NAME}-${WP_SVC}",
-    //       "build1": "${APP_NAME}-${WP_SVC}",
-    //       "deploy": "${APP_NAME}-${WP_SVC}"
-    //     }
-    //   },
-    //   "spec": {
-    //     "clusterIP": "None",
-    //     "ports": [
-    //       {
-    //         "name": "8080-tcp",
-    //         "protocol": "TCP",
-    //         "port": 8080,
-    //         "targetPort": 8080
-    //       },
-    //       {
-    //         "name": "8443-tcp",
-    //         "protocol": "TCP",
-    //         "port": 8443,
-    //         "targetPort": 8443
-    //       }
-    //     ],
-    //     "selector": {
-    //       "app": "${APP_NAME}",
-    //       "deployconfig": "${APP_NAME}-${WP_SVC}"
-    //     }
-    //   }
-    // },
+    },
+    {
+      "kind": "Service",
+      "apiVersion": "v1",
+      "metadata": {
+        "name":  "${APP_NAME}-${WP_SVC}",
+        "labels": {
+          "app": "${APP_NAME}",
+          "app-service": "${APP_NAME}-${WP_SVC}",
+          "build": "${APP_NAME}-${WP_SVC}",
+          "build1": "${APP_NAME}-${WP_SVC}",
+          "deploy": "${APP_NAME}-${WP_SVC}"
+        }
+      },
+      "spec": {
+        "clusterIP": "None",
+        "ports": [
+          {
+            "name": "8080-tcp",
+            "protocol": "TCP",
+            "port": 8080,
+            "targetPort": 8080
+          },
+          {
+            "name": "8443-tcp",
+            "protocol": "TCP",
+            "port": 8443,
+            "targetPort": 8443
+          }
+        ],
+        "selector": {
+          "app": "${APP_NAME}",
+          "deployconfig": "${APP_NAME}-${WP_SVC}"
+        }
+      }
+    },
     // {
     //   "kind": "Route",
     //   "apiVersion": "v1",
@@ -784,127 +784,127 @@
     //     }
     //   }
     // },
-    // {
-  //     "kind": "DeploymentConfig",
-  //     "apiVersion": "v1",
-  //     "metadata": {
-  //       "name":  "${APP_NAME}-${WP_SVC}",
-  //       "labels": {
-  //         "app": "${APP_NAME}",
-  //         "app-service": "${APP_NAME}-${WP_SVC}",
-  //         "build": "${APP_NAME}-${WP_SVC}",
-  //         "build1": "${APP_NAME}-${WP_SVC}",
-  //         "deploy": "${APP_NAME}-${WP_SVC}"
-  //       }
-  //     },
-  //     "spec": {
-  //       "strategy": {
-  //         "type": "Rolling"
-  //         //"type": "Recreate"
-  //       },
-  //       "triggers": [
-  //         {
-  //           "type": "ConfigChange"
-  //         }
-  //       ],
-  //       "replicas": 1,
-  //       "selector": {
-  //         "app": "${APP_NAME}",
-  //         "deployconfig":  "${APP_NAME}-${WP_SVC}"
-  //     },
-  //     "template": {
-  //       "metadata": {
-  //         "labels": {
-  //           "app": "${APP_NAME}",
-  //           "deployconfig":  "${APP_NAME}-${WP_SVC}"
-  //         }
-  //       },
-  //       "spec": {
-  //         // "serviceAccountName": "default",
-  //           "securityContext": {
-  //             "fsGroup": "0",
-  //             "runAsUser": "1001",
-  //             "runAsGroup": "0"
-  //           },
-  //         "containers": [
-  //           {
-  //             "name": "${APP_NAME}-${WP_SVC}",
-  //             "image": "${DOCKER_REGISTER}/${PROJECT_NAME}/${APP_NAME}-${WP_SVC}-img-1:latest",
-  //             "ports": [
-  //               {
-  //                 "containerPort": 8080,
-  //                 "protocol": "TCP"
-  //               },
-  //               {
-  //                 "containerPort": 8443,
-  //                 "protocol": "TCP"
-  //               }
-  //             ],
-  //             "resources": {
-  //               "limits": {
-  //                 "memory": "512Mi"
-  //               }
-  //             },
-  //             // "livenessProbe": {
-  //             //   "exec":{
-  //             //     "command": [ "/usr/bin/sh", "-i", "-c","MYSQL_PWD=\"$MYSQL_PASSWORD\" mysqladmin status --user=userdb --host=${HOSTNAME}" ]
-  //             //   },
-  //             //   "initialDelaySeconds": 20,
-  //             //   "periodSeconds": 20,
-  //             //   "failureThreshold": 30
-  //             // },
-  //             // "startupProbe": {
-  //             //   "exec": {
-  //             //     "command": [ "/usr/bin/sh", "-i", "-c","MYSQL_PWD=\"$MYSQL_PASSWORD\" mysqladmin status --user=userdb  --host=${HOSTNAME}" ]
-  //             //   },
-  //             //   "successThreshold": 1,
-  //             //   "failureThreshold": 30, 
-  //             //   "periodSeconds": 10
-  //             // },
-  //             // "readinessProbe": {
-  //             //   "exec":{
-  //             //     // "command": [ "mysqladmin status --user=root --host=$(hostname) --password=$MYSQL_ROOT_PASSWORD" ]
-  //             //     "command": [ "/usr/bin/sh", "-i", "-c","MYSQL_PWD=\"$MYSQL_PASSWORD\" mysqladmin status --user=userdb  --host=${HOSTNAME}" ]
-  //             //   },
-  //             //   "initialDelaySeconds": 20,
-  //             //   "periodSeconds": 10,
-  //             //   "failureThreshold": 1
-  //             // },
-  //             "env": [
-  //               {
-  //                 "name": "DB_NAME",
-  //                 "value": "${WP_DB_NAME}"
-  //               },
-  //               {
-  //                 "name": "DB_USER",
-  //                 "value": "${WP_DB_USER}"
-  //               },
-  //               {
-  //                 "name": "DB_PASSWORD",
-  //                 "value": "${WP_DB_PASSWORD}"
-  //               },
-  //               {
-  //                 "name": "DB_ROOT_PASSWORD",
-  //                 "value": "${WP_ROOT_DB_PASSWORD}"
-  //               },
-  //               {
-  //                 "name": "DB_HOST",
-  //                 "value": "${APP_NAME}-${WP_SVC}"
-  //               }
-  //               // {
-  //               //   "name": "DB_PORT_NUMBER",
-  //               //   "value": "${DB_PORT_NUMBER}"
-  //               //}
-  //             ]
-  //           } 
-  //         ],
-  //         "dnsPolicy": "ClusterFirst",
-  //         "restartPolicy": "Always",
-  //         "terminationGracePeriodSeconds": "30"
-  //       }
-  //     }
-  //   }
-  // }
+    {
+      "kind": "DeploymentConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name":  "${APP_NAME}-${WP_SVC}",
+        "labels": {
+          "app": "${APP_NAME}",
+          "app-service": "${APP_NAME}-${WP_SVC}",
+          "build": "${APP_NAME}-${WP_SVC}",
+          "build1": "${APP_NAME}-${WP_SVC}",
+          "deploy": "${APP_NAME}-${WP_SVC}"
+        }
+      },
+      "spec": {
+        "strategy": {
+          "type": "Rolling"
+          //"type": "Recreate"
+        },
+        "triggers": [
+          {
+            "type": "ConfigChange"
+          }
+        ],
+        "replicas": 1,
+        "selector": {
+          "app": "${APP_NAME}",
+          "deployconfig":  "${APP_NAME}-${WP_SVC}"
+      },
+      "template": {
+        "metadata": {
+          "labels": {
+            "app": "${APP_NAME}",
+            "deployconfig":  "${APP_NAME}-${WP_SVC}"
+          }
+        },
+        "spec": {
+          // "serviceAccountName": "default",
+            "securityContext": {
+              "fsGroup": "0",
+              "runAsUser": "1001",
+              "runAsGroup": "0"
+            },
+          "containers": [
+            {
+              "name": "${APP_NAME}-${WP_SVC}",
+              "image": "${DOCKER_REGISTER}/${PROJECT_NAME}/${APP_NAME}-${WP_SVC}-img-2:latest",
+              "ports": [
+                {
+                  "containerPort": 8080,
+                  "protocol": "TCP"
+                },
+                {
+                  "containerPort": 8443,
+                  "protocol": "TCP"
+                }
+              ],
+              "resources": {
+                "limits": {
+                  "memory": "512Mi"
+                }
+              },
+              // "livenessProbe": {
+              //   "exec":{
+              //     "command": [ "/usr/bin/sh", "-i", "-c","MYSQL_PWD=\"$MYSQL_PASSWORD\" mysqladmin status --user=userdb --host=${HOSTNAME}" ]
+              //   },
+              //   "initialDelaySeconds": 20,
+              //   "periodSeconds": 20,
+              //   "failureThreshold": 30
+              // },
+              // "startupProbe": {
+              //   "exec": {
+              //     "command": [ "/usr/bin/sh", "-i", "-c","MYSQL_PWD=\"$MYSQL_PASSWORD\" mysqladmin status --user=userdb  --host=${HOSTNAME}" ]
+              //   },
+              //   "successThreshold": 1,
+              //   "failureThreshold": 30, 
+              //   "periodSeconds": 10
+              // },
+              // "readinessProbe": {
+              //   "exec":{
+              //     // "command": [ "mysqladmin status --user=root --host=$(hostname) --password=$MYSQL_ROOT_PASSWORD" ]
+              //     "command": [ "/usr/bin/sh", "-i", "-c","MYSQL_PWD=\"$MYSQL_PASSWORD\" mysqladmin status --user=userdb  --host=${HOSTNAME}" ]
+              //   },
+              //   "initialDelaySeconds": 20,
+              //   "periodSeconds": 10,
+              //   "failureThreshold": 1
+              // },
+              "env": [
+                {
+                  "name": "DB_NAME",
+                  "value": "${WP_DB_NAME}"
+                },
+                {
+                  "name": "DB_USER",
+                  "value": "${WP_DB_USER}"
+                },
+                {
+                  "name": "DB_PASSWORD",
+                  "value": "${WP_DB_PASSWORD}"
+                },
+                {
+                  "name": "DB_ROOT_PASSWORD",
+                  "value": "${WP_ROOT_DB_PASSWORD}"
+                },
+                {
+                  "name": "DB_HOST",
+                  "value": "${APP_NAME}-${MYSQL_SVC}"
+                }
+                // {
+                //   "name": "DB_PORT_NUMBER",
+                //   "value": "${DB_PORT_NUMBER}"
+                //}
+              ]
+            } 
+          ],
+          "dnsPolicy": "ClusterFirst",
+          "restartPolicy": "Always",
+          "terminationGracePeriodSeconds": "30"
+        }
+      }
+    }
+  }
 
 
   ]
