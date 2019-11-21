@@ -581,7 +581,25 @@
                     "to": {
                         "kind": "ImageStreamTag",
                         "name": "${APP_NAME}-${WP_SVC}-img-2:latest"
-                    }
+                    },
+                    "imageLabels": [
+                        {
+                            "name": "io.k8s.display-name",
+                            "value": "${APP_NAME}"
+                        },
+                        {
+                            "name": "io.k8s.description",
+                            "value": "wordpress application and S2I builder."
+                        },
+                        {
+                            "name": "io.openshift.s2i.scripts-url",
+                            "value": "image:///opt/app-root/s2i"
+                        },
+                        {
+                            "name": "io.s2i.scripts-url",
+                            "value": "image:///opt/app-root/s2i"
+                        }
+                    ]
                 },
                 "postCommit": {},
                 "resources": {},

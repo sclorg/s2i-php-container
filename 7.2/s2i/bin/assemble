@@ -22,7 +22,7 @@ mv /tmp/src/builder/save-artifacts /opt/app-root/s2i
 
 
 mkdir -p /tmp/.s2i
-mv /tmp/src/builder/image_metadata.json /opt/app-root/s2i
+mv /tmp/src/builder/image_metadata.json /tmp/.s2i
 
 # # Fix source directory permissions
 # fix-permissions ./
