@@ -27,7 +27,6 @@ if [ -f "/opt/app-root/src/wp-config-sample.php" ] && [ -d "/opt/app-root/src/wp
         echo "Procedemos desde el propio instalador php de wordpress (web) mediante el browser."
     else
         wp config create --dbname="${DB_NAME}" --dbuser="${DB_USER}" --dbpass="${DB_PASSWORD}" --dbhost="${DB_HOST}" --skip-check
-        # wp db create
     fi
 fi
 

@@ -873,6 +873,7 @@
               "env": [
                 {
                   "name": "DB_NAME",
+                  // "value": "${WP_DB_NAME}"
                   "value": "${WP_DB_NAME}"
                 },
                 {
