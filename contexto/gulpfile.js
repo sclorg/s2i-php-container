@@ -13,8 +13,8 @@ const dstwpcontent = '/silo/wordpress/wp-content';
 const srcwphtcaccess = '/opt/app-root/src/.htcaccess';
 const srcwphtcaccesspriv = '/opt/app-root/silo/wordpress/.htcaccess';
 const dstwphtcaccess = '/silo/wordpress/.htcaccess';
-const srcwpconfig = '/opt/app-root/src/wp-config.php' ;
-const srcwpconfigpriv = '/opt/app-root/silo/wordpress/wp-config.php' ;
+const srcwpconfig = '/opt/app-root/src/wp-config.php';
+const srcwpconfigpriv = '/opt/app-root/silo/wordpress/wp-config.php';
 const dstwpconfig = '/silo/wordpress/wp-config.php';
 
 
@@ -45,7 +45,7 @@ async function moverwpcontentpriv () {
   } else {
     console.log("No existe el archivo ", moverwpcontentpriv);
   } 
-}
+};
 
 
 // Async/Await:
@@ -63,7 +63,7 @@ async function moverwpcontent () {
   } else {
     console.log("No existe el archivo ", moverwpcontent);
   } 
-}
+};
 
 
 
@@ -97,7 +97,7 @@ async function moverwpconfigpriv () {
     console.log("No existe el archivo ", srcwpconfigpriv);
   }
   
-}
+};
 
 
 // Async/Await:
@@ -117,7 +117,7 @@ async function moverwpconfig () {
     console.log("No existe el archivo ", srcwpconfig);
   }
   
-}
+};
 
 gulp.task('tmoverwpconfigpriv', function(done) {
   moverwpconfigpriv();
@@ -145,7 +145,7 @@ async function moverwphtcaccesspriv () {
   } else {
     console.log("No existe el archivo ", srcwphtcaccesspriv);
   }
-}
+};
 
 
 // Async/Await:
@@ -162,7 +162,7 @@ async function moverwphtcaccess () {
   } else {
     console.log("No existe el archivo ", srcwphtcaccesspriv);
   }
-}
+};
 
 
 gulp.task('tmoverwphtcaccesspriv', function(done) {
@@ -192,7 +192,7 @@ gulp.task('createSymlinkwpconfig', async function(done) {
 
 gulp.task('createSymlinkhtcaccess', async function(done) {
   
-  if ( fs.pathExists(dstwpconfig)) {
+  if ( fs.pathExists(dstwphtcaccess)) {
     try {
       await fs.ensureSymlink( dstwphtcaccess,  srcwphtcaccess, 'file');
       console.log('success!');
@@ -242,13 +242,13 @@ gulp.task('enlacesSymlinkpriv', gulp.series('createSymlinkwpconfig','createSymli
 
           
 
-gulp.task('task-kill', function() {
-  console.log("before kill task");
+// gulp.task('task-kill', function() {
+//   console.log("before kill task");
 
-  // process.exit(0);
+//    process.exit(0);
 
-  console.log("after kill task");
-});
+//   console.log("after kill task");
+// });
 
 
 gulp.task('watch',  function(done) {
