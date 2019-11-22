@@ -18,7 +18,7 @@ fi
 
 gulp default &
 
-sleep(5)
+sleep 5
 
 
 if [ -f "/opt/app-root/src/wp-config-sample.php" ] && [ -d "/opt/app-root/src/wp-content" ];then
