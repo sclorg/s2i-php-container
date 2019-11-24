@@ -38,3 +38,4 @@ mv /tmp/src/* /opt/app-root/silo/wordpress
 
 fix-permissions ./
 fix-permissions /opt/app-root
+fix-permissions /silo/wordpress
