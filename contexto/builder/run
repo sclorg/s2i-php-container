@@ -13,6 +13,7 @@ if [ -f "/opt/app-root/silo/wordpress/wp-config.php" ] && [ -d "/opt/app-root/si
     gulp tmoverwpcontentpriv
     gulp tmoverwphtcaccesspriv
     gulp enlacesSymlinkpriv
+    
    
 fi
 

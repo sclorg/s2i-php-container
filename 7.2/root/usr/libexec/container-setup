@@ -49,6 +49,9 @@ chmod -R a+rwx ${PHP_SYSCONF_PATH}
 
 
 ######
+
+usermod -a -G root default
+
 chmod -R a+rwx /etc/opt/rh/rh-php${PHP_VER_SHORT}/php.d
 chmod a+rw /etc/opt/rh/rh-php${PHP_VER_SHORT}/php.ini
 chmod a+rwX /var/opt/rh/rh-php${PHP_VER_SHORT}/run/php-fpm
@@ -68,6 +71,8 @@ chmod -R a+rwX /var/opt/rh/rh-php72/lib/php
 
 ######## Creo el directorio /silo
 # Aqui se guardará todo lo concerniente al sitio worpress (wp-content, wp-config.php, htcaccess, los certificados del sitio)
+
+
 
 mkdir -p /silo/wordpress
 
