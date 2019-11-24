@@ -823,7 +823,7 @@
           // "serviceAccountName": "default",
             "securityContext": {
               "fsGroup": "0",
-              "runAsUser": "1001",
+              "runAsUser": "48",
               "runAsGroup": "0"
             },
           "containers": [
