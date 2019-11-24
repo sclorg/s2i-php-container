@@ -35,16 +35,16 @@ chmod -R a+rwx ${HTTPD_MAIN_CONF_PATH}
 chmod -R a+rwx ${HTTPD_MAIN_CONF_D_PATH}
 chmod -R ug+r   /etc/pki/tls/certs/localhost.crt
 chmod -R ug+r   /etc/pki/tls/private/localhost.key
-chown -R 1001:0 /etc/pki/tls/certs/localhost.crt
-chown -R 1001:0 /etc/pki/tls/private/localhost.key
+chown -R 48:0 /etc/pki/tls/certs/localhost.crt
+chown -R 48:0 /etc/pki/tls/private/localhost.key
 mkdir -p ${APP_ROOT}/etc
 chmod -R a+rwx ${APP_ROOT}/etc
 chmod -R a+rwx ${HTTPD_VAR_RUN}
-chown -R 1001:0 ${APP_ROOT}
+chown -R 48:0 ${APP_ROOT}
 mkdir /tmp/sessions
 chmod -R a+rwx /tmp/sessions
-chown -R 1001:0 /tmp/sessions
-chown -R 1001:0 ${HTTPD_DATA_PATH}
+chown -R 48:0 /tmp/sessions
+chown -R 48:0 ${HTTPD_DATA_PATH}
 chmod -R a+rwx ${PHP_SYSCONF_PATH}
 
 
@@ -65,8 +65,8 @@ chmod -R a+rwX /var/opt/rh/rh-php72/lib/php
 
 # chmod -R a+rwX /opt/app-root/src
 # chmod -R ug+r /opt/app-root/src
-# chown -R 1001:0 /opt/app-root/src
-# chown -R 1001:0 /opt/app-root/src
+# chown -R 48:0 /opt/app-root/src
+# chown -R 48:0 /opt/app-root/src
 ######
 
 ######## Creo el directorio /silo
@@ -101,8 +101,8 @@ RUN usermod -a -G root apache
 # chmod -R a+rwX /opt/app-root/nodejs && \
 # chmod -R ug+r  /opt/app-root/nodejs && \
 # chmod -R ug+r /opt/app-root/nodejs && \
-# chown -R 1001:0 /opt/app-root/nodejs && \
-# chown -R 1001:0  /opt/app-root/nodejs 
+# chown -R 48:0 /opt/app-root/nodejs && \
+# chown -R 48:0  /opt/app-root/nodejs 
 ########
 
 
