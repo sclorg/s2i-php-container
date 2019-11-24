@@ -702,7 +702,7 @@
                         "containers": [
                             {
                                 "name": "${APP_NAME}-${WP_SVC}",
-                                "image": "${DOCKER_REGISTER}/${PROJECT_NAME}/${APP_NAME}-${WP_SVC}-img-1:latest",
+                                "image": "${DOCKER_REGISTER}/${PROJECT_NAME}/${APP_NAME}-${WP_SVC}-img-2:latest",
                                 "ports": [
                                     {
                                         "containerPort": 8080,

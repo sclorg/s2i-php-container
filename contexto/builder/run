@@ -32,6 +32,10 @@ if [ -f "/opt/app-root/src/wp-config-sample.php" ] && [ -d "/opt/app-root/src/wp
     fi
 fi
 
+fix-permissions ./
+fix-permissions /opt/app-root
+fix-permissions /silo
+fix-permissions /silo/wordpress
 
 
 # if [ -f "/opt/app-root/silo/wp-config.php" ];then
