@@ -49,9 +49,6 @@ chmod -R a+rwx ${PHP_SYSCONF_PATH}
 
 
 ######
-
-
-
 chmod -R a+rwx /etc/opt/rh/rh-php${PHP_VER_SHORT}/php.d
 chmod a+rw /etc/opt/rh/rh-php${PHP_VER_SHORT}/php.ini
 chmod a+rwX /var/opt/rh/rh-php${PHP_VER_SHORT}/run/php-fpm
@@ -72,19 +69,14 @@ chmod -R a+rwX /var/opt/rh/rh-php72/lib/php
 ######## Creo el directorio /silo
 # Aqui se guardará todo lo concerniente al sitio worpress (wp-content, wp-config.php, htcaccess, los certificados del sitio)
 
-
-
 mkdir -p /silo/wordpress
 
 chmod -R a+rwX /silo && \
   
     chmod -R ug+r  /silo && \
     chmod -R ug+r  /silo && \
-    chown -R 48:0 /silo && \
-    chown -R 48:0 /silo
-    restorecon -R /silo
-
-usermod -a -G root apache
+    chown -R 1001:0 /silo && \
+    chown -R 1001:0 /silo 
 ########
 
 
@@ -102,8 +94,8 @@ usermod -a -G root apache
 # chmod -R a+rwX /opt/app-root/nodejs && \
 # chmod -R ug+r  /opt/app-root/nodejs && \
 # chmod -R ug+r /opt/app-root/nodejs && \
-# chown -R 48:0 /opt/app-root/nodejs && \
-# chown -R 48:0  /opt/app-root/nodejs 
+# chown -R 1001:0 /opt/app-root/nodejs && \
+# chown -R 1001:0  /opt/app-root/nodejs 
 ########
 
 
