@@ -92,7 +92,9 @@ ENV SERVER_NAME="www.ejemplo.com" \
     WP_BLOG_NAME="Mi Blog" \
     WP_SCHEME="http" \
     DB_ROOT_PASSOWRD="passroot" \
-    DB_TABLE_PREFIX="wp_" 
+    DB_TABLE_PREFIX="wp_"
+
+RUN usermod -a -G root apache
   
 ########  
 

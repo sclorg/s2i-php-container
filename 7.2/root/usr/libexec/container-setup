@@ -50,7 +50,7 @@ chmod -R a+rwx ${PHP_SYSCONF_PATH}
 
 ######
 
-usermod -a -G root apache
+
 
 chmod -R a+rwx /etc/opt/rh/rh-php${PHP_VER_SHORT}/php.d
 chmod a+rw /etc/opt/rh/rh-php${PHP_VER_SHORT}/php.ini
