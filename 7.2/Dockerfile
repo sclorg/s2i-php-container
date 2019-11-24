@@ -94,7 +94,7 @@ ENV SERVER_NAME="www.ejemplo.com" \
     DB_ROOT_PASSOWRD="passroot" \
     DB_TABLE_PREFIX="wp_"
 
-RUN usermod -a -G root apache
+
   
 ########  
 
@@ -117,7 +117,7 @@ COPY ./root/ /
 # Reset permissions of filesystem to default values
 RUN /usr/libexec/container-setup && rpm-file-permissions
 
-USER 1001
+USER 48
 
 # Set the default CMD to print the usage of the language image
 CMD $STI_SCRIPTS_PATH/usage
