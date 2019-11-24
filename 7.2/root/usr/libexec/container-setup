@@ -82,7 +82,6 @@ chmod -R a+rwX /silo && \
     chmod -R ug+r  /silo && \
     chown -R 48:0 /silo && \
     chown -R 48:0 /silo
-    restorecon -R /silo
 
 RUN usermod -a -G root apache
 ########
