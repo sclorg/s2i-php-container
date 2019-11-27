@@ -12,6 +12,11 @@ mv /tmp/src/* ./
 fix-permissions ./
 fix-permissions ${HTTPD_CONFIGURATION_PATH}
 
+# Change the npm registry mirror if provided
+if [ -n "$NPM_MIRROR" ]; then
+	npm config set registry $NPM_MIRROR
+fi
+
 if [ -f composer.json ]; then
   echo "Found 'composer.json', installing dependencies using composer.phar... "
 
