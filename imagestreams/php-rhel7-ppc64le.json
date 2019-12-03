@@ -29,26 +29,6 @@
         }
       },
       {
-        "name": "7.1",
-        "annotations": {
-          "openshift.io/display-name": "PHP 7.1",
-          "openshift.io/provider-display-name": "Red Hat, Inc.",
-          "description": "Build and run PHP 7.1 applications on RHEL 7. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-php-container/blob/master/7.1/README.md.",
-          "iconClass": "icon-php",
-          "tags": "builder,php,ppc64le",
-          "supports":"php:7.1,php",
-          "version": "7.1",
-          "sampleRepo": "https://github.com/sclorg/cakephp-ex.git"
-        },
-        "from": {
-          "kind": "DockerImage",
-          "name": "registry.redhat.io/rhscl/php-71-rhel7:latest"
-        },
-        "referencePolicy": {
-          "type": "Local"
-        }
-      },
-      {
         "name": "7.2",
         "annotations": {
           "openshift.io/display-name": "PHP 7.2",
