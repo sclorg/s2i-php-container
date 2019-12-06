@@ -49,5 +49,21 @@ chmod -R a+rwx ${PHP_SYSCONF_PATH}
 
 mkdir -p ${PHP_CONTAINER_SCRIPTS_PATH}/pre-init
 
+mkdir -p /silo/wordpress
+
+chmod -R a+rwX /silo && \
+
+    chmod -R ug+r  /silo && \
+        chmod -R ug+r  /silo && \
+        chown -R 1001:0 /silo && \
+        chown -R 1001:0 /silo
+
+chmod -R a+rwx /etc/opt/rh/rh-php${PHP_VER_SHORT}/php.d
+chmod a+rw /etc/opt/rh/rh-php${PHP_VER_SHORT}/php.ini
+chmod a+rwX /var/opt/rh/rh-php${PHP_VER_SHORT}/run/php-fpm
+chmod -R a+rwX /var/opt/rh/rh-php72/lib/php
+
+
+
 config_general
 
