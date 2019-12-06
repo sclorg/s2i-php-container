@@ -1,0 +1,505 @@
+=====================================================
+7.2/Dockerfile
+=====================================================
+
+@@ -5,6 +5,9 @@ FROM centos/s2i-base-centos7
+
+
++++ EXPOSE 9000
+
+---    PATH=$PATH:/opt/rh/rh-php72/root/usr/bin
+#######
++++    PATH=$PATH:/opt/rh/rh-php72/root/usr/bin:/opt/rh/rh-mysql80/root/usr/bin/:/opt/app-root/src/.npm-global/bin/:/opt/app-root/src/node_modules/.bin/
+#######
+
+ENV SUMMARY="Platform for building and running PHP $PHP_VERSION applications" \
+    DESCRIPTION="PHP $PHP_VERSION available as container is a base platform for \
+@@ -42,30 +47,69 @@ LABEL summary="${SUMMARY}" \
+
+# Install Apache httpd and PHP
+RUN yum install -y centos-release-scl && \
+------    INSTALL_PKGS="rh-php72 rh-php72-php rh-php72-php-mysqlnd rh-php72-php-pgsql rh-php72-php-bcmath \
+########
++++++++    INSTALL_PKGS="rh-php72 rh-php72-php  rh-php72-php-fpm rh-php72-php-mysqlnd rh-php72-php-pgsql rh-php72-php-bcmath \
+########
+                  rh-php72-php-gd rh-php72-php-intl rh-php72-php-ldap rh-php72-php-mbstring rh-php72-php-pdo \
+                  rh-php72-php-process rh-php72-php-soap rh-php72-php-opcache rh-php72-php-xml \----
+                  rh-php72-php-gmp rh-php72-php-pecl-apcu httpd24-mod_ssl" && \
+########
+++++++                  rh-php72-php-gmp rh-php72-php-pecl-apcu httpd24-mod_ssl rh-mysql80-mysql" && \
+########
+    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS --nogpgcheck && \
+    rpm -V $INSTALL_PKGS && \
+    yum -y clean all --enablerepo='*'
+
+
+
+######## Variables add para apache
+##  SERVERNAME=${SERVERNAME:-www.ejemplo.com} 
+
+ENV SERVER_NAME="www.ejemplo.com" \
+    WP_INSTALL_VERSION="" \
+    DB_USER="" \
+    DB_PASSWORD="" \
+    DB_NAME="" \
+    DB_HOST="" \
+    DB_PORT_NUMBER="3306" \
+    WP_USERNAME="userwp" \
+    WP_PASSWORD="passuserwp" \
+    WP_EMAIL="userwp@ejemplo.com" \
+    WP_FIRST_NAME="FirtsName" \
+    WP_LAST_NAME="LastName" \
+    WP_BLOG_NAME="Mi Blog" \
+    WP_SCHEME="http" \
+    DB_ROOT_PASSOWRD="passroot" \
+    DB_TABLE_PREFIX="wp_"
+
+
+
+########  
+
+######## instalamos wp-cli
+RUN set -x && cd /tmp && \
+  curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
+  php wp-cli.phar --info && \
+  chmod +x wp-cli.phar && \
+  mv wp-cli.phar /usr/local/bin/wp && \
+  wp --info 
+
+########
+
+# Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
+
+COPY s2i/bin/ $STI_SCRIPTS_PATH
+
+# Copy extra files to the image.
+COPY ./root/ /
+=====================================================
+7.2/root/usr/libexec/container-setup
+=====================================================
+chown -R 1001:0 ${HTTPD_DATA_PATH}
+chmod -R a+rwx ${PHP_SYSCONF_PATH}
+
+########
+
+chmod -R a+rwx /etc/opt/rh/rh-php${PHP_VER_SHORT}/php.d
+chmod a+rw /etc/opt/rh/rh-php${PHP_VER_SHORT}/php.ini
+chmod a+rwX /var/opt/rh/rh-php${PHP_VER_SHORT}/run/php-fpm
+chmod -R a+rwX /var/opt/rh/rh-php72/lib/php
+
+mkdir -p /silo/wordpress
+
+chmod -R a+rwX /silo && \
+
+    chmod -R ug+r  /silo && \
+    chmod -R ug+r  /silo && \
+    chown -R 1001:0 /silo && \
+    chown -R 1001:0 /silo 
+
+
+=====================================================
+ 7.2/root/usr/share/container-scripts/php/common.sh
+=====================================================
+
+config_modules_conf() {
+  
+  ----  # echo "LoadModule mpm_prefork_module modules/mod_mpm_prefork.so" > "${HTTPD_MODULES_CONF_D_PATH}/00-mpm.conf"
+ ++++++   echo "LoadModule mpm_event_module modules/mod_mpm_event.so" > "/etc/httpd/conf.modules.d/00-mpm.conf"
+
+}
+
++++++++config_fpm() {
+
+    echo "<FilesMatch \.php$>" >> /etc/httpd/conf.d/rh-php72-php.conf
+    echo '    SetHandler "proxy:fcgi://127.0.0.1:9000"' >> /etc/httpd/conf.d/rh-php72-php.conf 
+    echo "</FilesMatch>" >> /etc/httpd/conf.d/rh-php72-php.conf
+    sed -i '/listen.allowed_clients/s/^/;/g' /etc/opt/rh/rh-php72/php-fpm.d/www.conf
+    sed -i 's/^user.*=.*$/user = default/g' /etc/opt/rh/rh-php72/php-fpm.d/www.conf
+    sed -i 's/^group.*=.*$/group = root/g' /etc/opt/rh/rh-php72/php-fpm.d/www.conf
+
+    # sed -i '/listen.allowed_clients/s/^/;/g' /etc/opt/rh/rh-php72/php-fpm.d/www.conf
+
+    # sed -i '/^.*session.save_path.*$/d' /etc/opt/rh/rh-php72/php-fpm.d/www.conf
+    # sed -i '/^.*soap.wsdl_cache_dir.*$/d' /etc/opt/rh/rh-php72/php-fpm.d/www.conf
+    # sed -i '/^.*opcache.file_cache.*$/d' /etc/opt/rh/rh-php72/php-fpm.d/www.conf
+
+    # echo "php_value[session.save_path]    = /tmp/session" >> /etc/opt/rh/rh-php72/php-fpm.d/www.conf
+    # echo " php_value[soap.wsdl_cache_dir]  = /tmp/wsdlcache" >> /etc/opt/rh/rh-php72/php-fpm.d/www.conf
+    # echo "php_value[opcache.file_cache]  = /tmp/opcache" >> /etc/opt/rh/rh-php72/php-fpm.d/www.conf
+}
+
+config_general() {
+  config_httpd_conf
+  config_ssl_conf
+  config_modules_conf
+ +++++++  config_fpm
+  sed -i '/php_value session.save_/d' ${HTTPD_MAIN_CONF_D_PATH}/${PHP_HTTPD_CONF_FILE}
+  head -n${HTTPCONF_LINENO} ${HTTPD_MAIN_CONF_PATH}/httpd.conf | tail -n1 | grep "AllowOverride All" || exit 1
+  echo "IncludeOptional ${APP_ROOT}/etc/conf.d/*.conf" >> ${HTTPD_MAIN_CONF_PATH}/httpd.conf
+
+
+=====================================================
+ 7.2/root/usr/share/container-scripts/php/httpd-cnf/00-servername.conf 
+=====================================================
+
+ServerName "${SERVER_NAME}"
+
+
+
+
+=====================================================
+ 7.2/root/usr/share/container-scripts/php/httpd-cnf/50-mpm-tuning.off 
+=====================================================
+
+<IfModule event.c>
+    StartServers             3
+    MinSpareThreads         16
+    MaxSpareThreads        250
+    ThreadsPerChild         25
+    MaxRequestWorkers      400
+    MaxConnectionsPerChild 100
+</IfModule> 
+
+
+
+
+
+
+=====================================================
+7.2/s2i/bin/assemble 
+=====================================================
+
+++++ shopt -s dotglob  ## para mover los archivos ocultos
+
+
+echo "---> Installing application source..."
+++++ mv /tmp/src/* ./
+
+mv /tmp/src/.htcaccess ./
+mv /tmp/src/gulpfile.js ./
+
+
+mkdir -p /opt/app-root/s2i
+
+mv /tmp/src/builder/assemble /opt/app-root/s2i
+mv /tmp/src/builder/run /opt/app-root/s2i
+mv /tmp/src/builder/save-artifacts /opt/app-root/s2i
+
+download-wp () {
+    ## Download  en /opt/app-root/src
+    if [ -z "$WP_INSTALL_VERSION" ]; then
+        # wp core download --locale='es_ES' --version='latest' --path='/opt/app-root/src'
+        wp core download  --version='latest'  --path='/opt/app-root/src'
+    else
+        # wp core download --locale='es_ES' --version="$WP_INSTALL_VERSION"  --path='/opt/app-root/src'
+        wp core download  --version="$WP_INSTALL_VERSION"  --path='/opt/app-root/src'
+    fi
+}
+
+
+npm update
+npm init --yes
+npm install gulp --save
+npm install fs-extra --save
+npm install gulp-concat --save
+
+## Instala wordpress en /opt/app-root/src. Eliminamos locale porque para las versiones latest igualno existe el paquete.
+
+download-wp
+
+process_extending_files ./php-post-assemble/ ${PHP_CONTAINER_SCRIPTS_PATH}/post-assemble/
+
+fix-permissions /opt/app-root
+fix-permissions ./
+fix-permissions /silo
+
+fix-permissions ${HTTPD_CONFIGURATION_PATH}
+
+=====================================================
+7.2/s2i/bin/run
+=====================================================
+
+
+exec /bin/bash -c 'php-fpm && httpd -D FOREGROUND'
+
+
+=====================================================
+contexto/.htcaccess 
+=====================================================
+
+# BEGIN WordPress
+
+
+RewriteEngine On
+RewriteBase /
+RewriteCond %{HTTPS} off
+RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+
+# END WordPress 
+=====================================================
+contexto/add-wp-config-php 
+=====================================================
+define( 'WP_DEBUG', true );
+define( 'WP_DEBUG_LOG', true );
+define('FORCE_SSL_ADMIN', true);
+define('FORCE_SSL_LOGIN', true);
+if (strpos($_SERVER['HTTP_X_FORWARDED_PROTO'], 'https') !== false) $_SERVER['HTTPS']='on';
+define( 'WP_CONTENT_DIR', '/silo/wordpress');
+define( 'WP_PLUGIN_DIR', WP_CONTENT_DIR . '/plugins' );
+define('WP_HOME', 'http://' . $_SERVER['HTTP_HOST'] . '/');
+define('WP_SITEURL', 'http://' . $_SERVER['HTTP_HOST'] . '/');
+define('FS_METHOD', 'direct');
+if ( defined( 'WP_CLI' ) ) {
+    $_SERVER['HTTP_HOST'] = 'localhost';
+};
+# if ( ! defined( 'WP_CLI' ) ) {
+#     // remove x-pingback HTTP header
+#     add_filter('wp_headers', function($headers) {
+#         unset($headers['X-Pingback']);
+#         return $headers;
+#     });
+#     // disable pingbacks
+#     add_filter( 'xmlrpc_methods', function( $methods ) {
+#             unset( $methods['pingback.ping'] );
+#             return $methods;
+#     });
+#     add_filter( 'auto_update_translation', '__return_false' );
+# };
+
+
+=====================================================
+contexto/builder/assemble 
+=====================================================
+
+
+#!/bin/bash
+
+set -x
+
+shopt -s dotglob ## para mover los archivos ocultos
+set -eo pipefail
+
+mkdir -p /opt/app-root/silo/wordpress
+
+mv /tmp/src/* /opt/app-root/silo/wordpress
+
+fix-permissions ./
+fix-permissions /opt/app-root
+fix-permissions /silo/wordpress
+
+
+
+
+=====================================================
+contexto/builder/image_metadata.json
+=====================================================
+
+{
+  "labels": [
+    {"io.k8s.display-name":"WordPress"},
+    {"io.k8s.description":"WordPress application and S2I builder."},
+    {"io.openshift.s2i.scripts-url":"image:///opt/app-root/s2i"},
+    {"io.s2i.scripts-url":"image:///opt/app-root/s2i"},
+    {"io.openshift.tags":"builder,php,wordpress"}
+  ]
+}
+=====================================================
+contexto/builder/run 
+=====================================================
+
+#!/bin/bash
+
+set -x
+
+set -eo pipefail
+
+shopt -s dotglob ## para mover los archivos ocultos
+
+
+
+if [ -f "/opt/app-root/silo/wordpress/wp-config.php" ] && [ -d "/opt/app-root/silo/wordpress/wp-content" ];then
+    gulp tmoverwpconfigpriv
+    gulp tmoverwpcontentpriv
+    gulp tmoverwphtcaccesspriv
+    gulp enlacesSymlinkpriv
+
+
+fi
+
+gulp default &
+
+sleep 5
+
+
+if [ -f "/opt/app-root/src/wp-config-sample.php" ] && [ -d "/opt/app-root/src/wp-content" ];then
+
+    if [ -z "${DB_USER}" ] ||  [ -z "${DB_PASSWORD}" ] ||  [ -z "${DB_NAME}" ] ||  [ -z "${DB_HOST}" ];then
+        echo "Procedemos desde el propio instalador php de wordpress (web) mediante el browser."
+    else
+        wp config create --dbname="${DB_NAME}" --dbuser="${DB_USER}" --dbpass="${DB_PASSWORD}" --dbhost="${DB_HOST}" 
+        # wp config create --dbname="${DB_NAME}" --dbuser="${DB_USER}" --dbpass="${DB_PASSWORD}" --dbhost="${DB_HOST}" --skip-check
+    fi
+
+
+exec /usr/libexec/s2i/run
+=====================================================
+ templates/gulpfile.js 
+=====================================================
+'use strict';
+
+const gulp = require('gulp');
+const json5 = require('gulp-json5-to-json');
+var jsonlint = require('gulp-jsonlint');
+var plumber = require('gulp-plumber');
+var beeper = require('beeper');
+var log = require('fancy-log');
+var myCustomReporter = function (file) {
+  log('File ' + file + ' is not valid JSON.');
+};
+
+
+
+// Error Helper
+// function onError(err) {
+//   beeper();
+//   console.log(err);
+// }
+
+
+gulp.task('convertirajson', () => {
+  return gulp.src('./*.json5')
+    .pipe(json5({ beautify: true }))
+    .pipe(gulp.dest('./build'));
+
+});
+
+//No necesario ya te lo corrige o te muestra
+// gulp.task('comprobarjson', () => {
+//   return gulp.src('./example_2HU.json.json')
+//     .pipe(plumber({
+//       errorHandler: onError
+//     }))
+//     .pipe(jsonlint())
+//     .pipe(jsonlint.reporter(myCustomReporter))
+// });
+
+
+
+gulp.task('watch',  function(done) {
+  // gulp.watch('/opt/app-root/src/wp-content',gulp.series('tmoverwpcontent'));
+  // gulp.watch('/opt/app-root/src/.htcaccess',gulp.series('tmoverwphtcaccess'));
+  gulp.watch('*.json5',gulp.series('convertirajson'));
+  done();
+});
+
+gulp.task('default', gulp.parallel('watch'));
+
+
+
+=====================================================
+ vacio/taskgulpfile.js
+=====================================================
+ 
+Viewed
+@@ -0,0 +1,87 @@
+'use strict';
+
+
+const gulp = require('gulp');
+const fs = require('fs-extra');
+
+
+
+const srcwpcontent = '/opt/app-root/src/wp-content';
+const dstwpcontent = '/silo/wordpress';
+const srcwphtaccess = '/opt/app-root/src/.httaccess';
+const dstwphtaccess = '/silo/wordpress/.htaccess';
+const srcwpconfig = '/opt/app-root/src/wp-config.php' ;
+const dstwpconfig = '/silo/wordpress/wp-config.php';
+
+
+// Async/Await:
+async function moverwpcontent () {
+  try {
+    await fs.move( srcwpcontent, dstwpcontent, {overwrite: true});
+    console.log('success!');
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+// Async/Await:
+async function moverwpconfig () {
+  try {
+    await fs.move( srcwpconfig, dstwpconfig, {overwrite: true});
+    console.log('success!');
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+// Async/Await:
+async function moverwphtcaccess () {
+  try {
+    await fs.move( srcwphtaccess, dstwphtaccess, {overwrite: true});
+    console.log('success!');
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+
+
+
+async function crearlinkwpconfig () {
+  try {
+    await fs.ensureSymlink(dstwpconfig, srcwpconfig);
+    console.log('success!');
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+async function crearlinkwphtcaccess () {
+  try {
+    await fs.ensureSymlink(dstwphtaccess, srcwphtaccess);
+    console.log('success!');
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+
+
+
+gulp.task('tmoverwpcontent', function() {
+  gulp.series('moverwpcontent');
+});
+
+gulp.task('tmoverwpconfig', function() {
+  gulp.series('moverwpconfig', 'crearlinkwpconfig');
+});
+
+gulp.task('tmoverwphtcaccess', function() {
+  gulp.series('moverwphtcaccess', 'crearlinkwphttcacces');
+});
+
+gulp.task('watch',  function() {
+  gulp.watch('/opt/app-root/src/wp-content',gulp.series('moverwpcontent', 'crearlinkwpcontent'));
+});
+
+gulp.task('default',  gulp.parallel('mover', 'watch'));
+=====================================================
+=====================================================
+=====================================================
+=====================================================
+=====================================================
+=====================================================
+=====================================================
+=====================================================
+=====================================================
+=====================================================
