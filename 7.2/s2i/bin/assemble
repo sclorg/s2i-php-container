@@ -6,60 +6,48 @@ source ${PHP_CONTAINER_SCRIPTS_PATH}/common.sh
 
 shopt -s dotglob
 echo "---> Installing application source..."
-mv /tmp/src/* ./
 
-# Fix source directory permissions
-fix-permissions ./
-fix-permissions ${HTTPD_CONFIGURATION_PATH}
+mv /tmp/src/.htcaccess ./
+mv /tmp/src/gulpfile.js ./
+
+
+mkdir -p /opt/app-root/s2i
+
+mv /tmp/src/builder/assemble /opt/app-root/s2i
+mv /tmp/src/builder/run /opt/app-root/s2i
+mv /tmp/src/builder/save-artifacts /opt/app-root/s2i
+
+download-wp () {
+    ## Download  en /opt/app-root/src
+    if [ -z "$WP_INSTALL_VERSION" ]; then
+        # wp core download --locale='es_ES' --version='latest' --path='/opt/app-root/src'
+        wp core download  --version='latest'  --path='/opt/app-root/src'
+    else
+        # wp core download --locale='es_ES' --version="$WP_INSTALL_VERSION"  --path='/opt/app-root/src'
+        wp core download  --version="$WP_INSTALL_VERSION"  --path='/opt/app-root/src'
+    fi
+}
 
 # Change the npm registry mirror if provided
 if [ -n "$NPM_MIRROR" ]; then
-	npm config set registry $NPM_MIRROR
+	  npm config set registry $NPM_MIRROR
 fi
+npm update
+npm init --yes
+npm install gulp --save
+npm install fs-extra --save
+npm install gulp-concat --save
 
-if [ -f composer.json ]; then
-  echo "Found 'composer.json', installing dependencies using composer.phar... "
+## Instala wordpress en /opt/app-root/src. Eliminamos locale porque para las versiones latest igualno existe el paquete.
 
-  # Install Composer
-  TEMPFILE=$(mktemp)
-  RETRIES=6
-  for ((i=0; i<$RETRIES; i++)); do
+download-wp
 
-    if [ -z "$COMPOSER_INSTALLER" ]; then
-      export COMPOSER_INSTALLER="https://getcomposer.org/installer"
-    fi
-
-    echo "Downloading $COMPOSER_INSTALLER, attempt $((i+1))/$RETRIES"
-    curl -o $TEMPFILE $COMPOSER_INSTALLER && break
-    sleep 10
-  done
-  if [[ $i == $RETRIES ]]; then
-    echo "Download failed, giving up."
-    exit 1
-  fi
-  php <$TEMPFILE
-
-  if [ "$(ls -a /tmp/artifacts/ 2>/dev/null)" ]; then
-    echo "Restoring build artifacts"
-    mv /tmp/artifacts/* $HOME/
-  fi
-
-  # Change the repo mirror if provided
-  if [ -n "$COMPOSER_MIRROR" ]; then
-    ./composer.phar config -g repositories.packagist composer $COMPOSER_MIRROR
-  fi
-
-  # Install App dependencies using Composer
-  ./composer.phar install --no-interaction --no-ansi --optimize-autoloader $COMPOSER_ARGS
-
-  if [ ! -f composer.lock ]; then
-    echo -e "\nConsider adding a 'composer.lock' file into your source repository.\n"
-  fi
-fi
 
 # post-assemble files
 process_extending_files ./php-post-assemble/ ${PHP_CONTAINER_SCRIPTS_PATH}/post-assemble/
 
 # Fix source directory permissions
+fix-permissions /opt/app-root
 fix-permissions ./
+fix-permissions /silo
 fix-permissions ${HTTPD_CONFIGURATION_PATH}
