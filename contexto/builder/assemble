@@ -1,0 +1,41 @@
+#!/bin/bash
+
+set -x
+
+shopt -s dotglob ## para mover los archivos ocultos
+set -eo pipefail
+
+# When the custom image is run as a S2I builder we allow for the user to
+# provide their own plugins, themes and languages directories. We need to
+# stash these away and they will be applied only when the final application
+# image is run so that they can be applied to what is contained in the
+# persistent volume.
+
+
+
+
+
+# mv /opt/app-root/src/wp-content /silo/wordpress && export MI_PID="$!" && \
+#     while $(kill -0 "$MI_PID");do  sleep 1;done
+# fi
+
+# while ['0'] ; do
+#     echo "el 0 es true"
+# done
+
+mkdir -p /opt/app-root/silo/wordpress
+
+mv /tmp/src/* /opt/app-root/silo/wordpress
+
+# rm -fr /opt/app-root/silo/wordpress/*
+
+# export APP_DATA="/opt/app-root/silo/wordpress"
+
+# mv /tmp/src/* /opt/app-root/silo/wordpress/ 
+
+# rm -f /opt/app-root/silo/wordpress/README.md
+# rm -fr /opt/app-root/silo/wordpress/.git
+
+fix-permissions ./
+fix-permissions /opt/app-root
+fix-permissions /silo/wordpress
