@@ -36,6 +36,6 @@ mv /tmp/src/* /opt/app-root/silo/wordpress
 # rm -f /opt/app-root/silo/wordpress/README.md
 # rm -fr /opt/app-root/silo/wordpress/.git
 
-fix-permissions ./
+
 fix-permissions /opt/app-root
 fix-permissions /silo/wordpress

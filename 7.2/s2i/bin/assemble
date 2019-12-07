@@ -7,15 +7,19 @@ source ${PHP_CONTAINER_SCRIPTS_PATH}/common.sh
 shopt -s dotglob
 echo "---> Installing application source..."
 
-mv /tmp/src/.htcaccess ./
-mv /tmp/src/gulpfile.js ./
+mv /tmp/src/contexto/.htcaccess ./
+mv /tmp/src/contexto/gulpfile.js ./
 
 
 mkdir -p /opt/app-root/s2i
 
-mv /tmp/src/builder/assemble /opt/app-root/s2i
-mv /tmp/src/builder/run /opt/app-root/s2i
-mv /tmp/src/builder/save-artifacts /opt/app-root/s2i
+mv /tmp/src/contexto/builder/assemble /opt/app-root/s2i
+mv /tmp/src/contexto/builder/run /opt/app-root/s2i
+mv /tmp/src/contexto/builder/save-artifacts /opt/app-root/s2i
+
+mkdir -p /tmp/.s2i
+mv /tmp/src/contexto/builder/image_metadata.json /tmp/.s2i
+
 
 download-wp () {
     ## Download  en /opt/app-root/src
