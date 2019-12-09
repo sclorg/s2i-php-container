@@ -254,7 +254,7 @@ gulp.task('enlacesSymlinkpriv', gulp.series('createSymlinkwpconfig','createSymli
 gulp.task('watch',  function(done) {
   // gulp.watch('/opt/app-root/src/wp-content',gulp.series('tmoverwpcontent'));
   // gulp.watch('/opt/app-root/src/.htcaccess',gulp.series('tmoverwphtcaccess'));
-  gulp.watch('/opt/app-root/src/**/wp-confi?.php',  gulp.series('tmoveyaddwpconfig','removewpconfig','createSymlinkwpconfig', 'tmoverwpcontent','tmoverwphtcaccess','createSymlinkhtcaccess',));
+  gulp.watch('/opt/app-root/src/**/wp-confi?.php',  gulp.series('tmoveyaddwpconfig','removewpconfig','createSymlinkwpconfig'));
   // gulp.watch('/silo/wordpdres/*',  gulp.series('createSymlinkwpconfig', 'createSymlinkhtcaccess'));
   // gulp.watch('/opt/silo/wordpdres/*',  gulp.series('createSymlinkwpconfig', 'createSymlinkhtcaccess', 'task-kill'));
 
