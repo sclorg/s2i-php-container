@@ -57,7 +57,7 @@ chmod -R a+rwX /silo && \
         chmod -R ug+r  /silo && \
         chown -R 1001:0 /silo && \
         chown -R 1001:0 /silo
-
+chmod 0777 -R /silo
 chmod -R a+rwx /etc/opt/rh/rh-php${PHP_VER_SHORT}/php.d
 chmod a+rw /etc/opt/rh/rh-php${PHP_VER_SHORT}/php.ini
 chmod a+rwX /var/opt/rh/rh-php${PHP_VER_SHORT}/run/php-fpm
