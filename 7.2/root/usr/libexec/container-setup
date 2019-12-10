@@ -49,7 +49,7 @@ chmod -R a+rwx ${PHP_SYSCONF_PATH}
 
 mkdir -p ${PHP_CONTAINER_SCRIPTS_PATH}/pre-init
 
-mkdir -p /silo/wordpress
+mkdir -p /silo
 
 chmod -R a+rwX /silo && \
 
