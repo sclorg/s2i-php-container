@@ -62,7 +62,7 @@
         },
         "from": {
           "kind": "DockerImage",
-          "name": "registry.redhat.io/rhscl/php-72-rhel7:latest"
+          "name": "registry.redhat.io/rhscl/php-73-rhel7:latest"
         },
         "referencePolicy": {
           "type": "Local"
