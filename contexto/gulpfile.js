@@ -16,228 +16,251 @@ const dstwphtcaccess = '/silo/wordpress/.htcaccess';
 const srcwpconfig = '/opt/app-root/src/wp-config.php';
 const srcwpconfigpriv = '/opt/app-root/silo/wordpress/wp-config.php';
 const dstwpconfig = '/silo/wordpress/wp-config.php';
+const dstwpconfigdev = '/silo/wordpress/dev/wp-config.php';
+
+///// wp-content
 
 
-// // With async/await:
-// async function createdirwpcontent () {
-//   try {
-//     await fs.emptyDir('/silo/wordpress,wp-content');
-//     console.log('success!');
-//   } catch (err) {
-//     console.error(err);
-//   }
-// }
-
-
-// Async/Await:
-async function moverwpcontentpriv () {
-  if ( fs.pathExists(srcwpcontentpriv)) {
-    try {
-      // createdirwpcontent();
+gulp.task('tmoverwpcontentpriv',async function(done)  {
+  try {
+    const existe = await fs.pathExists(srcwpcontentpriv);
+    if ( existe ){
       await fs.move( srcwpcontentpriv, dstwpcontent, {overwrite: true});
       await fs.remove(srcwpcontent);
-      // await fs.remove(srcwpcontent);
-      // await fs.ensureSymlink( dstwpcontent,  srcwpcontent, 'dir');
       console.log('success!');
-    } catch (err) {
-      console.error(err);
+    } else {
+      console.log("No existe la carpeta ", srcwpcontentpriv);
     }
-  } else {
-    console.log("No existe el archivo ", moverwpcontentpriv);
-  } 
-};
-
-
-// Async/Await:
-async function moverwpcontent () {
-  if ( fs.pathExists(srcwpcontent)) {
-    try {
-      // createdirwpcontent();
-      await fs.move( srcwpcontent, dstwpcontent, {overwrite: true});
-      // await fs.remove(srcwpcontent);
-      // await fs.ensureSymlink( dstwpcontent,  srcwpcontent, 'dir');
-      console.log('success!');
-    } catch (err) {
-      console.error(err);
-    }
-  } else {
-    console.log("No existe el archivo ", moverwpcontent);
-  } 
-};
-
-
-
-gulp.task('tmoverwpcontent', function(done) {
-  moverwpcontent();
-  done();
-});
-
-gulp.task('tmoverwpcontentpriv', function(done) {
-  moverwpcontentpriv();
-  done();
-});
-
-
-
-
-// Async/Await:
-async function moverwpconfigpriv () {
-
-  if ( fs.pathExists(srcwpconfigpriv)) {
-    try {
-      await fs.move( srcwpconfigpriv, dstwpconfig, {overwrite: true});
-      await fs.remove( '/opt/app-root/src/wp-config-sample.php');
-      // await fs.remove(srcwpconfig);
-      // await fs.ensureSymlink( dstwpconfig,  srcwpconfig, 'file');
-      console.log('success!');
-    } catch (err) {
-      console.error(err);
-    }
-  } else {
-    console.log("No existe el archivo ", srcwpconfigpriv);
-  }
-  
-};
-
-
-// Async/Await:
-async function moverwpconfig () {
-
-  if ( fs.pathExists(srcwpconfig)) {
-    try {
-      await fs.move( srcwpconfig, dstwpconfig, {overwrite: true});
-      fs.remove( '/opt/app-root/src/wp-config-sample.php');
-      // await fs.remove(srcwpconfig);
-      // await fs.ensureSymlink( dstwpconfig,  srcwpconfig, 'file');
-      console.log('success!');
-    } catch (err) {
-      console.error(err);
-    }
-  } else {
-    console.log("No existe el archivo ", srcwpconfig);
-  }
-  
-};
-
-gulp.task('tmoverwpconfigpriv', function(done) {
-  moverwpconfigpriv();
-  done();
-});
-
-
-gulp.task('tmoverwpconfig', function(done) {
-  moverwpconfig();
-  done();
-});
-
-
-// Async/Await:
-async function moverwphtcaccesspriv () {
-  if ( fs.pathExists(srcwphtcaccesspriv)) {
-    try {
-      await fs.move( srcwphtcaccesspriv, dstwphtcaccess, {overwrite: true});
-      await fs.remove(srcwphtcaccess);
-      //await fs.ensureSymlink( dstwphtcaccess,  srcwphtcaccess, 'file');
-      console.log('success!');
-    } catch (err) {
-      console.error(err);
-    }
-  } else {
-    console.log("No existe el archivo ", srcwphtcaccesspriv);
-  }
-};
-
-
-// Async/Await:
-async function moverwphtcaccess () {
-  if ( fs.pathExists(srcwphtcaccess)) {
-    try {
-      await fs.move( srcwphtcaccess, dstwphtcaccess, {overwrite: true});
-      await fs.remove(srcwphtcaccess);
-      //await fs.ensureSymlink( dstwphtcaccess,  srcwphtcaccess, 'file');
-      console.log('success!');
-    } catch (err) {
-      console.error(err);
-    }
-  } else {
-    console.log("No existe el archivo ", srcwphtcaccesspriv);
-  }
-};
-
-
-gulp.task('tmoverwphtcaccesspriv', function(done) {
-  moverwphtcaccesspriv();
-  done();
-});
-
-gulp.task('tmoverwphtcaccess', function(done) {
-  moverwphtcaccess();
-  done();
-});
-
-gulp.task('createSymlinkwpconfig', async function(done) {
-  
-  if ( fs.pathExists(dstwpconfig)) {
-    try {
-      await fs.ensureSymlink( dstwpconfig,  srcwpconfig, 'file');
-      console.log('success!');
-    } catch (err) {
-      console.error(err);
-    }
-  } else {
-    console.log("No existe el archivo ", srcwpconfig);
+  } catch (err) {
+    console.error(err);
   };
   done();
 });
 
-gulp.task('createSymlinkhtcaccess', async function(done) {
-  
-  if ( fs.pathExists(dstwphtcaccess)) {
-    try {
+
+gulp.task('tmoverwpcontent',async function(done)  {
+  try {
+    const existe = await fs.pathExists(srcwpcontent);
+    if ( existe) {
+      await fs.move( srcwpcontent, dstwpcontent, {overwrite: true});
+      console.log('success!');
+    } else {
+      console.log("No existe la carpeta ",srcwpcontent);
+    }
+  } catch (err) {
+    console.error(err);
+  };
+  done();
+});
+
+
+gulp.task('tcreateSymlinkwpcontent', async function(done) {
+  try {
+    const existe = await fs.pathExists(dstwpcontent);
+    if (existe) {
+      await fs.remove( srcwpcontent );
+      await fs.ensureSymlink( dstwpcontent,  srcwpcontent, 'dir');
+      console.log('success!');
+    } else {
+      console.log("No existe el archivo ", dstwpcontent);
+    }
+  } catch (err) {
+    console.error(err);
+  };
+  done();
+});
+
+
+
+
+
+
+//////// .htcaccess
+
+gulp.task('tmoverwphtcaccesspriv',async function(done)  {
+  try {
+    const existe = await fs.pathExists(srcwphtcaccesspriv);
+    if ( existe ){
+      await fs.move( srcwphtcaccesspriv, dstwphtcaccess, {overwrite: true});
+      console.log('success!');
+    } else {
+      console.log("No existe el archivo ", srcwphtcaccesspriv);
+    }
+  } catch (err) {
+    console.error(err);
+  };
+  done();
+});
+
+
+
+gulp.task('tmoverwphtcaccess',async function(done)  {
+  try {
+    const existe = await fs.pathExists(srcwphtcaccess);
+    if ( existe ){
+      await fs.move( srcwphtcaccess, dstwphtcaccess, {overwrite: true});
+      console.log('success!');
+    } else {
+      console.log("No existe el archivo ", srcwphtcaccess);
+    }
+  } catch (err) {
+    console.error(err);
+  };
+  done();
+});
+
+
+
+gulp.task('tcreateSymlinkwphtcaccess', async function(done) {
+  try {
+    const existe = await fs.pathExists(dstwphtcaccess);
+    if (existe) {
+      await fs.remove( srcwphtcaccess );
       await fs.ensureSymlink( dstwphtcaccess,  srcwphtcaccess, 'file');
       console.log('success!');
-    } catch (err) {
-      console.error(err);
+    } else {
+      console.log("No existe el archivo ", dstwphtcaccess);
     }
-  } else {
-    console.log("No existe el archivo ", srcwpconfig);
+  } catch (err) {
+    console.error(err);
   };
   done();
 });
 
 
+//////// wp-config
 
-gulp.task('removewpconfig', async function(done) {
-  
-  if ( fs.pathExists(srcwpconfig)) {
-    try {
-      await fs.remove(srcwpconfig);
+
+
+// Async/Await:
+gulp.task('tmoverwpconfigpriv',async function () {
+  try {
+    const existe = await fs.pathExists(srcwpconfigpriv);
+    if ( existe ){
+      await fs.move( srcwpconfigpriv, dstwpconfig, {overwrite: true});
       console.log('success!');
-    } catch (err) {
-      console.error(err);
+    } else {
+      console.log("No existe el archivo ", srcwpconfigpriv);
     }
-  } else {
-    console.log("No existe el archivo ", srcwpconfig);
+  } catch (err) {
+    console.error(err);
   };
   done();
 });
-         
 
-gulp.task('tmoveyaddwpconfig', function() {
-  if ( (fs.pathExists(srcwpconfig)) && (! fs.existsSync(dstwpconfig) )) {
-    // return gulp.src([srcwpconfig,'/opt/app-root/src/add-wp-config-php'],{ sourcemaps: true }, {allowEmpty:true})
-    return gulp.src([srcwpconfig,'/opt/app-root/src/add-wp-config-php'],{allowEmpty:true})
-    .pipe(concat( 'wp-config.php'))
-    // .pipe(concat({ path: 'wp-config.php', stat: { mode: '0777' }}))
-    .pipe(gulp.dest('/silo/wordpress'));
-   } else {
-     return console.log("Nada por hacer. ");
-   };
-  
+
+
+gulp.task('twpconfigdev', async function(done) {
+  try{
+    const existe = await fs.pathExists(srcwpconfig);
+    const existedev = await fs.pathExists(dstwpconfigdev);
+    if (existedev) {
+      await fs.remove(dstwpconfigdev);
+    }
+    if (existe) {
+      return gulp.src([srcwpconfig,'/opt/app-root/src/add-wp-config-dev-php'],{allowEmpty:true})
+        .pipe(concat( 'wp-config-dev.php'))
+        .pipe(gulp.dest(dstwpconfigdev));
+
+    } else {
+      return console.log("Nada por hacer. ");
+    }
+
+  } catch (err) {
+    console.error(err);
+  };
+  done();
+})
+
+
+gulp.task('twpconfig', async function(done) {
+  try{
+    const existe = await fs.pathExists(srcwpconfig);
+    const existeprod = await fs.pathExists(dstwpconfig);
+    if (existeprod) {
+      await fs.remove(dstwpconfig);
+    }
+    if (existe) {
+      return gulp.src([srcwpconfig,'/opt/app-root/src/add-wp-config-prod-php'],{allowEmpty:true})
+        .pipe(concat( 'wp-config-prod.php'))
+        .pipe(gulp.dest(dstwpconfig));
+
+    } else {
+      return console.log("Nada por hacer. ");
+    }
+
+  } catch (err) {
+    console.error(err);
+  };
+  done();
+})
+
+
+
+// gulp.task('twpconfigdev', async function(done) {
+//   try{
+//     const existe = await fs.pathExists(srcwpconfig);
+//   } catch (err) {
+//     console.error(err);
+//   };
+//   done();
+//   if (existe) {
+//     return gulp.src([srcwpconfig,'/opt/app-root/src/add-wp-config-php'],{allowEmpty:true})
+//       .pipe(concat( 'wp-config-dev.php'));  
+//   } else {
+//     return console.log("Nada por hacer. ");
+//   } 
+// })
+
+
+
+
+gulp.task('tcreateSymlinkwpconfig', async function(done) {
+  try {
+    const existe = await fs.pathExists(dstwpconfig);
+    if (existe) {
+      await fs.remove( srcwpconfig );
+      await fs.ensureSymlink( dstwpconfig,  srcwpconfig, 'file');
+      console.log('success!');
+    } else {
+      console.log("No existe el archivo ", dstwpconfig);
+    }
+  } catch (err) {
+    console.error(err);
+  };
+  done();
 });
 
 
-gulp.task('enlacesSymlinkpriv', gulp.series('createSymlinkwpconfig','createSymlinkhtcaccess'));
+///////////
+
+
+
+gulp.task('twpconfigdev', async function(done) {
+  try{
+    const existe = await fs.pathExists(srcwpconfig);
+    const existedev = await fs.pathExists(dstwpconfigdev);
+    if (existedev) {
+      await fs.remove(dstwpconfigdev);
+    }
+    if (existe) {
+      return gulp.src([srcwpconfig,'/opt/app-root/src/add-wp-config-php'],{allowEmpty:true})
+        .pipe(concat( 'wp-config-dev.php'))
+        .pipe(gulp.dest(dstwpconfigdev));
+
+    } else {
+      return console.log("Nada por hacer. ");
+    }
+
+  } catch (err) {
+    console.error(err);
+  };
+  done();
+})
+
+
+
+// gulp.task('enlacesSymlinkpriv', gulp.series('createSymlinkwpconfig','createSymlinkhtcaccess'));
 
 
           
@@ -254,7 +277,7 @@ gulp.task('enlacesSymlinkpriv', gulp.series('createSymlinkwpconfig','createSymli
 gulp.task('watch',  function(done) {
   // gulp.watch('/opt/app-root/src/wp-content',gulp.series('tmoverwpcontent'));
   // gulp.watch('/opt/app-root/src/.htcaccess',gulp.series('tmoverwphtcaccess'));
-  gulp.watch('/opt/app-root/src/**/wp-confi?.php',  gulp.series('tmoveyaddwpconfig','removewpconfig','createSymlinkwpconfig'));
+//  gulp.watch('/opt/app-root/src/**/wp-confi?.php',  gulp.series('tmoveyaddwpconfig','removewpconfig','createSymlinkwpconfig'));
   // gulp.watch('/silo/wordpdres/*',  gulp.series('createSymlinkwpconfig', 'createSymlinkhtcaccess'));
   // gulp.watch('/opt/silo/wordpdres/*',  gulp.series('createSymlinkwpconfig', 'createSymlinkhtcaccess', 'task-kill'));
 
@@ -264,152 +287,3 @@ gulp.task('watch',  function(done) {
 
 gulp.task('default',  gulp.series('watch'));
 
-
-
-//##########################################################
-
-// // With async/await:
-// async function createdirwpcontent () {
-//   try {
-//     await fs.emptyDir('/silo/wordpress,wp-content');
-//     console.log('success!');
-//   } catch (err) {
-//     console.error(err);
-//   }
-// }
-
-
-// // Async/Await:
-// async function linkremovewpcontentwpconfightcaccess () {
-//   try {
-//     await fs.remove(srcwpcontent);
-//     await fs.remove(srcwpconfig);
-//     await fs.ensureSymlink( dstwpcontent,  srcwpcontent, 'dir');
-//     await fs.ensureSymlink( dstwpconfig,  srcwpconfig, 'file');
-//     if ( fs.pathExists(dstwphtcaccess)) {
-//       try {
-//         await fs.remove(srcwphtcaccess);
-//         await fs.ensureSymlink( dstwphtcaccess,  srcwphtcaccess, 'file');
-//         console.log('success!');
-//       } catch (err) {
-//         console.error(err);
-//       }
-//     } else {
-//       console.log("No existe el archivo ", dstwphtcaccess);
-//     }
-
-//     console.log('success!');
-//   } catch (err) {
-//     console.error(err);
-//   }
-// }
-
-
-
-// // Async/Await:
-// async function moverwpcontent () {
-//   try {
-//     createdirwpcontent();
-//     await fs.move( srcwpcontent, dstwpcontent, {overwrite: true});
-//     // await fs.remove(srcwpcontent);
-//     // await fs.ensureSymlink( dstwpcontent,  srcwpcontent, 'dir');
-//     console.log('success!');
-//   } catch (err) {
-//     console.error(err);
-//   }
-// }
-
-// // Async/Await:
-// async function moverwpconfig () {
-
-//   if ( fs.pathExists(srcwpconfig)) {
-//     try {
-//       await fs.move( srcwpconfig, dstwpconfig, {overwrite: true});
-//       // await fs.remove(srcwpconfig);
-//       await fs.ensureSymlink( dstwpconfig,  srcwpconfig, 'file');
-//       console.log('success!');
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   } else {
-//     console.log("No existe el archivo ", srcwpconfig);
-//   }
-   
-// }
-
-// // Async/Await:
-// async function moverwphtcaccess () {
-//   if ( fs.pathExists(srcwphtcaccess)) {
-//   try {
-//     await fs.move( srcwphtcaccess, dstwphtcaccess, {overwrite: true});
-//     // await fs.remove(srcwphtcaccess);
-//     await fs.ensureSymlink( dstwphtcaccess,  srcwphtcaccess, 'file');
-//     console.log('success!');
-//   } catch (err) {
-//     console.error(err);
-//   }
-//   } else {
-//      console.log("No existe el archivo ", srcwphtcaccess);
-//   }
-// }
-
-// // async function crearlinkwpcontent () {
-// //   try {
-// //     await fs.ensureSymlink(    srcwpcontent, dstwpcontent, 'dir');
-// //     console.log('success!');
-// //   } catch (err) {
-// //     console.error(err);
-// //   }
-// // }
- 
-
-// // async function crearlinkwpconfig () {
-// //   try {
-// //     await fs.ensureSymlink(  dstwpconfig, srcwpconfig);
-// //     console.log('success!');
-// //   } catch (err) {
-// //     console.error(err);
-// //   }
-// // }
-
-// // async function crearlinkwphtcaccess () {
-// //   try {
-// //     await fs.ensureSymlink (srcwphtaccess, dstwphtaccess);
-// //     console.log('success!');
-// //   } catch (err) {
-// //     console.error(err);
-// //   }
-// // }
-
-
-// gulp.task('tlinkremovewpcontentwpconfightcaccess', function(done) {
-//   linkremovewpcontentwpconfightcaccess();
-//   done();
-// });
-
-
-// gulp.task('tmoverwpcontent', function(done) {
-//   moverwpcontent();
-//   done();
-// });
-
-// gulp.task('tmoverwpconfig', function(done) {
-//   moverwpconfig();
-//   done();
-// });
-
-// gulp.task('tmoverwphtcaccess', function(done) {
-//   moverwphtcaccess();
-//   done();
-// });
-
-
-
-// gulp.task('watch',  function(done) {
-//   // gulp.watch('/opt/app-root/src/wp-content',gulp.series('tmoverwpcontent'));
-//   // gulp.watch('/opt/app-root/src/.htcaccess',gulp.series('tmoverwphtcaccess'));
-//   gulp.watch('/opt/app-root/src/wp-config.php',gulp.series('tmoverwpconfig', 'tmoverwpcontent', 'tmoverwphtcaccess'));
-//   done();
-// });
-
-// gulp.task('default',  gulp.parallel('watch'));

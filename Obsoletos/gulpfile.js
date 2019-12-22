@@ -221,7 +221,47 @@ gulp.task('removewpconfig', async function(done) {
   };
   done();
 });
-         
+
+
+
+gulp.task('tcreateSymlinkwpcontent2', async function(done) {
+
+  const existe = await fs.pathExists(srcwpcontent);
+  
+  if (! existe) {
+    try {
+      await fs.ensureSymlink( dstwpcontent,  srcwpcontent, 'dir');
+      console.log('success!');
+    } catch (err) {
+      console.error(err);
+    }
+  } else {
+    console.log("Ya existe la carpeta ", srcwpcontent);
+    try {
+      await fs.remove(srcwpcontent);
+      await fs.ensureSymlink( dstwpcontent,  srcwpcontent, 'dir');
+      console.log('success!');
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  done();
+});
+
+
+gulp.task('tcreateSymlinkwpcontent1', async function(done) {
+
+  const existe = await fs.pathExists(srcwpcontent);
+  if (existe) {
+    
+    
+    console.log('se ejecuta');
+    
+  } else {
+    console.log("No se ejecuta ");
+  };
+  done();
+});
 
 gulp.task('tmoveyaddwpconfig', function() {
   if ( (fs.pathExists(srcwpconfig)) && (! fs.existsSync(dstwpconfig) )) {
