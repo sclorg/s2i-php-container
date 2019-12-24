@@ -146,46 +146,62 @@ gulp.task('tmoverwpconfigpriv',async function () {
   done();
 });
 
-gulp.task('tmoverwpconfig',async function (done) {
-  try {
-    const existe = await fs.pathExists(dstwpconfigdev);
-    const existe1 = await fs.pathExists(srcwpconfig);
-    if (! existe1 ) {
-      if (existe) {
-        await fs.copy( srcwpconfig, dstwpconfig, {overwrite: true});
-        await fs.move( srcwpconfig, dstwpconfigdev, {overwrite: true});
-        console.log('success!');
-      } else {
-        console.log("No existe el archivo ", srcwpconfig);
-      }
+
+
+gulp.task('twpconfigdev', async function(done) {
+  try{
+    const existe = await fs.pathExists(srcwpconfig);
+    const existedev = await fs.pathExists(dstwpconfigdev);
+    if (existedev) {
+      await fs.remove(dstwpconfigdev);
     }
+    if (existe) {
+      return gulp.src(srcwpconfig,{allowEmpty:true})
+        .pipe(gulp.dest(dstwpconfigdev));
+
+    } else {
+      return console.log("Nada por hacer. ");
+    }
+
   } catch (err) {
     console.error(err);
   };
   done();
-});
+})
 
+
+gulp.task('twpconfig', async function(done) {
+  try{
+    const existe = await fs.pathExists(srcwpconfig);
+    const existeprod = await fs.pathExists(dstwpconfig);
+    if (existeprod) {
+      await fs.remove(dstwpconfig);
+    }
+    if (existe) {
+      return gulp.src([srcwpconfig,'/opt/app-root/src/add-wp-config-prod.php'],{allowEmpty:true})
+        .pipe(concat( 'wp-config-prod.php'))
+        .pipe(gulp.dest(dstwpconfig));
+
+    } else {
+      return console.log("Nada por hacer. ");
+    }
+
+  } catch (err) {
+    console.error(err);
+  };
+  done();
+})
 
 gulp.task('twpconfigchange', async function(done) {
-  try {
-    const existe = await fs.pathExists(dstwpconfigdev);
-    if ( existe ){
-      shell.sed('-i', /^.*define\(.*DB_COLLATE.*/, 'define( \'DB_COLLATE\', \'utf8_general_ci\' );' , dstwpconfigdev);
-      shell.sed('-i', /.*table_prefix.*/, shell.cat ('wp-config.js') , dstwpconfigdev);
-      shell.sed( '-i', /^.*define\(.*WP_DEBUG.*/, shell.cat('wp-config-dev.js') , dstwpconfigdev);
-      shell.sed('-i', /^.*define\(.*DB_HOST.*/, 'define( \'DB_HOST\', \'localhost\' );' , dstwpconfig);
-      shell.sed('-i', /^.*define\(.*DB_COLLATE.*/, 'define( \'DB_COLLATE\', \'utf8_general_ci\' );' , dstwpconfig);
-      shell.sed('-i', /.*table_prefix.*/, shell.cat ('wp-config.js') , dstwpconfig);
-      console.log('success!');
-    } else {
-      console.log("No existe el archivo ", srcwpconfigdev);
-    }
-  } catch (err) {
-    console.error(err);
-  };
+  
+  shell.sed('-i', /^.*define\(.*DB_COLLATE.*/, 'define( \'DB_COLLATE\', \'utf8_general_ci\' );' , dstwpconfigdev);
+  shell.sed('-i', /.*table_prefix.*/, shell.cat ('wp-config.js') , dstwpconfigdev);
+  shell.sed( '-i', /^.*define\(.*WP_DEBUG.*/, shell.cat('wp-config-dev.js') , dstwpconfigdev);
+  shell.sed('-i', /^.*define\(.*DB_HOST.*/, 'define( \'DB_HOST\', \'localhost\' );' , dstwpconfig);
+  shell.sed('-i', /^.*define\(.*DB_COLLATE.*/, 'define( \'DB_COLLATE\', \'utf8_general_ci\' );' , dstwpconfig);
+  shell.sed('-i', /.*table_prefix.*/, shell.cat ('wp-config.js') , dstwpconfig);
   done();
 });
-  
 
 
 
@@ -211,6 +227,21 @@ gulp.task('tcreateSymlinkwpconfig', async function(done) {
 });
 
 
+gulp.task('union', async function(done) {
+  
+  try{
+    const existe = await fs.pathExists(dstwpconfigdev);
+    if ( existe) {
+      gulp.task('twpconfig');
+      gulp.task( 'twpconfigdev');
+      gulp.task('twpconfigchange');
+    }
+  } catch (err) {
+    console.error(err);
+  };
+  done();
+})
+
 
 ///////////
 
@@ -225,4 +256,3 @@ gulp.task('watch',  function(done) {
 
 gulp.task('default',  gulp.series('watch'));
 
-gulp.task('union', gulp.series('tmoverwpconfig','twpconfigchange', 'tcreateSymlinkwpconfig'));
