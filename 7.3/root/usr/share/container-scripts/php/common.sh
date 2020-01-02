@@ -1,7 +1,7 @@
-if head "/etc/redhat-release" | grep -q "^Red Hat Enterprise Linux release 8"; then
-  HTTPCONF_LINENO=154
-else
+if [ "x$PLATFORM" == "xel7" ]; then
   HTTPCONF_LINENO=151
+else
+  HTTPCONF_LINENO=154
 fi
 
 config_httpd_conf() {

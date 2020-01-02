@@ -1,4 +1,4 @@
-FROM registry.fedoraproject.org/f30/s2i-base:latest
+FROM registry.fedoraproject.org/f31/s2i-base:latest
 
 # This image provides an Apache+PHP environment for running PHP
 # applications.
