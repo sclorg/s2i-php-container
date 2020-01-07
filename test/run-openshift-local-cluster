@@ -63,15 +63,15 @@ if [[ "${VERSION}" > "5.6" ]] ; then
 fi
 
 # test image update with s2i
-case "$OS" in
-  rhel7) old_image=registry.access.redhat.com/rhscl/php-${VERSION/./}-rhel7 ;;
-# Fedora image isn't in registry yet
-#  fedora) old_image=${IMAGE_NAME/localhost\//}
-  *) old_image=docker.io/centos/php-${VERSION/./}-centos7 ;;
-esac
-ct_os_test_image_update "$IMAGE_NAME" "${old_image}" "$istag" \
-                        'ct_test_response "http://<IP>:8080" "200" "Test PHP passed"' \
-                        "$istag~https://github.com/sclorg/s2i-php-container.git" \
-                        --context-dir="$VERSION/test/test-app"
+old_image=$(ct_get_public_image_name "$OS" "$BASE_IMAGE_NAME" "$VERSION")
+
+if ct_check_image_availability "$old_image"; then
+  ct_os_test_image_update "$IMAGE_NAME" "${old_image}" "$istag" \
+                          'ct_test_response "http://<IP>:8080" "200" "Test PHP passed"' \
+                          "$istag~https://github.com/sclorg/s2i-php-container.git" \
+                          --context-dir="$VERSION/test/test-app"
+else
+  echo "Image $old_image not found in public repositories, skipping update test."
+fi
 
 test_file_upload "$IMAGE_NAME"
