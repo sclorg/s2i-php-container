@@ -11,10 +11,10 @@ var shell = require('shelljs');
 const srcwpcontent = '/opt/app-root/src/wp-content';
 const srcwpcontentpriv = '/opt/app-root/silo/wordpress/wp-content';
 const dstwpcontent = '/silo/wordpress/wp-content';
-const srcwphtaccess = '/opt/app-root/src/.htaccess';
-const srcwphtaccesspriv = '/opt/app-root/silo/wordpress/.htaccess';
-const dstwphtaccessdev = '/silo/wordpress/dev/.htaccess-dev';
-const dstwphtaccess = '/silo/wordpress/.htaccess';
+const srcwphtcaccess = '/opt/app-root/src/.htcaccess';
+const srcwphtcaccesspriv = '/opt/app-root/silo/wordpress/.htcaccess';
+const dstwphtcaccessdev = '/silo/wordpress/dev/.htcaccess-dev.php';
+const dstwphtcaccess = '/silo/wordpress/.htcaccess';
 const srcwpconfig = '/opt/app-root/src/wp-config.php';
 const srcwpconfigpriv = '/opt/app-root/silo/wordpress/wp-config.php';
 const dstwpconfig = '/silo/wordpress/wp-config.php';
@@ -43,14 +43,11 @@ gulp.task('tmoverwpcontentpriv',async function(done)  {
 gulp.task('tmoverwpcontent',async function(done)  {
   try {
     const existe = await fs.pathExists(srcwpcontent);
-    const existe1 = await fs.pathExists(dstwpcontent);
-    if (! existe1 ){
-      if ( existe) {
-        await fs.move( srcwpcontent, dstwpcontent, {overwrite: true});
-        console.log('success!');
-      } else {
-        console.log("No existe la carpeta ",srcwpcontent);
-      }
+    if ( existe) {
+      await fs.move( srcwpcontent, dstwpcontent, {overwrite: true});
+      console.log('success!');
+    } else {
+      console.log("No existe la carpeta ",srcwpcontent);
     }
   } catch (err) {
     console.error(err);
@@ -62,15 +59,12 @@ gulp.task('tmoverwpcontent',async function(done)  {
 gulp.task('tcreateSymlinkwpcontent', async function(done) {
   try {
     const existe = await fs.pathExists(dstwpcontent);
-    const existe1 = await fs.pathExists(srcwpcontent);
-    if (! existe1) {
-      if (existe) {
-        // await fs.remove( srcwpcontent );
-        await fs.ensureSymlink( dstwpcontent,  srcwpcontent, 'dir');
-        console.log('success!');
-      } else {
-        console.log("No existe el archivo. ", dstwpcontent);
-      }
+    if (existe) {
+      await fs.remove( srcwpcontent );
+      await fs.ensureSymlink( dstwpcontent,  srcwpcontent, 'dir');
+      console.log('success!');
+    } else {
+      console.log("No existe el archivo. ", dstwpcontent);
     }
   } catch (err) {
     console.error(err);
@@ -79,7 +73,7 @@ gulp.task('tcreateSymlinkwpcontent', async function(done) {
 });
 
 
-//////// .htaccess
+//////// .htaccess aa
 
 gulp.task('tmoverwphtaccesspriv',async function(done)  {
   try {
@@ -100,16 +94,12 @@ gulp.task('tmoverwphtaccesspriv',async function(done)  {
 
 gulp.task('tmoverwphtaccess',async function(done)  {
   try {
-    const existe1 = await fs.pathExists(dstwphtaccessdev);
     const existe = await fs.pathExists(srcwphtaccess);
-    if (! existe1 ){
-      if (existe) {
-        await fs.copy( srcwphtaccess, dstwphtaccess, {overwrite: true});
-        await fs.move( srcwphtaccess, dstwphtaccessdev, {overwrite: true});
-        console.log('success!');
-      } else {
-        console.log("No existe el archivo ", srcwphtaccess);
-      }
+    if ( existe ){
+      await fs.move( srcwphtaccess, dstwphtaccess, {overwrite: true});
+      console.log('success!');
+    } else {
+      console.log("No existe el archivo ", srcwphtaccess);
     }
   } catch (err) {
     console.error(err);
@@ -122,15 +112,12 @@ gulp.task('tmoverwphtaccess',async function(done)  {
 gulp.task('tcreateSymlinkwphtaccess', async function(done) {
   try {
     const existe = await fs.pathExists(dstwphtaccessdev);
-    const existe1 = await fs.pathExists(srcwphtaccess);
-    if (! existe1) {
-      if (existe) {
-       //  await fs.remove( srcwphtaccess );
-        await fs.ensureSymlink( dstwphtaccessdev,  srcwphtaccess, 'file');
-        console.log('success!');
-      } else {
-        console.log("No existe el archivo ", dstwphtaccessdev);
-      }
+    if (existe) {
+      await fs.remove( srcwphtaccess );
+      await fs.ensureSymlink( dstwphtaccessdev,  srcwphtaccess, 'file');
+      console.log('success!');
+    } else {
+      console.log("No existe el archivo ", dstwphtaccessdev);
     }
   } catch (err) {
     console.error(err);
@@ -159,48 +146,62 @@ gulp.task('tmoverwpconfigpriv',async function () {
   done();
 });
 
-gulp.task('tmoverwpconfig',async function (done) {
-  try {
-    const existe1 = await fs.pathExists(dstwpconfigdev);
+
+
+gulp.task('twpconfigdev', async function(done) {
+  try{
     const existe = await fs.pathExists(srcwpconfig);
-    if (! existe1 ) {
-      if (existe) {
-        await fs.copy( srcwpconfig, dstwpconfig, {overwrite: true});
-        await fs.move( srcwpconfig, dstwpconfigdev, {overwrite: true});
-        console.log('success!');
-      } else {
-        console.log("No existe el archivo ", srcwpconfig);
-      }
+    const existedev = await fs.pathExists(dstwpconfigdev);
+    if (existedev) {
+      await fs.remove(dstwpconfigdev);
     }
+    if (existe) {
+      return gulp.src(srcwpconfig,{allowEmpty:true})
+        .pipe(gulp.dest(dstwpconfigdev));
+
+    } else {
+      return console.log("Nada por hacer. ");
+    }
+
   } catch (err) {
     console.error(err);
   };
   done();
-});
+})
 
+
+gulp.task('twpconfig', async function(done) {
+  try{
+    const existe = await fs.pathExists(srcwpconfig);
+    const existeprod = await fs.pathExists(dstwpconfig);
+    if (existeprod) {
+      await fs.remove(dstwpconfig);
+    }
+    if (existe) {
+      return gulp.src([srcwpconfig,'/opt/app-root/src/add-wp-config-prod.php'],{allowEmpty:true})
+        .pipe(concat( 'wp-config-prod.php'))
+        .pipe(gulp.dest(dstwpconfig));
+
+    } else {
+      return console.log("Nada por hacer. ");
+    }
+
+  } catch (err) {
+    console.error(err);
+  };
+  done();
+})
 
 gulp.task('twpconfigchange', async function(done) {
-  try {
-    const existe = await fs.pathExists(dstwpconfigdev);
-    const existe1 = await fs.pathExists(dstwpconfig);
-    if ( existe ){
-      shell.sed('-i', /^.*define\(.*DB_COLLATE.*/, 'define( \'DB_COLLATE\', \'utf8_general_ci\' );' , dstwpconfigdev);
-      shell.sed('-i', /.*table_prefix.*/, shell.cat ('wp_config.js') , dstwpconfigdev);
-      shell.sed( '-i', /^.*define\(.*WP_DEBUG.*/, shell.cat('wp_config_dev.js') , dstwpconfigdev);
-      console.log('success!');
-    }
-    if (existe1 ) {
-      shell.sed('-i', /^.*define\(.*DB_HOST.*/, 'define( \'DB_HOST\', \'localhost\' );' , dstwpconfig);
-      shell.sed('-i', /^.*define\(.*DB_COLLATE.*/, 'define( \'DB_COLLATE\', \'utf8_general_ci\' );' , dstwpconfig);
-      shell.sed('-i', /.*table_prefix.*/, shell.cat ('wp_config.js') , dstwpconfig);
-      console.log('success!');
-    } 
-  } catch (err) {
-    console.error(err);
-  };
+  
+  shell.sed('-i', /^.*define\(.*DB_COLLATE.*/, 'define( \'DB_COLLATE\', \'utf8_general_ci\' );' , dstwpconfigdev);
+  shell.sed('-i', /.*table_prefix.*/, shell.cat ('wp-config.js') , dstwpconfigdev);
+  shell.sed( '-i', /^.*define\(.*WP_DEBUG.*/, shell.cat('wp-config-dev.js') , dstwpconfigdev);
+  shell.sed('-i', /^.*define\(.*DB_HOST.*/, 'define( \'DB_HOST\', \'localhost\' );' , dstwpconfig);
+  shell.sed('-i', /^.*define\(.*DB_COLLATE.*/, 'define( \'DB_COLLATE\', \'utf8_general_ci\' );' , dstwpconfig);
+  shell.sed('-i', /.*table_prefix.*/, shell.cat ('wp-config.js') , dstwpconfig);
   done();
 });
-  
 
 
 
@@ -226,23 +227,32 @@ gulp.task('tcreateSymlinkwpconfig', async function(done) {
 });
 
 
+gulp.task('union', async function(done) {
+  
+  try{
+    const existe = await fs.pathExists(dstwpconfigdev);
+    if ( existe) {
+      gulp.task('twpconfig');
+      gulp.task( 'twpconfigdev');
+      gulp.task('twpconfigchange');
+    }
+  } catch (err) {
+    console.error(err);
+  };
+  done();
+})
+
 
 ///////////
 
 
 
 gulp.task('watch',  function(done) {
-  gulp.watch('/opt/app-root/src/**/wp-confi?.php',  gulp.series('tmoverwpconfig','twpconfigchange', 'tcreateSymlinkwpconfig'));
-  gulp.watch('/opt/app-root/src/**/.htacces?',  gulp.series('tmoverwphtaccess', 'tcreateSymlinkwphtaccess'));
-  
+  gulp.watch('/opt/app-root/src/**/wp-confi?.php',  gulp.series('twpconfigdev','twpconfig','tcreateSymlinkwpconfig'));
+  gulp.watch('/opt/app-root/src/**/.htacces?',  gulp.series('twpconfigdev','twpconfig','tcreateSymlinkwpconfig'));
   
   done();
 });
 
 gulp.task('default',  gulp.series('watch'));
 
-// gulp.task('union', gulp.series('tmoverwpconfig','twpconfigchange', 'tcreateSymlinkwpconfig'));
-
-// gulp.task('unionh', gulp.series('tmoverwphtaccess', 'tcreateSymlinkwphtaccess'));
-
-gulp.task('tmovelinkwpcontent', gulp.series('tmoverwpcontent', 'tcreateSymlinkwpcontent'));

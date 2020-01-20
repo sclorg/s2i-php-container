@@ -27,27 +27,31 @@ Workflow
 
 ### When updating your work, use: 
 
-1. `git checkout master`
-2. `git fetch sclorg --rebase=preserve` (upstream remote)
-3. `git diff FETCH_HEAD`
-4. `git merge`
-5. `git submodule update --init` (sure initial commit)
-6. `git checkout develop`
-7. `git rebase master`
+1.  `git checkout master`
+2.  `git pull sclorg master --rebase=preserve` (upstream remote)
+3.  `git diff FETCH_HEAD`
+4.  `git merge`
+5.  `git submodule update --init` (sure initial commit)
+6.  `git checkout develop`
+7.  `git pull sclorg master --rebase=preserve`
+8.  `git rebase master`
+9.  `git checkout master`
+10. `git merge develop`
+
 
 
 
 ### When merging your work post review, use: 
 
-1. `git checkout master`
-2. `git fetch sclorg --rebase=preserve` (upstream remote)
-3. `git diff FETCH_HEAD`
-4. `git merge`
-5. `git submodule update --init` (sure initial commit)
-6. `git checkout develop`
-7. `git rebase master`
-8. `git checkout main`
-9. `git rebase master`
+1.  `git checkout master`
+2.  `git pull sclorg master --rebase=preserve` (upstream remote)
+3.  `git diff FETCH_HEAD`
+4.  `git merge`
+5.  `git submodule update --init` (sure initial commit)
+6.  `git checkout develop`
+7.  `git pull sclorg master --rebase=preserve`
+8.  `git rebase master`
+9.  `git checkout master`
 10. `git merge develop`
 
 

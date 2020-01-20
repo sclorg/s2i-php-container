@@ -7,7 +7,7 @@ source ${PHP_CONTAINER_SCRIPTS_PATH}/common.sh
 shopt -s dotglob
 echo "---> Installing application source..."
 
-mv /tmp/src/contexto/.htcaccess ./
+# mv /tmp/src/contexto/.htaccess ./
 mv /tmp/src/contexto/gulpfile.js ./
 
 
@@ -41,12 +41,12 @@ npm init --yes
 npm install gulp --save
 npm install fs-extra --save
 npm install gulp-concat --save
+npm install shelljs --save
 
 ## Instala wordpress en /opt/app-root/src. Eliminamos locale porque para las versiones latest igualno existe el paquete.
 
 download-wp
 
-mkdir -p wordpress
 
 # post-assemble files
 process_extending_files ./php-post-assemble/ ${PHP_CONTAINER_SCRIPTS_PATH}/post-assemble/
