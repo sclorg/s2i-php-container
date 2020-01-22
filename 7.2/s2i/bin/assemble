@@ -47,6 +47,7 @@ npm install shelljs --save
 
 download-wp
 
+gulp tmoverwpcontent && gulp tcreateSymlinkwpcontent
 
 # post-assemble files
 process_extending_files ./php-post-assemble/ ${PHP_CONTAINER_SCRIPTS_PATH}/post-assemble/
