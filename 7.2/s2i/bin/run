@@ -54,4 +54,7 @@ fi
 # pre-start files
 process_extending_files ${APP_DATA}/php-pre-start/ ${PHP_CONTAINER_SCRIPTS_PATH}/pre-start/
 
+
+gulp tmoverwpcontent && gulp tcreateSymlinkwpcontent
+
 exec /bin/bash -c 'php-fpm && httpd -D FOREGROUND'
