@@ -10,6 +10,8 @@ The resulting image can be run using [podman](https://github.com/containers/libp
 For more information about using these images with OpenShift, please see the
 official [OpenShift Documentation](https://docs.okd.io/latest/using_images/s2i_images/php.html).
 
+This image is also test in OpenShift 4 environment
+
 For more information about contributing, see
 [the Contribution Guidelines](https://github.com/sclorg/welcome/blob/master/contribution.md).
 For more information about concepts used in these container images, see the
