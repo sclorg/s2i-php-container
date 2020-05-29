@@ -24,7 +24,7 @@ export CT_SKIP_NEW_PROJECT=true
 export CT_SKIP_UPLOAD_IMAGE=true
 export CT_NAMESPACE=openshift
 
-test_php_integration "${IMAGE_NAME}" ${VERSION} php
+test_php_integration "${IMAGE_NAME}"
 
 # Check the imagestream
 test_php_imagestream

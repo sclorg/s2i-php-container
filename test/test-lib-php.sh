@@ -13,13 +13,10 @@ source ${THISDIR}/test-lib-openshift.sh
 
 function test_php_integration() {
   local image_name=$1
-  local version=$2
-  local import_image=$3
-  VERSION=$version ct_os_test_s2i_app "${image_name}" \
-                                      "https://github.com/sclorg/s2i-php-container.git" \
-                                      test/test-app \
-                                      "Test PHP passed" \
-                                      8080 http 200
+  ct_os_test_s2i_app "${image_name}" \
+                     "https://github.com/sclorg/s2i-php-container.git" \
+                     "test/test-app" \
+                     "Test PHP passed"
 }
 
 # Check the imagestream
