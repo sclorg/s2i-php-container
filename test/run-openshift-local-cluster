@@ -50,6 +50,16 @@ function test_file_upload() {
   ct_os_delete_project
 }
 
+test_latest_imagestreams() {
+  local result=1
+  # Switch to root directory of a container
+  pushd "${test_dir}/../.." >/dev/null || return 1
+  ct_check_latest_imagestreams
+  result=$?
+  popd >/dev/null || return 1
+  return $result
+}
+
 ct_os_cluster_up
 
 # test local app
@@ -79,6 +89,8 @@ else
 fi
 
 test_file_upload "$IMAGE_NAME"
+
+test_latest_imagestreams
 
 # Check the imagestream
 test_php_imagestream
