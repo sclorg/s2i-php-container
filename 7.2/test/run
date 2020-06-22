@@ -9,9 +9,24 @@
 test -n "${IMAGE_NAME-}" || false 'make sure $IMAGE_NAME is defined'
 test -n "${VERSION-}" || false 'make sure $VERSION is defined'
 
+TEST_LIST="\
+test_s2i_usage
+test_docker_run_usage
+test_scl_usage
+test_application
+test_application_user
+test_ssl
+test_ssl_own_cert
+ct_npm_works
+"
+
+ct_enable_cleanup
+
 # TODO: Make command compatible for Mac users
 test_dir="$(readlink -zf $(dirname "${BASH_SOURCE[0]}"))"
 image_dir=$(readlink -zf ${test_dir}/..)
+test_short_summary=''
+TESTSUITE_RESULT=1
 
 source "${test_dir}/test-lib.sh"
 
@@ -76,6 +91,13 @@ cleanup() {
     docker rmi -f ${IMAGE_NAME}-testapp
   fi
   rm -rf ${test_dir}/test-app/.git
+  echo "$test_short_summary"
+
+  if [ $TESTSUITE_RESULT -eq 0 ] ; then
+    echo "Tests for ${IMAGE_NAME} succeeded."
+  else
+    echo "Tests for ${IMAGE_NAME} failed."
+  fi
 }
 
 check_result() {
@@ -176,16 +198,30 @@ test_application() {
   wait_for_cid
 
   test_scl_usage "php --version" "$VERSION"
-  check_result $?
+  if [[ "$?" != "0" ]]; then
+    return 1
+  fi
 
   test_session ${test_port}
-  check_result $?
+  if [[ "$?" != "0" ]]; then
+    return 1
+  fi
 
   test_connection ${test_port}
-  check_result $?
+  if [[ "$?" != "0" ]]; then
+    return 1
+  fi
+
   test_connection ${test_port_ssl} https
-  check_result $?
+  if [[ "$?" != "0" ]]; then
+    return 1
+  fi
   cleanup_test_app
+}
+
+test_application_user() {
+  # Test application with random uid
+  CONTAINER_ARGS="--user 12345" test_application
 }
 
 test_ssl() {
@@ -198,10 +234,14 @@ test_ssl() {
 }
 
 test_ssl_own_cert() {
+  cleanup_test_app
   ct_s2i_build_as_df file://${test_dir}/self-signed-ssl ${IMAGE_NAME} ${IMAGE_NAME}-test-self-signed-ssl ${s2i_args} $(ct_build_s2i_npm_variables)
   docker run -d --user=100001 ${run_args} --cidfile=${cid_file} ${IMAGE_NAME}-test-self-signed-ssl
   test_connection ${test_port_ssl} https
-  check_result $?
+  if [[ "$?" != "0" ]]; then
+    return 1
+  fi
+
   echo | openssl s_client -showcerts -servername $(container_ip) -connect $(container_ip):${test_port_ssl} 2>/dev/null | openssl x509 -inform pem -noout -text >./servercert
   openssl x509 -in ${test_dir}/self-signed-ssl/httpd-ssl/certs/server-cert-selfsigned.pem -inform pem -noout -text >./configcert
   diff ./configcert ./servercert >cert.diff
@@ -217,28 +257,26 @@ prepare
 run_s2i_build
 check_result $?
 
-# Verify the 'usage' script is working properly when running the base image with 's2i usage ...'
-test_s2i_usage
-check_result $?
+function run_all_tests() {
+  local suite_result=0
+  for test_case in $TEST_LIST; do
+    : "Running test $test_case ...."
+    if $test_case; then
+      printf -v test_short_summary "${test_short_summary}[PASSED] $test_case\n"
+    else
+      printf -v test_short_summary "${test_short_summary}[FAILED] $test_case\n"
+      suite_result=1
+      [ -n "${FAIL_QUICKLY:-}" ] && echo "$sum" && return $suite_result
+    fi
+  done;
+  return $suite_result
+}
 
-# Verify the 'usage' script is working properly when running the base image with 'docker run ...'
-test_docker_run_usage
-check_result $?
-
-# Test application with default uid
-test_application
-
-# Test application with random uid
-CONTAINER_ARGS="--user 12345" test_application
-
-echo "Testing npm availibility"
-ct_npm_works
-check_result $?
-
-cleanup
-
-test_ssl_own_cert
-check_result $?
+# Run the chosen tests
+TEST_LIST=${TESTS:-$TEST_LIST} run_all_tests
+if [[ "$?" == "0" ]]; then
+    TESTSUITE_RESULT=0
+fi
 cleanup
 
 info "All tests finished successfully."
