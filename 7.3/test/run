@@ -26,7 +26,7 @@ ct_enable_cleanup
 test_dir="$(readlink -zf $(dirname "${BASH_SOURCE[0]}"))"
 image_dir=$(readlink -zf ${test_dir}/..)
 test_short_summary=''
-TESTSUITE_RESULT=1
+TESTSUITE_RESULT=0
 source "${test_dir}/test-lib.sh"
 
 # TODO: This should be part of the image metadata
@@ -98,15 +98,15 @@ cleanup() {
   else
     echo "Tests for ${IMAGE_NAME} failed."
   fi
+  exit $TESTSUITE_RESULT
 }
 
 check_result() {
   local result="$1"
   if [[ "$result" != "0" ]]; then
-    info "TEST FAILED (${result})"
-    cleanup
-    exit $result
+    TESTSUITE_RESULT=1
   fi
+  return $result
 }
 
 wait_for_cid() {
@@ -198,18 +198,19 @@ test_application() {
   wait_for_cid
 
   test_scl_usage "php --version" "$VERSION"
-  [[ "$?" != "0" ]] && return 1
+  check_result $? || return 1
 
   test_session ${test_port}
-  [[ "$?" != "0" ]] && return 1
+  check_result $? || return 1
 
   test_connection ${test_port}
-  [[ "$?" != "0" ]] && return 1
+  check_result $? || return 1
 
   test_connection ${test_port_ssl} https
-  [[ "$?" != "0" ]] && return 1
+  check_result $? || return 1
 
   cleanup_test_app
+  return 0
 }
 
 test_application_user() {
@@ -223,15 +224,15 @@ test_ssl() {
   ct_gen_self_signed_cert_pem ${cert_dir} ${cert_base}
   local private_key=${cert_dir}/${cert_base}-cert-selfsigned.pem
   local cert_file=${cert_dir}/${cert_base}-key.pem
+
 }
 
 test_ssl_own_cert() {
-  local result=0
   cleanup_test_app
   ct_s2i_build_as_df file://${test_dir}/self-signed-ssl ${IMAGE_NAME} ${IMAGE_NAME}-test-self-signed-ssl ${s2i_args} $(ct_build_s2i_npm_variables)
   docker run -d --user=100001 ${run_args} --cidfile=${cid_file} ${IMAGE_NAME}-test-self-signed-ssl
   test_connection ${test_port_ssl} https
-  [[ "$?" != "0" ]] && return 1
+  check_result $? || return 1
 
   echo | openssl s_client -showcerts -servername $(container_ip) -connect $(container_ip):${test_port_ssl} 2>/dev/null | openssl x509 -inform pem -noout -text >./servercert
   openssl x509 -in ${test_dir}/self-signed-ssl/httpd-ssl/certs/server-cert-selfsigned.pem -inform pem -noout -text >./configcert
@@ -265,10 +266,5 @@ function run_all_tests() {
 
 # Run the chosen tests
 TEST_LIST=${TESTS:-$TEST_LIST} run_all_tests
-if [[ "$?" == "0" ]]; then
-    TESTSUITE_RESULT=0
-fi
 
 cleanup
-
-info "All tests finished successfully."
