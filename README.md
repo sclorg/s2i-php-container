@@ -21,9 +21,11 @@ Versions
 PHP versions currently supported are:
 * [php-7.2](7.2)
 * [php-7.3](7.3)
+* [php-7.3](7.4)
 
 RHEL versions currently supported are:
 * RHEL7
+* RHEL8
 
 CentOS versions currently supported are:
 * CentOS7
@@ -34,7 +36,7 @@ Installation
 To build a PHP image, choose either the CentOS or RHEL based image:
 *  **RHEL based image**
 
-    These images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/php-72-rhel7).
+    These images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/php-73-rhel7).
     To download it run:
 
     ```
@@ -69,6 +71,9 @@ on all the supported versions of PHP.**
 
 Usage
 ---------------------------------
+For information about usage of Dockerfile for PHP 7.4,
+see [usage documentation](7.4/README.md).
+
 For information about usage of Dockerfile for PHP 7.3,
 see [usage documentation](7.3/README.md).
 
