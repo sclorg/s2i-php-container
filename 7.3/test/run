@@ -18,6 +18,7 @@ test_application_user
 test_ssl
 test_ssl_own_cert
 ct_npm_works
+test_modules
 "
 
 ct_enable_cleanup
@@ -237,6 +238,13 @@ test_ssl_own_cert() {
   echo | openssl s_client -showcerts -servername $(container_ip) -connect $(container_ip):${test_port_ssl} 2>/dev/null | openssl x509 -inform pem -noout -text >./servercert
   openssl x509 -in ${test_dir}/self-signed-ssl/httpd-ssl/certs/server-cert-selfsigned.pem -inform pem -noout -text >./configcert
   diff ./configcert ./servercert >cert.diff
+}
+
+test_modules() {
+  if ! docker run -ti --rm ${IMAGE_NAME} bash -c 'httpd -t -D DUMP_MODULES' | grep -q mpm_prefork_module ; then
+    echo "ERROR: module mpm_prefork_module not loaded" >&2
+    return 1
+  fi
 }
 
 cid_file=$(mktemp -u --suffix=.cid)
