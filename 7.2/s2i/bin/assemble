@@ -6,6 +6,7 @@ source ${PHP_CONTAINER_SCRIPTS_PATH}/common.sh
 
 shopt -s dotglob
 echo "---> Installing application source..."
+rm -fR /tmp/src/.git
 mv /tmp/src/* ./
 
 # Fix source directory permissions
