@@ -21,7 +21,7 @@ Versions
 PHP versions currently supported are:
 * [php-7.2](7.2)
 * [php-7.3](7.3)
-* [php-7.3](7.4)
+* [php-7.4](7.4)
 
 RHEL versions currently supported are:
 * RHEL7
