@@ -18,6 +18,11 @@ test_application_user
 test_ssl
 test_ssl_own_cert
 ct_npm_works
+test_build_from_dockerfil
+"
+TEST_LIST="\
+test_application
+test_build_from_dockerfil
 "
 
 ct_enable_cleanup
@@ -70,7 +75,7 @@ prepare() {
 
 run_test_application() {
   run_args=${CONTAINER_ARGS:-}
-  docker run --user=100001 ${run_args} --cidfile=${cid_file} ${IMAGE_NAME}-testapp
+  docker run -d --user=100001 ${run_args} --cidfile=${cid_file} ${IMAGE_NAME}-testapp
 }
 
 cleanup_test_app() {
@@ -192,7 +197,7 @@ test_connection() {
 
 test_application() {
   # Verify that the HTTP connection can be established to test application container
-  run_test_application &
+  run_test_application
 
   # Wait for the container to write it's CID file
   wait_for_cid
@@ -237,6 +242,20 @@ test_ssl_own_cert() {
   echo | openssl s_client -showcerts -servername $(container_ip) -connect $(container_ip):${test_port_ssl} 2>/dev/null | openssl x509 -inform pem -noout -text >./servercert
   openssl x509 -in ${test_dir}/self-signed-ssl/httpd-ssl/certs/server-cert-selfsigned.pem -inform pem -noout -text >./configcert
   diff ./configcert ./servercert >cert.diff
+}
+
+test_build_from_dockerfil() {
+  info "Check building using a Dockerfile"
+  ct_test_app_dockerfile ${THISDIR}/../examples/from-dockerfile/Dockerfile \
+                         'https://github.com/sclorg/cakephp-ex.git' \
+                         'Welcome to your CakePHP application on OpenShift' \
+                         app-src
+  check_result $?
+  ct_test_app_dockerfile ${THISDIR}/../examples/from-dockerfile/Dockerfile.s2i \
+                         'https://github.com/sclorg/cakephp-ex.git' \
+                         'Welcome to your CakePHP application on OpenShift' \
+                         app-src
+  check_result $?
 }
 
 cid_file=$(mktemp -u --suffix=.cid)
