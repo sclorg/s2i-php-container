@@ -3,8 +3,7 @@ PHP 7.4 container image
 
 This container image includes PHP 7.4 as a [S2I](https://github.com/openshift/source-to-image) base image for your PHP 7.4 applications.
 Users can choose between RHEL and CentOS based builder images.
-The RHEL images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/),
-the CentOS images are available on [Docker Hub](https://hub.docker.com/r/centos/),
+The RHEL UBI images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/),
 and the Fedora images are available in [Fedora Registry](https://registry.fedoraproject.org/).
 The resulting image can be run using [podman](https://github.com/containers/libpod).
 
@@ -26,28 +25,132 @@ modules for their web applications. There is no guarantee for any specific npm o
 version, that is included in the image; those versions can be changed anytime and
 the nodejs itself is included just to make the npm work.
 
-Usage
+Usage in OpenShift
 ---------------------
-For this, we will assume that you are using the `rhscl/php-74-rhel7 image`, available via `php:7.4` imagestream tag in Openshift.
-Building a simple [php-test-app](https://github.com/sclorg/s2i-php-container/tree/master/7.4/test/test-app) application
-in Openshift can be achieved with the following step:
+In this example, we will assume that you are using the `ubi8/php-74` image, available via `php:74` imagestream tag in Openshift.
 
-    ```
-    oc new-app php:7.4~https://github.com/sclorg/s2i-php-container.git --context-dir=7.4/test/test-app/
-    ```
+To build a simple [cakephp-sample-app](https://github.com/sclorg/cakephp-ex.git) application in Openshift:
 
-The same application can also be built using the standalone [S2I](https://github.com/openshift/source-to-image) application on systems that have it available:
+```
+oc new-app php:7.4~https://github.com/sclorg/cakephp-ex.git
+```
 
-    ```
-    $ s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=7.4/test/test-app/ rhscl/php-74-rhel7 php-sample-app
-    ```
+To access the application:
+```
+$ oc get pods
+$ oc exec <pod> -- curl 127.0.0.1:8080
+```
 
 **Accessing the application:**
 ```
 $ curl 127.0.0.1:8080
 ```
 
-Environment variables
+Source-to-Image framework and scripts
+---------------------
+This image supports the [Source-to-Image](https://docs.openshift.com/container-platform/3.11/creating_images/s2i.html)
+(S2I) strategy in OpenShift. The Source-to-Image is an OpenShift framework
+which makes it easy to write images that take application source code as
+an input, use a builder image like this PHP container image, and produce
+a new image that runs the assembled application as an output.
+
+To support the Source-to-Image framework, important scripts are included in the builder image:
+
+* The `/usr/libexec/s2i/assemble` script inside the image is run to produce a new image with the application artifacts. The script takes sources of a given application and places them into appropriate directories inside the image. It utilizes some common patterns in PHP application development (see the **Environment variables** section below).
+* The `/usr/libexec/s2i/run` script is set as the default command in the resulting container image (the new image with the application artifacts). It runs `httpd` with PHP support enabled.
+
+Building an application using a Dockerfile
+---------------------
+Compared to the Source-to-Image strategy, using a Dockerfile is a more
+flexible way to build a PHP container image with an application.
+Use a Dockerfile when Source-to-Image is not sufficiently flexible for you or
+when you build the image outside of the OpenShift environment.
+
+To use the PHP image in a Dockerfile, follow these steps:
+
+#### 1. Pull a base builder image to build on
+
+```
+podman pull ubi8/php-74
+```
+
+An UBI image `ubi8/php-74` is used in this example. This image is usable and freely redistributable under the terms of the UBI End User License Agreement (EULA). See more about UBI at [UBI FAQ](https://developers.redhat.com/articles/ubi-faq).
+
+#### 2. Pull an application code
+
+An example application available at https://github.com/sclorg/cakephp-ex.git is used here. Feel free to clone the repository for further experiments.
+
+```
+git clone https://github.com/sclorg/cakephp-ex.git app-src
+```
+
+#### 3. Prepare an application inside a container
+
+This step usually consists of at least these parts:
+
+* putting the application source into the container
+* installing the dependencies
+* setting the default command in the resulting image
+
+For all these three parts, users can either setup all manually and use commands `./composer.phar` or other commands explicitly in the Dockerfile ([3.1.](#31-to-use-your-own-setup-create-a-dockerfile-with-this-content)), or users can use the Source-to-Image scripts inside the image ([3.2.](#32-to-use-the-source-to-image-scripts-and-build-an-image-using-a-dockerfile-create-a-dockerfile-with-this-content); see more about these scripts in the section "Source-to-Image framework and scripts" above), that already know how to set-up and run some common PHP applications.
+
+##### 3.1. To use your own setup, create a Dockerfile with this content:
+```
+FROM ubi8/php-74
+
+# Add application sources
+ADD app-src .
+
+# Install the dependencies
+RUN TEMPFILE=$(mktemp) && \
+    curl -o "$TEMPFILE" "https://getcomposer.org/installer" && \
+    php <"$TEMPFILE" && \
+    ./composer.phar install --no-interaction --no-ansi --optimize-autoloader
+
+# Run script uses standard ways to configure the PHP application
+# and execs httpd -D FOREGROUND at the end
+# See more in <version>/s2i/bin/run in this repository.
+# Shortly what the run script does: The httpd daemon and php needs to be
+# configured, so this script prepares the configuration based on the container
+# parameters (e.g. available memory) and puts the configuration files into
+# the approriate places.
+# This can obviously be done differently, and in that case, the final CMD
+# should be set to "CMD httpd -D FOREGROUND" instead.
+CMD /usr/libexec/s2i/run
+
+```
+
+##### 3.2. To use the Source-to-Image scripts and build an image using a Dockerfile, create a Dockerfile with this content:
+```
+FROM ubi8/php-74
+
+# Add application sources to a directory that the assemble script expects them
+# and set permissions so that the container runs without root access
+USER 0
+ADD app-src /tmp/src
+RUN chown -R 1001:0 /tmp/src
+USER 1001
+
+# Install the dependencies
+RUN /usr/libexec/s2i/assemble
+
+# Set the default command for the resulting image
+CMD /usr/libexec/s2i/run
+```
+
+#### 4. Build a new image from a Dockerfile prepared in the previous step
+
+```
+podman build -t cakephp-app .
+```
+
+#### 5. Run the resulting image with the final application
+
+```
+podman run -d cakephp-app
+```
+
+Environment variables for Source-to-Image
 ---------------------
 
 To set these environment variables, you can place them as a key value pair into a `.s2i/environment`
