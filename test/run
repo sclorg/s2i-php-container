@@ -18,11 +18,7 @@ test_application_user
 test_ssl
 test_ssl_own_cert
 ct_npm_works
-test_build_from_dockerfil
-"
-TEST_LIST="\
-test_application
-test_build_from_dockerfil
+test_build_from_dockerfile
 "
 
 ct_enable_cleanup
@@ -244,14 +240,14 @@ test_ssl_own_cert() {
   diff ./configcert ./servercert >cert.diff
 }
 
-test_build_from_dockerfil() {
+test_build_from_dockerfile() {
   info "Check building using a Dockerfile"
-  ct_test_app_dockerfile ${THISDIR}/../examples/from-dockerfile/Dockerfile \
+  ct_test_app_dockerfile ${test_dir}/examples/from-dockerfile/Dockerfile \
                          'https://github.com/sclorg/cakephp-ex.git' \
                          'Welcome to your CakePHP application on OpenShift' \
                          app-src
   check_result $?
-  ct_test_app_dockerfile ${THISDIR}/../examples/from-dockerfile/Dockerfile.s2i \
+  ct_test_app_dockerfile ${test_dir}/examples/from-dockerfile/Dockerfile.s2i \
                          'https://github.com/sclorg/cakephp-ex.git' \
                          'Welcome to your CakePHP application on OpenShift' \
                          app-src
