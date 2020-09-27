@@ -211,6 +211,9 @@ The following environment variables set their equivalent property value in the o
 * **OPCACHE_REVALIDATE_FREQ**
   * How often to check script timestamps for updates, in seconds. 0 will result in OPcache checking for updates on every request.
   * Default: 2
+* **OPCACHE_MAX_FILES**
+  * The maximum number of keys (scripts) in the OPcache hash table. Only numbers between 200 and 1000000 are allowed.
+  * Default: 4000  
 
 You can also override the entire directory used to load the PHP configuration by setting:
 * **PHPRC**
