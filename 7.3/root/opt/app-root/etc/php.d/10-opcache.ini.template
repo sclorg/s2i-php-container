@@ -15,7 +15,7 @@ opcache.interned_strings_buffer=8
 
 ; The maximum number of keys (scripts) in the OPcache hash table.
 ; Only numbers between 200 and 1000000 are allowed.
-opcache.max_accelerated_files=${OPCACHE_MAX_FILES}
+opcache.max_accelerated_files=4000
 
 ; The maximum percentage of "wasted" memory until a restart is scheduled.
 ;opcache.max_wasted_percentage=5
