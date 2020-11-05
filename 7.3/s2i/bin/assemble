@@ -40,10 +40,16 @@ if [ -f composer.json ]; then
   fi
 
   if [ -z "$COMPOSER_VERSION" ]; then
-    php <$TEMPFILE
+    export COMPOSER_VERSION_ARG=""
+  elif [ $COMPOSER_VERSION = "--1" ]; then
+    export COMPOSER_VERSION_ARG="--1"
+  elif [ $COMPOSER_VERSION = "--2" ]; then
+    export COMPOSER_VERSION_ARG="--2"
   else
-    php $TEMPFILE --version="$COMPOSER_VERSION" 
+    export COMPOSER_VERSION_ARG="--version=$COMPOSER_VERSION"
   fi
+
+  php $TEMPFILE $COMPOSER_VERSION_ARG
 
   if [ "$(ls -a /tmp/artifacts/ 2>/dev/null)" ]; then
     echo "Restoring build artifacts"

@@ -245,7 +245,7 @@ yourself:
     * **COMPOSER_INSTALLER**
       * Overrides the default URL for downloading Composer of https://getcomposer.org/installer. Useful in disconnected environments.
     * **COMPOSER_VERSION**
-      * Overrides the default Composer version to download. See https://getcomposer.org/download/ for releases. Useful if you need version 1 or specific version.
+      * Overrides the default Composer version to download. Set to --1 for latest Composer v1, --2 for latest Composer v2. Defaults to v2. For specific versions see https://getcomposer.org/download/.
     * **COMPOSER_ARGS**
       * Adds extra arguments to the `composer install` command line (for example `--no-dev`).
 
