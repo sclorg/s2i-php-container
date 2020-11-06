@@ -284,13 +284,3 @@ function run_all_tests() {
 TEST_LIST=${TESTS:-$TEST_LIST} run_all_tests
 
 cleanup
-
-echo "$test_short_summary"
-
-if [ $TESTSUITE_RESULT -eq 0 ] ; then
-  echo "Tests for ${IMAGE_NAME} succeeded."
-else
-  echo "Tests for ${IMAGE_NAME} failed."
-fi
-
-exit $TESTSUITE_RESULT
