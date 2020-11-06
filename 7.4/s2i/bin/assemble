@@ -38,18 +38,7 @@ if [ -f composer.json ]; then
     echo "Download failed, giving up."
     exit 1
   fi
-
-  if [ -z "$COMPOSER_VERSION" ]; then
-    export COMPOSER_VERSION_ARG=""
-  elif [ $COMPOSER_VERSION = "--1" ]; then
-    export COMPOSER_VERSION_ARG="--1"
-  elif [ $COMPOSER_VERSION = "--2" ]; then
-    export COMPOSER_VERSION_ARG="--2"
-  else
-    export COMPOSER_VERSION_ARG="--version=$COMPOSER_VERSION"
-  fi
-
-  php $TEMPFILE $COMPOSER_VERSION_ARG
+  php $TEMPFILE "$COMPOSER_INSTALLER_OPTIONS"
 
   if [ "$(ls -a /tmp/artifacts/ 2>/dev/null)" ]; then
     echo "Restoring build artifacts"
