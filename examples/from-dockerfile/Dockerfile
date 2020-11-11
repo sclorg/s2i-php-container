@@ -1,7 +1,10 @@
 FROM ubi8/php-73
 
+USER 0
 # Add application sources
 ADD app-src .
+RUN chown -R 1001:0 .
+USER 1001
 
 # Install the dependencies
 RUN TEMPFILE=$(mktemp) && \
