@@ -21,8 +21,6 @@ ct_npm_works
 test_build_from_dockerfile
 "
 
-ct_enable_cleanup
-
 # TODO: Make command compatible for Mac users
 test_dir="$(readlink -zf $(dirname "${BASH_SOURCE[0]}"))"
 image_dir=$(readlink -zf ${test_dir}/..)
@@ -33,6 +31,9 @@ source "${test_dir}/test-lib.sh"
 # TODO: This should be part of the image metadata
 test_port=8080
 test_port_ssl=8443
+
+ct_enable_cleanup
+
 
 info() {
   echo -e "\n\e[1m[INFO] $@...\e[0m\n"
@@ -105,7 +106,7 @@ cleanup() {
 check_result() {
   local result="$1"
   if [[ "$result" != "0" ]]; then
-    TESTSUITE_RESULT=1
+    TESTCASE_RESULT=1
   fi
   return $result
 }
@@ -265,18 +266,18 @@ run_s2i_build
 check_result $?
 
 function run_all_tests() {
-  local suite_result=0
   for test_case in $TEST_LIST; do
     : "Running test $test_case ...."
-    if $test_case; then
+    TESTCASE_RESULT=0
+    $test_case
+    if [ $TESTCASE_RESULT -eq 0 ]; then
       printf -v test_short_summary "${test_short_summary}[PASSED] $test_case\n"
     else
       printf -v test_short_summary "${test_short_summary}[FAILED] $test_case\n"
-      suite_result=1
-      [ -n "${FAIL_QUICKLY:-}" ] && echo "$sum" && return $suite_result
+      TESTSUITE_RESULT=1
+      [ -n "${FAIL_QUICKLY:-}" ] && return 1
     fi
   done;
-  return $suite_result
 }
 
 # Run the chosen tests
