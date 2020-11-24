@@ -1,5 +1,11 @@
 PHP Docker images
 =================
+s2i-php-container 7.2 Quay.io status: [![Docker Repository on Quay](https://quay.io/repository/centos7/php-72-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/php-72-centos7)
+
+s2i-php-container 7.3 Quay.io status: [![Docker Repository on Quay](https://quay.io/repository/centos7/php-73-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/php-73-centos7)
+
+s2i-php-container 7.4 Quay.io status: [![Docker Repository on Quay](https://quay.io/repository/centos7/php-74-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/php-74-centos7)
+
 
 This repository contains the source for building various versions of
 the PHP application as a reproducible Docker image using
@@ -17,7 +23,7 @@ For more information about concepts used in these container images, see the
 
 
 Versions
----------------
+--------
 PHP versions currently supported are:
 * [php-7.2](7.2)
 * [php-7.3](7.3)
@@ -32,7 +38,7 @@ CentOS versions currently supported are:
 
 
 Installation
----------------
+------------
 To build a PHP image, choose either the CentOS or RHEL based image:
 *  **RHEL based image**
 
@@ -61,7 +67,7 @@ To build a PHP image, choose either the CentOS or RHEL based image:
 
 Alternatively, you can pull the CentOS image from Docker Hub via:
 
-    $ podman pull centos/php-73-centos7
+    $ podman pull centos7/php-73-centos7
 
 Note: while the installation steps are calling `podman`, you can replace any such calls by `docker` with the same arguments.
 
@@ -70,7 +76,7 @@ on all the supported versions of PHP.**
 
 
 Usage
----------------------------------
+-----
 For information about usage of Dockerfile for PHP 7.4,
 see [usage documentation](7.4/README.md).
 
@@ -81,7 +87,7 @@ For information about usage of Dockerfile for PHP 7.2,
 see [usage documentation](7.2/README.md).
 
 Test
----------------------
+----
 This repository also provides a [S2I](https://github.com/openshift/source-to-image) test framework,
 which launches tests to check functionality of a simple PHP application built on top of the s2i-php image.
 
@@ -111,7 +117,7 @@ on all the supported versions of PHP.**
 
 
 Repository organization
-------------------------
+-----------------------
 * **`<php-version>`**
 
     * **Dockerfile**
@@ -154,5 +160,3 @@ Repository organization
         * **run**
 
             Script that runs the [S2I](https://github.com/openshift/source-to-image) test framework.
-
-
