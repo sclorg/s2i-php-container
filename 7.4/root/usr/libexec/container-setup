@@ -26,7 +26,7 @@ else
   rm -f /opt/app-root/etc/scl_enable
 fi
 
-if head "/etc/redhat-release" | grep -q -e "^Red Hat Enterprise Linux release 8" -e "Fedora"; then
+if head "/etc/redhat-release" | grep -q "^Red Hat Enterprise Linux release 8"; then
     /usr/libexec/httpd-ssl-gencerts
 fi
 
