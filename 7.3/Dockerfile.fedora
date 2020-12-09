@@ -52,7 +52,6 @@ ENV PHP_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/php/ \
     HTTPD_CONFIGURATION_PATH=${APP_ROOT}/etc/conf.d \
     HTTPD_MAIN_CONF_PATH=/etc/httpd/conf \
     HTTPD_MAIN_CONF_D_PATH=/etc/httpd/conf.d \
-    HTTPD_MODULES_CONF_D_PATH=/etc/httpd/conf.modules.d \
     HTTPD_VAR_RUN=/var/run/httpd \
     HTTPD_DATA_PATH=/var/www \
     HTTPD_DATA_ORIG_PATH=/var/www \
@@ -65,7 +64,22 @@ COPY ./s2i/bin/ $STI_SCRIPTS_PATH
 COPY ./root/ /
 
 # Reset permissions of filesystem to default values
-RUN /usr/libexec/container-setup && rpm-file-permissions
+# Generate SSL certs and reset permissions of filesystem to default values
+RUN /usr/libexec/httpd-ssl-gencerts && \
+    /usr/libexec/container-setup && rpm-file-permissions
+
+# Fedora uses by default 'event' MPM module
+# switch to 'prefork' to provide same user experience as with RHEL image
+# Code taken from 'config_mpm()' function in sclorg/httpd-container repo
+ENV HTTPD_MPM=prefork \
+    HTTPD_MAIN_CONF_MODULES_D_PATH=/etc/httpd/conf.modules.d
+
+RUN if [ -v HTTPD_MPM -a -f ${HTTPD_MAIN_CONF_MODULES_D_PATH}/00-mpm.conf ]; then \
+    mpmconf=${HTTPD_MAIN_CONF_MODULES_D_PATH}/00-mpm.conf; \
+    sed -i -e 's,^LoadModule,#LoadModule,' ${mpmconf}; \
+    sed -i -e "/LoadModule mpm_${HTTPD_MPM}/s,^#LoadModule,LoadModule," ${mpmconf}; \
+    echo "---> Set MPM to ${HTTPD_MPM} in ${mpmconf}"; \
+  fi
 
 USER 1001
 
