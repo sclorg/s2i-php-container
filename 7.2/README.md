@@ -1,9 +1,10 @@
 PHP 7.2 container image
-================
+=======================
 
 This container image includes PHP 7.2 as a [S2I](https://github.com/openshift/source-to-image) base image for your PHP 7.2 applications.
 Users can choose between RHEL and CentOS based builder images.
 The RHEL UBI images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/),
+the CentOS images are available on [Quay.io](https://quay.io/organization/centos7),
 and the Fedora images are available in [Fedora Registry](https://registry.fedoraproject.org/).
 The resulting image can be run using [podman](https://github.com/containers/libpod).
 
@@ -26,7 +27,7 @@ version, that is included in the image; those versions can be changed anytime an
 the nodejs itself is included just to make the npm work.
 
 Usage in OpenShift
----------------------
+------------------
 In this example, we will assume that you are using the `ubi8/php-72` image, available via `php:72` imagestream tag in Openshift.
 
 To build a simple [cakephp-sample-app](https://github.com/sclorg/cakephp-ex.git) application in Openshift:
@@ -47,7 +48,7 @@ $ curl 127.0.0.1:8080
 ```
 
 Source-to-Image framework and scripts
----------------------
+-------------------------------------
 This image supports the [Source-to-Image](https://docs.openshift.com/container-platform/3.11/creating_images/s2i.html)
 (S2I) strategy in OpenShift. The Source-to-Image is an OpenShift framework
 which makes it easy to write images that take application source code as
@@ -60,7 +61,7 @@ To support the Source-to-Image framework, important scripts are included in the 
 * The `/usr/libexec/s2i/run` script is set as the default command in the resulting container image (the new image with the application artifacts). It runs `httpd` with PHP support enabled.
 
 Building an application using a Dockerfile
----------------------
+------------------------------------------
 Compared to the Source-to-Image strategy, using a Dockerfile is a more
 flexible way to build a PHP container image with an application.
 Use a Dockerfile when Source-to-Image is not sufficiently flexible for you or
@@ -151,7 +152,7 @@ podman run -d cakephp-app
 ```
 
 Environment variables for Source-to-Image
----------------------
+-----------------------------------------
 
 To set these environment variables, you can place them as a key value pair into a `.s2i/environment`
 file inside your source code repository.
@@ -268,7 +269,7 @@ However, if these files exist they will affect the behavior of the build process
   of the application source.
 
 Hot deploy
----------------------
+----------
 
 In order to immediately pick up changes made in your application source code, you need to run your built image with the `OPCACHE_REVALIDATE_FREQ=0` environment variable passed to [Podman](https://github.com/containers/libpod) `-e` run flag:
 
