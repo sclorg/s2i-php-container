@@ -118,10 +118,11 @@ wait_for_cid() {
   local result=1
   info "Waiting for application container to start"
   while [ $attempt -le $max_attempts ]; do
-    [ -f $cid_file ] && [ -s $cid_file ] && break
+    [ -f $cid_file ] && [ -s $cid_file ] && result=0 && break
     attempt=$(( $attempt + 1 ))
     sleep $sleep_time
   done
+  return $result
 }
 
 test_s2i_usage() {
@@ -194,25 +195,25 @@ test_connection() {
 
 test_application() {
   # Verify that the HTTP connection can be established to test application container
-  run_test_application
+  run_test_application &
 
   # Wait for the container to write it's CID file
   wait_for_cid
+  check_result $?
 
   test_scl_usage "php --version" "$VERSION"
-  check_result $? || return 1
+  check_result $?
 
   test_session ${test_port}
-  check_result $? || return 1
+  check_result $?
 
   test_connection ${test_port}
-  check_result $? || return 1
+  check_result $?
 
   test_connection ${test_port_ssl} https
-  check_result $? || return 1
+  check_result $?
 
   cleanup_test_app
-  return 0
 }
 
 test_application_user() {
@@ -234,11 +235,12 @@ test_ssl_own_cert() {
   ct_s2i_build_as_df file://${test_dir}/self-signed-ssl ${IMAGE_NAME} ${IMAGE_NAME}-test-self-signed-ssl ${s2i_args} $(ct_build_s2i_npm_variables)
   docker run -d --user=100001 ${run_args} --cidfile=${cid_file} ${IMAGE_NAME}-test-self-signed-ssl
   test_connection ${test_port_ssl} https
-  check_result $? || return 1
+  check_result $?
 
   echo | openssl s_client -showcerts -servername $(container_ip) -connect $(container_ip):${test_port_ssl} 2>/dev/null | openssl x509 -inform pem -noout -text >./servercert
   openssl x509 -in ${test_dir}/self-signed-ssl/httpd-ssl/certs/server-cert-selfsigned.pem -inform pem -noout -text >./configcert
   diff ./configcert ./servercert >cert.diff
+  check_result $?
 }
 
 test_build_from_dockerfile() {
@@ -278,6 +280,7 @@ function run_all_tests() {
       TESTSUITE_RESULT=1
       [ -n "${FAIL_QUICKLY:-}" ] && return 1
     fi
+    cleanup_test_app
   done;
 }
 
