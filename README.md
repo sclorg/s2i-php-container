@@ -1,7 +1,5 @@
 PHP Docker images
 =================
-s2i-php-container 7.2 Quay.io status: [![Docker Repository on Quay](https://quay.io/repository/centos7/php-72-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/php-72-centos7)
-
 s2i-php-container 7.3 Quay.io status: [![Docker Repository on Quay](https://quay.io/repository/centos7/php-73-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/php-73-centos7)
 
 s2i-php-container 7.4 Quay.io status: [![Docker Repository on Quay](https://quay.io/repository/centos7/php-74-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/php-74-centos7)
