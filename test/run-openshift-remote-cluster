@@ -24,9 +24,7 @@ oc version
 
 oc status || false "It looks like oc is not properly logged in."
 
-export CT_SKIP_NEW_PROJECT=true
-export CT_SKIP_UPLOAD_IMAGE=true
-export CT_NAMESPACE=openshift
+export CT_EXTERNAL_REGISTRY=true
 
 test_php_integration "${IMAGE_NAME}"
 
