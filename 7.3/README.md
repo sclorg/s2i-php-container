@@ -15,10 +15,10 @@ Description
 
 PHP 7.3 available as container is a base platform for
 building and running various PHP 7.3 applications and frameworks.
-PHP is an HTML-embedded scripting language. PHP attempts to make it easy for developers 
-to write dynamically generated web pages. PHP also offers built-in database integration 
-for several commercial and non-commercial database management systems, so writing 
-a database-enabled webpage with PHP is fairly simple. The most common use of PHP coding 
+PHP is an HTML-embedded scripting language. PHP attempts to make it easy for developers
+to write dynamically generated web pages. PHP also offers built-in database integration
+for several commercial and non-commercial database management systems, so writing
+a database-enabled webpage with PHP is fairly simple. The most common use of PHP coding
 is probably as a replacement for CGI scripts.
 
 This container image includes an npm utility, so users can use it to install JavaScript
@@ -191,7 +191,7 @@ The following environment variables set their equivalent property value in the p
   * Default: /tmp/sessions
 * **SESSION_COOKIE_DOMAIN**
   * The domain for which the cookie is valid.
-  * Default: 
+  * Default:
 * **SESSION_COOKIE_HTTPONLY**
   * Whether or not to add the httpOnly flag to the cookie
   * Default: 0
@@ -214,7 +214,7 @@ The following environment variables set their equivalent property value in the o
   * Default: 2
 * **OPCACHE_MAX_FILES**
   * The maximum number of keys (scripts) in the OPcache hash table. Only numbers between 200 and 1000000 are allowed.
-  * Default: 4000  
+  * Default: 4000
 
 You can also override the entire directory used to load the PHP configuration by setting:
 * **PHPRC**
@@ -238,6 +238,17 @@ yourself:
   * `MaxRequestWorkers` was called `MaxClients` before version httpd 2.3.13.
   * Default: 256 (this is automatically tuned by setting Cgroup limits for the container using this formula:
     `TOTAL_MEMORY / 15MB`. The 15MB is average size of a single httpd process.
+* **HTTPD_MAX_REQUESTS_PER_CHILD**
+  * The [MaxRequestsPerChild](http://httpd.apache.org/docs/current/mod/mpm_common.html#maxconnectionsperchild)
+    directive sets the limit on the number of connections that an individual child server process will handle.
+    After `MaxRequestsPerChild` connections, the child process will die. If `MaxRequestsPerChild` is 0, then the process will never expire.
+  * Setting `MaxRequestsPerChild` to a non-zero value limits the amount of memory that a process can consume by (accidental) memory leakage.
+  * `MaxRequestsPerChild` is called `MaxConnectionsPerChild` in Apache HTTP 2.3.9 and later.
+  * Default: 4000
+* **HTTPD_MAX_KEEPALIVE_REQUESTS**
+  * The [MaxKeepAliveRequests](http://httpd.apache.org/docs/current/mod/core.html#maxkeepaliverequests)
+    directive limits the number of requests allowed per connection when `KeepAlive` is on. If it is set to 0, unlimited requests will be allowed.
+  * Default: 100
 
   You can use a custom composer repository mirror URL to download packages instead of the default 'packagist.org':
 
