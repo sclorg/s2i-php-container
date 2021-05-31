@@ -23,7 +23,6 @@ For more information about concepts used in these container images, see the
 Versions
 --------
 PHP versions currently supported are:
-* [php-7.2](7.2)
 * [php-7.3](7.3)
 * [php-7.4](7.4)
 
@@ -81,8 +80,6 @@ see [usage documentation](7.4/README.md).
 For information about usage of Dockerfile for PHP 7.3,
 see [usage documentation](7.3/README.md).
 
-For information about usage of Dockerfile for PHP 7.2,
-see [usage documentation](7.2/README.md).
 
 Test
 ----
@@ -95,7 +92,7 @@ Users can choose between testing a PHP test application based on a RHEL or CentO
 
     This image is not available as a trusted build in [Docker Index](https://index.docker.io).
 
-    To test a RHEL7 based PHP-5.5 image, you need to run the test on a properly
+    To test a RHEL7 based PHP-7.3 image, you need to run the test on a properly
     subscribed RHEL machine.
 
     ```
@@ -134,8 +131,8 @@ Repository organization
         *   **assemble**
 
             Used to install the sources into the location where the application
-            will be run and prepare the application for deployment (eg. installing
-            modules using npm, etc..)
+            will be run and prepare the application for deployment (e.g. installing
+            modules using npm, etc.)
 
         *   **run**
 
