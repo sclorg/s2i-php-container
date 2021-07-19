@@ -29,7 +29,12 @@ export OPCACHE_REVALIDATE_FREQ=${OPCACHE_REVALIDATE_FREQ:-2}
 export OPCACHE_MAX_FILES=${OPCACHE_MAX_FILES:-4000}
 
 export PHPRC=${PHPRC:-${PHP_SYSCONF_PATH}/php.ini}
-export PHP_INI_SCAN_DIR=${PHP_INI_SCAN_DIR:-${PHP_SYSCONF_PATH}/php.d}
+
+if [ -z "${PHP_INI_SCAN_DIR:-}" ]; then
+   export PHP_INI_SCAN_DIR=${PHP_SYSCONF_PATH}/php.d
+else
+   export PHP_INI_SCAN_DIR=${PHP_INI_SCAN_DIR}:${PHP_SYSCONF_PATH}/php.d
+fi
 
 envsubst < /opt/app-root/etc/php.ini.template > ${PHP_SYSCONF_PATH}/php.ini
 envsubst < /opt/app-root/etc/php.d/10-opcache.ini.template > ${PHP_SYSCONF_PATH}/php.d/10-opcache.ini
