@@ -45,7 +45,7 @@ jobs:
             "sha": "${{steps.sha.outputs.SHA}}",
             "state": "pending",
             "context": "Testing Farm - RHEL8",
-            "target_url": "http://artifacts.dev.testing-farm.io/${{ steps.sched_test.outputs.req_id }}/pipeline.log"
+            "target_url": "http://artifacts.osci.redhat.com/testing-farm/${{ steps.sched_test.outputs.req_id }}"
           }
           EOF
           echo "https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/${{steps.sha.outputs.SHA}}"
@@ -115,7 +115,7 @@ jobs:
             "state": "pending",
             "context": "Testing Farm - RHEL8",
             "description": "Build started",
-            "target_url": "http://artifacts.dev.testing-farm.io/${{ needs.build.outputs.REQ_ID }}/"
+            "target_url": "http://artifacts.osci.redhat.com/testing-farm/${{ needs.build.outputs.REQ_ID }}"
           }
           EOF
           # Update GitHub status description to 'Build started'
@@ -183,7 +183,7 @@ jobs:
             "state": "${{steps.final_state.outputs.FINAL_STATE}}",
             "context": "Testing Farm - RHEL8",
             "description": "Build finished${{steps.final_state.outputs.INFRA_STATE}}",
-            "target_url": "http://artifacts.dev.testing-farm.io/${{ needs.running.outputs.REQ_ID }}/"
+            "target_url": "http://artifacts.osci.redhat.com/testing-farm/${{ needs.running.outputs.REQ_ID }}"
           }
           EOF
           cat final.json
