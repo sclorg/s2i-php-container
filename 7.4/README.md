@@ -220,7 +220,7 @@ You can also override the entire directory used to load the PHP configuration by
 * **PHPRC**
   * Sets the path to the php.ini file
 * **PHP_INI_SCAN_DIR**
-  * Path to scan for additional ini configuration files
+  * Path to scan for additional ini configuration files (in addition to /etc/php.d)
 
 You can override the Apache [MPM prefork](https://httpd.apache.org/docs/2.4/mod/mpm_common.html)
 settings to increase the performance for of the PHP application. In case you set
