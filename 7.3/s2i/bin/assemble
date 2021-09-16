@@ -38,7 +38,14 @@ if [ -f composer.json ]; then
     echo "Download failed, giving up."
     exit 1
   fi
-  php <$TEMPFILE
+
+  if [ -z $COMPOSER_VERSION ]; then
+    echo "By default, latest composer will be used. If you want to use v1 please use the environment variable COMPOSER_VERSION=1"
+    php <$TEMPFILE
+  else
+    echo "You set the COMPOSER_VERSION"
+    php <$TEMPFILE -- --$COMPOSER_VERSION
+  fi
 
   if [ "$(ls -a /tmp/artifacts/ 2>/dev/null)" ]; then
     echo "Restoring build artifacts"
