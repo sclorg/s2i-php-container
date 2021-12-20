@@ -94,8 +94,7 @@ test_file_upload "$IMAGE_NAME"
 # Check the imagestream
 test_php_imagestream
 
-# Version 7.4 is not supported for RHEL7 in imagestreams yet
-# Let's disable tests
+# CentOS-7 and RHEL-7 does not have image streams for 7.4 yet.
 # test_latest_imagestreams
 
 OS_TESTSUITE_RESULT=0

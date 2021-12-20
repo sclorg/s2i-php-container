@@ -39,11 +39,11 @@ Installation
 To build a PHP image, choose either the CentOS or RHEL based image:
 *  **RHEL based image**
 
-    These images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/php-73-rhel7).
+    These images are available in the [Red Hat Container Catalog](https://catalog.redhat.com/software/containers/ubi8/php-74/5f521244e05bbcd88f128b63).
     To download it run:
 
     ```
-    $ podman pull registry.access.redhat.com/rhscl/php-73-rhel7
+    $ podman pull registry.access.redhat.com/ubi8/php-74
     ```
 
     To build a RHEL based PHP image, you need to run the build on a properly
@@ -52,7 +52,7 @@ To build a PHP image, choose either the CentOS or RHEL based image:
     ```
     $ git clone --recursive https://github.com/sclorg/s2i-php-container.git
     $ cd s2i-php-container
-    $ make build TARGET=rhel7 VERSIONS=7.3
+    $ make build TARGET=rhel8 VERSIONS=7.4
     ```
 
 *  **CentOS based image**
@@ -92,12 +92,12 @@ Users can choose between testing a PHP test application based on a RHEL or CentO
 
     This image is not available as a trusted build in [Docker Index](https://index.docker.io).
 
-    To test a RHEL7 based PHP-7.3 image, you need to run the test on a properly
+    To test a RHEL8 based PHP-7.4 image, you need to run the test on a properly
     subscribed RHEL machine.
 
     ```
     $ cd s2i-php-container
-    $ make test TARGET=rhel7 VERSIONS=7.3
+    $ make test TARGET=rhel8 VERSIONS=7.4
     ```
 
 *  **CentOS based image**
