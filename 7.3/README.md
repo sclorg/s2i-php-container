@@ -3,7 +3,7 @@ PHP 7.3 container image
 
 This container image includes PHP 7.3 as a [S2I](https://github.com/openshift/source-to-image) base image for your PHP 7.3 applications.
 Users can choose between RHEL and CentOS based builder images.
-The RHEL UBI images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/),
+The RHEL UBI images are available in the [Red Hat Container Catalog](https://catalog.redhat.com/software/containers/search),
 the CentOS images are available on [Quay.io](https://quay.io/organization/centos7),
 and the Fedora images are available in [Fedora Registry](https://registry.fedoraproject.org/).
 The resulting image can be run using [podman](https://github.com/containers/libpod).
@@ -28,7 +28,7 @@ the nodejs itself is included just to make the npm work.
 
 Usage in OpenShift
 ------------------
-In this example, we will assume that you are using the `ubi8/php-73` image, available via `php:73` imagestream tag in Openshift.
+In this example, we will assume that you are using the `ubi7/php-73` image, available via `php:73` imagestream tag in Openshift.
 
 To build a simple [cakephp-sample-app](https://github.com/sclorg/cakephp-ex.git) application in Openshift:
 
@@ -72,10 +72,10 @@ To use the PHP image in a Dockerfile, follow these steps:
 #### 1. Pull a base builder image to build on
 
 ```
-podman pull ubi8/php-73
+podman pull ubi7/php-73
 ```
 
-An UBI image `ubi8/php-73` is used in this example. This image is usable and freely redistributable under the terms of the UBI End User License Agreement (EULA). See more about UBI at [UBI FAQ](https://developers.redhat.com/articles/ubi-faq).
+An UBI image `ubi7/php-73` is used in this example. This image is usable and freely redistributable under the terms of the UBI End User License Agreement (EULA). See more about UBI at [UBI FAQ](https://developers.redhat.com/articles/ubi-faq).
 
 #### 2. Pull an application code
 
@@ -97,7 +97,7 @@ For all these three parts, users can either setup all manually and use commands 
 
 ##### 3.1. To use your own setup, create a Dockerfile with this content:
 ```
-FROM ubi8/php-73
+FROM ubi7/php-73
 
 # Add application sources
 ADD app-src .
@@ -123,7 +123,7 @@ CMD /usr/libexec/s2i/run
 
 ##### 3.2. To use the Source-to-Image scripts and build an image using a Dockerfile, create a Dockerfile with this content:
 ```
-FROM ubi8/php-73
+FROM ubi7/php-73
 
 # Add application sources to a directory that the assemble script expects them
 # and set permissions so that the container runs without root access
