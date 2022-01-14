@@ -10,6 +10,7 @@ THISDIR=$(dirname ${BASH_SOURCE[0]})
 
 source ${THISDIR}/test-lib.sh
 source ${THISDIR}/test-lib-openshift.sh
+source ${THISDIR}/test-lib-php.sh
 
 # change the branch to a different value if a new change in the example
 # app needs to be tested
@@ -17,14 +18,18 @@ BRANCH_TO_TEST=master
 
 set -eo nounset
 
-test -n "${IMAGE_NAME-}" || false 'make sure $IMAGE_NAME is defined'
-test -n "${VERSION-}" || false 'make sure $VERSION is defined'
-test -n "${OS-}" || false 'make sure $OS is defined'
+trap ct_os_cleanup EXIT SIGINT
+
+ct_os_check_compulsory_vars
+
+ct_os_enable_print_logs
+
 istag="php:$VERSION"
 
 function test_file_upload() {
   local image_name=$1
-  local service_name=${image_name##*/}
+  local image_name_no_namespace=${image_name##*/}
+  local service_name="${image_name_no_namespace%%:*}-testing"
   local app="https://github.com/openshift-qe/openshift-php-upload-demo"
   local ip=""
 
@@ -46,6 +51,16 @@ function test_file_upload() {
   ct_os_delete_project
 }
 
+test_latest_imagestreams() {
+  local result=1
+  # Switch to root directory of a container
+  pushd "${THISDIR}/../.." >/dev/null || return 1
+  ct_check_latest_imagestreams
+  result=$?
+  popd >/dev/null || return 1
+  return $result
+}
+
 ct_os_cluster_up
 
 # test local app
@@ -63,15 +78,28 @@ if [[ "${VERSION}" > "5.6" ]] ; then
 fi
 
 # test image update with s2i
-case "$OS" in
-  rhel7) old_image=registry.access.redhat.com/rhscl/php-${VERSION/./}-rhel7 ;;
-# Fedora image isn't in registry yet
-#  fedora) old_image=${IMAGE_NAME/localhost\//}
-  *) old_image=docker.io/centos/php-${VERSION/./}-centos7 ;;
-esac
-ct_os_test_image_update "$IMAGE_NAME" "${old_image}" "$istag" \
-                        'ct_test_response "http://<IP>:8080" "200" "Test PHP passed"' \
-                        "$istag~https://github.com/sclorg/s2i-php-container.git" \
-                        --context-dir="$VERSION/test/test-app"
+old_image=$(ct_get_public_image_name "$OS" "$BASE_IMAGE_NAME" "$VERSION")
+
+if ct_check_image_availability "$old_image"; then
+  ct_os_test_image_update "$IMAGE_NAME" "${old_image}" "$istag" \
+                          'ct_test_response "http://<IP>:8080" "200" "Test PHP passed"' \
+                          "$istag~https://github.com/sclorg/s2i-php-container.git" \
+                          --context-dir="$VERSION/test/test-app"
+else
+  echo "Image $old_image not found in public repositories, skipping update test."
+fi
 
 test_file_upload "$IMAGE_NAME"
+
+# Check the imagestream
+test_php_imagestream
+
+# CentOS-7 and RHEL-7 does not have image streams for 7.4 yet.
+# test_latest_imagestreams
+
+OS_TESTSUITE_RESULT=0
+
+ct_os_cluster_down
+
+# vim: set tabstop=2:shiftwidth=2:expandtab:
+

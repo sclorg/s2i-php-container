@@ -1,5 +1,9 @@
 PHP Docker images
 =================
+s2i-php-container 7.3 Quay.io status: [![Docker Repository on Quay](https://quay.io/repository/centos7/php-73-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/php-73-centos7)
+
+s2i-php-container 7.4 Quay.io status: [![Docker Repository on Quay](https://quay.io/repository/centos7/php-74-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/php-74-centos7)
+
 
 This repository contains the source for building various versions of
 the PHP application as a reproducible Docker image using
@@ -17,29 +21,29 @@ For more information about concepts used in these container images, see the
 
 
 Versions
----------------
+--------
 PHP versions currently supported are:
-* [php-7.0](7.0)
-* [php-7.1](7.1)
-* [php-7.2](7.2)
+* [php-7.3](7.3)
+* [php-7.4](7.4)
 
 RHEL versions currently supported are:
 * RHEL7
+* RHEL8
 
 CentOS versions currently supported are:
 * CentOS7
 
 
 Installation
----------------
+------------
 To build a PHP image, choose either the CentOS or RHEL based image:
 *  **RHEL based image**
 
-    These images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/php-72-rhel7).
+    These images are available in the [Red Hat Container Catalog](https://catalog.redhat.com/software/containers/ubi8/php-74/5f521244e05bbcd88f128b63).
     To download it run:
 
     ```
-    $ podman pull registry.access.redhat.com/rhscl/php-72-rhel7
+    $ podman pull registry.access.redhat.com/ubi8/php-74
     ```
 
     To build a RHEL based PHP image, you need to run the build on a properly
@@ -48,19 +52,19 @@ To build a PHP image, choose either the CentOS or RHEL based image:
     ```
     $ git clone --recursive https://github.com/sclorg/s2i-php-container.git
     $ cd s2i-php-container
-    $ make build TARGET=rhel7 VERSIONS=7.2
+    $ make build TARGET=rhel8 VERSIONS=7.4
     ```
 
 *  **CentOS based image**
     ```
     $ git clone --recursive https://github.com/sclorg/s2i-php-container.git
     $ cd s2i-php-container
-    $ make build TARGET=centos7 VERSIONS=7.2
+    $ make build TARGET=centos7 VERSIONS=7.3
     ```
 
 Alternatively, you can pull the CentOS image from Docker Hub via:
 
-    $ podman pull centos/php-72-centos7
+    $ podman pull centos7/php-73-centos7
 
 Note: while the installation steps are calling `podman`, you can replace any such calls by `docker` with the same arguments.
 
@@ -69,19 +73,16 @@ on all the supported versions of PHP.**
 
 
 Usage
----------------------------------
+-----
+For information about usage of Dockerfile for PHP 7.4,
+see [usage documentation](7.4/README.md).
 
-For information about usage of Dockerfile for PHP 7.2,
-see [usage documentation](7.2/README.md).
+For information about usage of Dockerfile for PHP 7.3,
+see [usage documentation](7.3/README.md).
 
-For information about usage of Dockerfile for PHP 7.1,
-see [usage documentation](7.1/README.md).
-
-For information about usage of Dockerfile for PHP 7.0,
-see [usage documentation](7.0/README.md).
 
 Test
----------------------
+----
 This repository also provides a [S2I](https://github.com/openshift/source-to-image) test framework,
 which launches tests to check functionality of a simple PHP application built on top of the s2i-php image.
 
@@ -91,19 +92,19 @@ Users can choose between testing a PHP test application based on a RHEL or CentO
 
     This image is not available as a trusted build in [Docker Index](https://index.docker.io).
 
-    To test a RHEL7 based PHP-5.5 image, you need to run the test on a properly
+    To test a RHEL8 based PHP-7.4 image, you need to run the test on a properly
     subscribed RHEL machine.
 
     ```
     $ cd s2i-php-container
-    $ make test TARGET=rhel7 VERSIONS=7.2
+    $ make test TARGET=rhel8 VERSIONS=7.4
     ```
 
 *  **CentOS based image**
 
     ```
     $ cd s2i-php-container
-    $ make test TARGET=centos7 VERSIONS=7.2
+    $ make test TARGET=centos7 VERSIONS=7.3
     ```
 
 **Notice: By omitting the `VERSIONS` parameter, the build/test action will be performed
@@ -111,7 +112,7 @@ on all the supported versions of PHP.**
 
 
 Repository organization
-------------------------
+-----------------------
 * **`<php-version>`**
 
     * **Dockerfile**
@@ -130,8 +131,8 @@ Repository organization
         *   **assemble**
 
             Used to install the sources into the location where the application
-            will be run and prepare the application for deployment (eg. installing
-            modules using npm, etc..)
+            will be run and prepare the application for deployment (e.g. installing
+            modules using npm, etc.)
 
         *   **run**
 
@@ -154,5 +155,3 @@ Repository organization
         * **run**
 
             Script that runs the [S2I](https://github.com/openshift/source-to-image) test framework.
-
-

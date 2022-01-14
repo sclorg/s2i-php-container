@@ -11,6 +11,8 @@
 THISDIR=$(dirname ${BASH_SOURCE[0]})
 
 source ${THISDIR}/test-lib-php.sh
+source ${THISDIR}/test-lib-openshift.sh
+source ${THISDIR}/test-lib-remote-openshift.sh
 
 set -eo nounset
 
@@ -18,13 +20,20 @@ trap ct_os_cleanup EXIT SIGINT
 
 ct_os_check_compulsory_vars
 
+ct_os_set_ocp4
+
+oc version
+
 oc status || false "It looks like oc is not properly logged in."
 
-export CT_SKIP_NEW_PROJECT=true
-export CT_SKIP_UPLOAD_IMAGE=true
-export CT_NAMESPACE=openshift
+export CT_EXTERNAL_REGISTRY=true
 
-test_php_integration php ${VERSION} "${IMAGE_NAME}"
+test_php_integration "${IMAGE_NAME}"
+
+# Check the imagestream
+test_php_imagestream
 
 OS_TESTSUITE_RESULT=0
+
+# vim: set tabstop=2:shiftwidth=2:expandtab:
 
