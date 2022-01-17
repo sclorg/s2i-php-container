@@ -43,7 +43,6 @@ jobs:
             compose: "CentOS-Stream-9"
             tmt_url: "http://artifacts.dev.testing-farm.io"
             tmt_repo: "https://github.com/sclorg/sclorg-testing-farm"
-
     if: |
       github.event.issue.pull_request
       && (contains(github.event.comment.body, '[test]') || contains(github.event.comment.body, '[test-all]'))
