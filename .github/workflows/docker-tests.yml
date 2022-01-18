@@ -98,6 +98,9 @@ jobs:
           else
             api_key="${{ secrets.TF_INTERNAL_API_KEY }}"
             branch_name="master"
+            if [ "${{ matrix.tmt_plan }}" == "c9s" ]; then
+              branch_name="main"
+            fi
           fi
           cat << EOF > request.json
           {
