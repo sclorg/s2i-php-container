@@ -118,7 +118,7 @@ jobs:
                 "TEST_NAME": "test"
               },
               "secrets": {
-                "QUAY_USERNAME": "${{ secrets.QUAY_IMAGE_SCLORG_BUILDER_USERNAME }}"
+                "QUAY_USERNAME": "${{ secrets.QUAY_IMAGE_SCLORG_BUILDER_USERNAME }}",
                 "QUAY_TOKEN": "${{ secrets.QUAY_IMAGE_SCLORG_BUILDER_TOKEN }}"
               }
             }]
