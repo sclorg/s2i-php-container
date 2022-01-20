@@ -1,4 +1,4 @@
-FROM quay.io/sclorg/s2i-base:c9s
+FROM quay.io/sclorg/s2i-base-c9s:c9s
 
 # This image provides an Apache+PHP environment for running PHP
 # applications.
@@ -41,10 +41,6 @@ LABEL summary="${SUMMARY}" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 # Install Apache httpd and PHP
-# module php:$PHP_VERSION is not available in CentOS Stream 9
-# So do not enable modele
-# RUN yum -y module enable php:$PHP_VERSION && \
-# php-json package is part of php
 RUN INSTALL_PKGS="php php-mysqlnd php-pgsql php-bcmath \
                   php-gd php-intl php-ldap php-mbstring php-pdo \
                   php-process php-soap php-opcache php-xml \
