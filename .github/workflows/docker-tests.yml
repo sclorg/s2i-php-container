@@ -40,8 +40,8 @@ jobs:
           - tmt_plan: "c9s"
             os_test: "c9s"
             context: "CentOS Stream 9"
-            compose: "1MT-CentOS-Stream-9"
-            tmt_url: "http://artifacts.osci.redhat.com/testing-farm"
+            compose: "CentOS-Stream-9"
+            tmt_url: "http://artifacts.dev.testing-farm.io"
             tmt_repo: "https://github.com/sclorg/sclorg-testing-farm"
 
     if: |
@@ -92,15 +92,11 @@ jobs:
         run: |
           # Update ubuntu-20.04 in order to install curl and jq
           sudo apt update && sudo apt -y install curl jq
-          if [ "${{ matrix.tmt_plan }}" == "fedora" ] || [ "${{ matrix.tmt_plan }}" == "centos7" ]; then
+          branch_name="master"
+          api_key="${{ secrets.TF_INTERNAL_API_KEY }}"
+          if [ "${{ matrix.tmt_plan }}" == "fedora" ] || [ "${{ matrix.tmt_plan }}" == "centos7" ] || [ "${{ matrix.tmt_plan }}" == "c9s" ]; then
             api_key="${{ secrets.TF_PUBLIC_API_KEY }}"
             branch_name="main"
-          else
-            api_key="${{ secrets.TF_INTERNAL_API_KEY }}"
-            branch_name="master"
-            if [ "${{ matrix.tmt_plan }}" == "c9s" ]; then
-              branch_name="main"
-            fi
           fi
           cat << EOF > request.json
           {
