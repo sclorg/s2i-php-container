@@ -26,19 +26,17 @@ else
   rm -f /opt/app-root/etc/scl_enable
 fi
 
-if head "/etc/redhat-release" | grep -q -e "^Red Hat Enterprise Linux release 8" -e "Fedora"; then
+if head "/etc/redhat-release" | grep -q -e "^Red Hat Enterprise Linux release 8" -e "Fedora" -e "^CentOS Stream release 9"; then
     /usr/libexec/httpd-ssl-gencerts
 fi
 
 mkdir -p ${HTTPD_CONFIGURATION_PATH}
 chmod -R a+rwx ${HTTPD_MAIN_CONF_PATH}
 chmod -R a+rwx ${HTTPD_MAIN_CONF_D_PATH}
-# These files does not exist on CentOS Stream 9
-# TODO may be some package is missing. Needs to clarify
-#chmod -R ug+r   /etc/pki/tls/certs/localhost.crt
-#chmod -R ug+r   /etc/pki/tls/private/localhost.key
-#chown -R 1001:0 /etc/pki/tls/certs/localhost.crt
-#chown -R 1001:0 /etc/pki/tls/private/localhost.key
+chmod -R ug+r   /etc/pki/tls/certs/localhost.crt
+chmod -R ug+r   /etc/pki/tls/private/localhost.key
+chown -R 1001:0 /etc/pki/tls/certs/localhost.crt
+chown -R 1001:0 /etc/pki/tls/private/localhost.key
 mkdir -p ${APP_ROOT}/etc
 chmod -R a+rwx ${APP_ROOT}/etc
 chmod -R a+rwx ${HTTPD_VAR_RUN}
