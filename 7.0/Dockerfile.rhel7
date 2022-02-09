@@ -36,6 +36,7 @@ LABEL summary="${SUMMARY}" \
       name="rhscl/${NAME}-${PHP_VER_SHORT}-rhel7" \
       com.redhat.component="rh-${NAME}${PHP_VER_SHORT}-container" \
       version="${PHP_VERSION}" \
+      com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#rhel" \
       help="For more information visit https://github.com/sclorg/s2i-${NAME}-container" \
       usage="s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=${PHP_VERSION}/test/test-app rhscl/${NAME}-${PHP_VER_SHORT}-rhel7 sample-server" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
@@ -49,7 +50,7 @@ RUN yum install -y yum-utils && \
                   rh-php70-php-gmp httpd24-mod_ssl" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
-    yum clean all -y
+    yum -y clean all --enablerepo='*'
 
 ENV PHP_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/php/ \
     APP_DATA=${APP_ROOT}/src \
