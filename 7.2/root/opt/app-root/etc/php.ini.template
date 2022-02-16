@@ -1209,7 +1209,7 @@ session.save_handler = ${SESSION_HANDLER}
 ; RPM note : session directory must be owned by process owner
 ; for mod_php, see /etc/httpd/conf.d/php.conf
 ; for php-fpm, see /etc/php-fpm.d/*conf
-session.save_path = ${SESSION_PATH}
+session.save_path = "${SESSION_PATH}"
 
 ; Whether to use strict session mode.
 ; Strict session mode does not accept uninitialized session ID and regenerate
