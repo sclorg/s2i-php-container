@@ -27,8 +27,12 @@ config_ssl_conf() {
 }
 
 config_modules_conf() {
-  # overwrite default rhel-8 mpm mode
-  echo "LoadModule mpm_prefork_module modules/mod_mpm_prefork.so" > "${HTTPD_MODULES_CONF_D_PATH}/00-mpm.conf"
+  if [ -d "/run/php-fpm" ]; then
+    echo "LoadModule mpm_event_module modules/mod_mpm_event.so" > "${HTTPD_MODULES_CONF_D_PATH}/00-mpm.conf"
+  else
+    # overwrite default rhel-8 mpm mode
+    echo "LoadModule mpm_prefork_module modules/mod_mpm_prefork.so" > "${HTTPD_MODULES_CONF_D_PATH}/00-mpm.conf"
+  fi
 }
 
 config_general() {

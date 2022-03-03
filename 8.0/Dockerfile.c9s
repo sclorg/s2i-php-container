@@ -41,7 +41,7 @@ LABEL summary="${SUMMARY}" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 # Install Apache httpd and PHP
-RUN INSTALL_PKGS="php php-mysqlnd php-pgsql php-bcmath \
+RUN INSTALL_PKGS="php php-fpm php-mysqlnd php-fpm php-pgsql php-bcmath \
                   php-gd php-intl php-ldap php-mbstring php-pdo \
                   php-process php-soap php-opcache php-xml \
                   php-gmp php-pecl-apcu php-pecl-zip mod_ssl hostname" && \
