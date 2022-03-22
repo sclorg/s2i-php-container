@@ -55,6 +55,8 @@ ENV PHP_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/php/ \
     PHP_DEFAULT_INCLUDE_PATH=/usr/share/pear \
     PHP_SYSCONF_PATH=/etc \
     PHP_HTTPD_CONF_FILE=php.conf \
+    PHP_FPM_CONF_PATH=/etc/php-fpm.d \
+    PHP_FPM_CONF_FILE=www.conf \
     HTTPD_CONFIGURATION_PATH=${APP_ROOT}/etc/conf.d \
     HTTPD_MAIN_CONF_PATH=/etc/httpd/conf \
     HTTPD_MAIN_CONF_D_PATH=/etc/httpd/conf.d \
@@ -62,7 +64,8 @@ ENV PHP_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/php/ \
     HTTPD_VAR_RUN=/var/run/httpd \
     HTTPD_DATA_PATH=/var/www \
     HTTPD_DATA_ORIG_PATH=/var/www \
-    HTTPD_VAR_PATH=/var
+    HTTPD_VAR_PATH=/var \
+    PHP_FPM_LOG_PATH=/var/log/php-fpm
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
 COPY ./s2i/bin/ $STI_SCRIPTS_PATH

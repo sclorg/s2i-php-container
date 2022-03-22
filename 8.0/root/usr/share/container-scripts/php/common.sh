@@ -39,7 +39,11 @@ config_general() {
   config_httpd_conf
   config_ssl_conf
   config_modules_conf
-  sed -i '/php_value session.save_/d' ${HTTPD_MAIN_CONF_D_PATH}/${PHP_HTTPD_CONF_FILE}
+  if [ -d "/run/php-fpm" ]; then
+    sed -i -E "/php_value\[session.save_path\]/d" ${PHP_FPM_CONF_PATH}/${PHP_FPM_CONF_FILE}
+  else
+    sed -i '/php_value session.save_/d' ${HTTPD_MAIN_CONF_D_PATH}/${PHP_HTTPD_CONF_FILE}
+  fi
   head -n${HTTPCONF_LINENO} ${HTTPD_MAIN_CONF_PATH}/httpd.conf | tail -n1 | grep "AllowOverride All" || exit 1
   echo "IncludeOptional ${APP_ROOT}/etc/conf.d/*.conf" >> ${HTTPD_MAIN_CONF_PATH}/httpd.conf
 }
