@@ -2,9 +2,9 @@ PHP 8.0 container image
 =======================
 
 This container image includes PHP 8.0 as a [S2I](https://github.com/openshift/source-to-image) base image for your PHP 8.0 applications.
-Users can choose between RHEL and CentOS based builder images.
+Users can choose between RHEL and CentOS Stream based builder images.
 The RHEL UBI images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/),
-the CentOS images are available on [Quay.io](https://quay.io/organization/centos7),
+the CentOS Stream images are available on [Quay.io](https://quay.io/organization/sclorg),
 and the Fedora images are available in [Fedora Registry](https://registry.fedoraproject.org/).
 The resulting image can be run using [podman](https://github.com/containers/libpod).
 
