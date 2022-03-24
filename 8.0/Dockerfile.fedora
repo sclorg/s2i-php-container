@@ -1,4 +1,4 @@
-FROM registry.fedoraproject.org/f32/s2i-base:latest
+FROM registry.fedoraproject.org/f35/s2i-base:latest
 
 # This image provides an Apache+PHP environment for running PHP
 # applications.
@@ -6,7 +6,7 @@ FROM registry.fedoraproject.org/f32/s2i-base:latest
 EXPOSE 8080
 EXPOSE 8443
 
-ENV PHP_VERSION=7.4 \
+ENV PHP_VERSION=8.0 \
     PATH=$PATH:/usr/bin
 
 ENV SUMMARY="Platform for building and running PHP $PHP_VERSION applications" \
@@ -36,7 +36,7 @@ LABEL summary="$SUMMARY" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 # Install Apache httpd and PHP
-RUN INSTALL_PKGS="php php-mysqlnd php-bcmath php-json \
+RUN INSTALL_PKGS="php php-fpm php-mysqlnd php-bcmath php-json \
                   php-gd php-intl php-ldap php-mbstring php-pdo \
                   php-process php-soap php-opcache php-xml \
                   php-gmp php-pecl-apcu mod_ssl hostname" && \
@@ -49,6 +49,11 @@ ENV PHP_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/php/ \
     PHP_DEFAULT_INCLUDE_PATH=/usr/share/pear \
     PHP_SYSCONF_PATH=/etc/ \
     PHP_HTTPD_CONF_FILE=php.conf \
+    PHP_FPM_CONF_PATH=/etc/php-fpm.d \
+    PHP_FPM_CONF_FILE=www.conf \
+    PHP_FPM_RUN_DIR=/run/php-fpm \
+    PHP_MAIN_FPM_CONF_FILE=${PHP_SYSCONF_PATH}/php-fpm.conf \
+    PHP_FPM_LOG_PATH=/var/log/php-fpm \
     HTTPD_CONFIGURATION_PATH=${APP_ROOT}/etc/conf.d \
     HTTPD_MAIN_CONF_PATH=/etc/httpd/conf \
     HTTPD_MAIN_CONF_D_PATH=/etc/httpd/conf.d \
