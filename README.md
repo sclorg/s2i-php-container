@@ -25,6 +25,7 @@ Versions
 PHP versions currently supported are:
 * [php-7.3](7.3)
 * [php-7.4](7.4)
+* [php-8.0](8.0)
 
 RHEL versions currently supported are:
 * RHEL7
@@ -33,6 +34,8 @@ RHEL versions currently supported are:
 CentOS versions currently supported are:
 * CentOS7
 
+CenOS Stream versions currently supported are:
+* CentOS Stream 9
 
 Installation
 ------------
@@ -80,6 +83,8 @@ see [usage documentation](7.4/README.md).
 For information about usage of Dockerfile for PHP 7.3,
 see [usage documentation](7.3/README.md).
 
+For information about usage of Dockerfile for PHP 8.0,
+see [usage documentation](8.0/README.md).
 
 Test
 ----
