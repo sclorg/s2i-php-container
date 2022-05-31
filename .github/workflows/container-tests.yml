@@ -1,4 +1,4 @@
-name: OpenShift tests by GitHub Action at Testing Farm
+name: Container-tests by GitHub Action at Testing Farm
 
 on:
   issue_comment:
@@ -6,55 +6,54 @@ on:
       - created
 jobs:
   build:
-    # This job only runs for '[test-all]' or '[test-openshift] pull request comments by owner, member
-    name: OpenShift tests by GitHub Action on Testing Farm service
+    # This job only runs for '[test]' pull request comments by owner, member
+    name: Container-tests by GitHub Action on Testing Farm service
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
         include:
-          - tmt_plan: "centos7"
-            os_test: "centos7"
-            context: "CentOS7 - OpenShift 3"
+          - tmt_plan: "fedora"
+            os_test: "fedora"
+            context: "Fedora"
+            compose: "Fedora-latest"
             api_key: "TF_PUBLIC_API_KEY"
             branch: "main"
             tmt_repo: "https://github.com/sclorg/sclorg-testing-farm"
+          - tmt_plan: "centos7"
+            os_test: "centos7"
+            context: "CentOS7"
             compose: "CentOS-7"
-            test_name: "test-openshift"
-          - tmt_plan: "rhel7-openshift-3"
+            api_key: "TF_PUBLIC_API_KEY"
+            branch: "main"
+            tmt_repo: "https://github.com/sclorg/sclorg-testing-farm"
+          - tmt_plan: "rhel7-docker"
             os_test: "rhel7"
-            context: "RHEL7 - OpenShift 3"
+            context: "RHEL7"
             compose: "RHEL-7.9-Released"
-            api_key: "TF_INTERNAL_API_KEY"
-            branch: "master"
-            tmt_url: "http://artifacts.osci.redhat.com/testing-farm/"
-            tmt_repo: "https://gitlab.cee.redhat.com/platform-eng-core-services/sclorg-tmt-plans"
-            test_name: "test-openshift"
-            tf_scope: "private"
-          - tmt_plan: "rhel7-openshift-4"
-            os_test: "rhel7"
-            context: "RHEL7 - OpenShift 4"
-            compose: "RHEL-7.9-Released"
-            tmt_url: "http://artifacts.osci.redhat.com/testing-farm/"
-            test_name: "test-openshift-4"
             api_key: "TF_INTERNAL_API_KEY"
             branch: "master"
             tmt_repo: "https://gitlab.cee.redhat.com/platform-eng-core-services/sclorg-tmt-plans"
             tf_scope: "private"
-          - tmt_plan: "rhel8-openshift-4"
+          - tmt_plan: "rhel8-docker"
             os_test: "rhel8"
-            context: "RHEL8 - OpenShift 4"
+            context: "RHEL8"
             compose: "RHEL-8.6.0-Nightly"
-            tmt_url: "http://artifacts.osci.redhat.com/testing-farm/"
-            test_name: "test-openshift-4"
             api_key: "TF_INTERNAL_API_KEY"
             branch: "master"
             tmt_repo: "https://gitlab.cee.redhat.com/platform-eng-core-services/sclorg-tmt-plans"
             tf_scope: "private"
+          - tmt_plan: "c9s"
+            os_test: "c9s"
+            context: "CentOS Stream 9"
+            compose: "CentOS-Stream-9"
+            api_key: "TF_PUBLIC_API_KEY"
+            branch: "main"
+            tmt_repo: "https://github.com/sclorg/sclorg-testing-farm"
 
     if: |
       github.event.issue.pull_request
-      && (contains(github.event.comment.body, '[test-openshift]') || contains(github.event.comment.body, '[test-all]'))
+      && (contains(github.event.comment.body, '[test]') || contains(github.event.comment.body, '[test-all]'))
       && contains(fromJson('["OWNER", "MEMBER"]'), github.event.comment.author_association)
     steps:
       - name: Checkout repo
@@ -73,5 +72,5 @@ jobs:
           tf_scope: ${{ matrix.tf_scope }}
           tmt_plan_regex: ${{ matrix.tmt_plan }}
           pull_request_status_name: ${{ matrix.context }}
-          variables: "REPO_URL=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY;REPO_NAME=$GITHUB_REPOSITORY;PR_NUMBER=${{ github.event.issue.number }};OS=${{ matrix.os_test }};TEST_NAME=${{ matrix.test_name }}"
+          variables: "REPO_URL=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY;REPO_NAME=$GITHUB_REPOSITORY;PR_NUMBER=${{ github.event.issue.number }};OS=${{ matrix.os_test }};TEST_NAME=test"
           compose: ${{ matrix.compose }}
