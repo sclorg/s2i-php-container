@@ -1,4 +1,4 @@
-FROM registry.fedoraproject.org/f35/s2i-base:latest
+FROM quay.io/fedora/s2i-base:35
 
 # This image provides an Apache+PHP environment for running PHP
 # applications.
@@ -7,6 +7,7 @@ EXPOSE 8080
 EXPOSE 8443
 
 ENV PHP_VERSION=8.0 \
+    PHP_SHORT_VER=80 \
     PATH=$PATH:/usr/bin
 
 ENV SUMMARY="Platform for building and running PHP $PHP_VERSION applications" \
@@ -29,14 +30,14 @@ LABEL summary="$SUMMARY" \
       io.k8s.display-name="Apache 2.4 with PHP $PHP_VERSION" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,php" \
-      name="$FGC/$NAME" \
+      name="fedora/$NAME-$PHP_SHORT_VER" \
       com.redhat.component="$NAME" \
       version="$VERSION" \
-      usage="s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=/$PHP_VERSION/test/test-app $FGC/$NAME sample-server" \
+      usage="s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=/$PHP_VERSION/test/test-app quay.io/fedora/$NAME-$PHP_SHORT_VER sample-server" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 # Install Apache httpd and PHP
-RUN INSTALL_PKGS="php php-fpm php-mysqlnd php-bcmath php-json \
+RUN INSTALL_PKGS="php php-fpm php-mysqlnd php-bcmath \
                   php-gd php-intl php-ldap php-mbstring php-pdo \
                   php-process php-soap php-opcache php-xml \
                   php-gmp php-pecl-apcu mod_ssl hostname" && \
@@ -47,12 +48,12 @@ RUN INSTALL_PKGS="php php-fpm php-mysqlnd php-bcmath php-json \
 ENV PHP_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/php/ \
     APP_DATA=${APP_ROOT}/src \
     PHP_DEFAULT_INCLUDE_PATH=/usr/share/pear \
-    PHP_SYSCONF_PATH=/etc/ \
+    PHP_SYSCONF_PATH=/etc \
     PHP_HTTPD_CONF_FILE=php.conf \
-    PHP_FPM_CONF_PATH=/etc/php-fpm.d \
+    PHP_FPM_CONF_D_PATH=/etc/php-fpm.d \
     PHP_FPM_CONF_FILE=www.conf \
     PHP_FPM_RUN_DIR=/run/php-fpm \
-    PHP_MAIN_FPM_CONF_FILE=${PHP_SYSCONF_PATH}/php-fpm.conf \
+    PHP_MAIN_FPM_CONF_FILE=/etc/php-fpm.conf \
     PHP_FPM_LOG_PATH=/var/log/php-fpm \
     HTTPD_CONFIGURATION_PATH=${APP_ROOT}/etc/conf.d \
     HTTPD_MAIN_CONF_PATH=/etc/httpd/conf \
