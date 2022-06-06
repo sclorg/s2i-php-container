@@ -12,8 +12,7 @@ source ${THISDIR}/test-lib.sh
 source ${THISDIR}/test-lib-openshift.sh
 
 function test_php_integration() {
-  local image_name=$1
-  ct_os_test_s2i_app "${image_name}" \
+  ct_os_test_s2i_app "${IMAGE_NAME}" \
                      "https://github.com/sclorg/s2i-php-container.git" \
                      "test/test-app" \
                      "Test PHP passed"
