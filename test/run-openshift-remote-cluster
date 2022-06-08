@@ -26,7 +26,8 @@ oc version
 
 oc status || false "It looks like oc is not properly logged in."
 
-export CT_EXTERNAL_REGISTRY=true
+# For testing on OpenShift 4 we use OpenShift internal registry
+export CT_OCP4_TEST=true
 
 test_php_integration "${IMAGE_NAME}"
 
