@@ -19,8 +19,6 @@ test_php_integration
 test_php_imagestream
 "
 
-set -u
-
 trap ct_os_cleanup EXIT SIGINT
 
 ct_os_check_compulsory_vars
@@ -29,7 +27,9 @@ ct_os_set_ocp4
 
 oc version
 
-oc status || false "It looks like oc is not properly logged in."
+ct_os_check_login || exit 1
+
+set -u
 
 # For testing on OpenShift 4 we use OpenShift internal registry
 export CT_OCP4_TEST=true
