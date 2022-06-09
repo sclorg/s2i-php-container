@@ -74,6 +74,10 @@ COPY ./root/ /
 # Reset permissions of filesystem to default values
 RUN /usr/libexec/container-setup && rpm-file-permissions
 
+# RPM uses a wrong file in the config
+# Related: https://bugzilla.redhat.com/show_bug.cgi?id=2092356
+RUN sed -i "s/mod_php7.c/mod_php.c/" /etc/httpd/conf.d/php.conf
+
 USER 1001
 
 # Set the default CMD to print the usage of the language image
