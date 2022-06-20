@@ -1,9 +1,14 @@
 PHP Docker images
 =================
-s2i-php-container 7.3 Quay.io status: [![Docker Repository on Quay](https://quay.io/repository/centos7/php-73-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/php-73-centos7)
 
-s2i-php-container 7.4 Quay.io status: [![Docker Repository on Quay](https://quay.io/repository/centos7/php-74-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/php-74-centos7)
+[![Build and push images to Quay.io registry](https://github.com/sclorg/s2i-php-container/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/sclorg/s2i-php-container/actions/workflows/build-and-push.yml)
 
+Images available on Quay are:
+* CentOS 7 [php-72](https://quay.io/repository/centos7/php-72-centos7)
+* CentOS 7 [php-73](https://quay.io/repository/centos7/php-73-centos7)
+* CentOS 7 [php-74](https://quay.io/repository/centos7/php-74-centos7)
+* CentOS Stream 9 [php-74](https://quay.io/repository/sclorg/php-74-c9s)
+* Fedora [php-80](https://quay.io/repository/fedora/php-80)
 
 This repository contains the source for building various versions of
 the PHP application as a reproducible Docker image using
@@ -30,6 +35,7 @@ PHP versions currently supported are:
 RHEL versions currently supported are:
 * RHEL7
 * RHEL8
+* RHEL9
 
 CentOS versions currently supported are:
 * CentOS7
