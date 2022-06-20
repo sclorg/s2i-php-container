@@ -26,7 +26,7 @@ else
   rm -f /opt/app-root/etc/scl_enable
 fi
 
-if head "/etc/redhat-release" | grep -q -e "^Red Hat Enterprise Linux release 8" -e "Fedora" -e "^CentOS Stream release 9"; then
+if head "/etc/redhat-release" | grep -q -e "^Red Hat Enterprise Linux release 8" -e "^Red Hat Enterprise Linux release 9" -e "Fedora" -e "^CentOS Stream release 9"; then
     /usr/libexec/httpd-ssl-gencerts
 fi
 
