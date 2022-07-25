@@ -42,8 +42,8 @@ LABEL summary="${SUMMARY}" \
 
 # Install Apache httpd and PHP
 RUN yum -y module enable php:$PHP_VERSION && \
-    INSTALL_PKGS="php php-fpm php-mysqlnd php-pgsql php-bcmath \
-                  php-gd php-intl php-json php-ldap php-mbstring php-pdo \
+    INSTALL_PKGS="php php-mysqlnd php-pgsql php-bcmath \
+                  php-gd php-intl php-ldap php-mbstring php-pdo \
                   php-process php-soap php-opcache php-xml \
                   php-gmp php-pecl-apcu php-pecl-zip mod_ssl hostname" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
