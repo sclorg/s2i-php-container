@@ -78,6 +78,9 @@ RUN /usr/libexec/container-setup && rpm-file-permissions
 # Related: https://bugzilla.redhat.com/show_bug.cgi?id=2092356
 RUN sed -i "s/mod_php7.c/mod_php.c/" /etc/httpd/conf.d/php.conf
 
+#Resolve the following warning httpd service startup: AH02282: No slotmem from mod_heartmonitor
+RUN sed -i 's/mod_lbmethod_heartbeat.so\/mod_lbmethod_heartbeat.so/# mod_lbmethod_heartbeat.so\/mod_lbmethod_heartbeat.so/g' /etc/httpd/conf.modules.d/00-proxy.conf
+
 USER 1001
 
 # Set the default CMD to print the usage of the language image
