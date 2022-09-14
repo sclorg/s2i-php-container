@@ -24,15 +24,15 @@ test_build_from_dockerfile
 # TODO: Make command compatible for Mac users
 test_dir="$(readlink -f $(dirname "${BASH_SOURCE[0]}"))"
 image_dir=$(readlink -f ${test_dir}/..)
-test_short_summary=''
-TESTSUITE_RESULT=0
 source "${test_dir}/test-lib.sh"
 
 # TODO: This should be part of the image metadata
 test_port=8080
 test_port_ssl=8443
 
-ct_enable_cleanup
+CID_FILE_DIR=$(mktemp --suffix=php_test_cidfiles -d)
+
+trap "cleanup;ct_cleanup" EXIT SIGINT
 
 
 info() {
@@ -71,19 +71,8 @@ prepare() {
 }
 
 run_test_application() {
-  run_args=${CONTAINER_ARGS:-}
+  local run_args=${CONTAINER_ARGS:-}
   docker run -d --user=100001 ${run_args} --cidfile=${cid_file} ${IMAGE_NAME}-testapp
-}
-
-cleanup_test_app() {
-  info "Cleaning up the test application"
-  if [ -f $cid_file ]; then
-    if container_exists; then
-      docker stop $(cat $cid_file)
-      docker rm $(cat $cid_file)
-    fi
-    rm $cid_file
-  fi
 }
 
 cleanup() {
@@ -92,15 +81,6 @@ cleanup() {
     docker rmi -f ${IMAGE_NAME}-testapp
   fi
   rm -rf ${test_dir}/test-app/.git
-
-  echo "$test_short_summary"
-
-  if [ $TESTSUITE_RESULT -eq 0 ] ; then
-    echo "Tests for ${IMAGE_NAME} succeeded."
-  else
-    echo "Tests for ${IMAGE_NAME} failed."
-  fi
-  exit $TESTSUITE_RESULT
 }
 
 check_result() {
@@ -159,8 +139,7 @@ test_scl_usage() {
 
 test_session() {
   local check_port=$1 ; shift
-  local check_protocol=${1:-http}
-  cat $cid_file
+  local check_protocol=${1:-http} ;
   info "Testing PHP session"
   response=$(curl -s -k ${check_protocol}://$(container_ip):${check_port}/session_test.php)
   if [ "${response}" != "Passed" ]; then
@@ -172,7 +151,6 @@ test_session() {
 test_connection() {
   local check_port=$1 ; shift
   local check_protocol=${1:-http}
-  cat $cid_file
   info "Testing the HTTP connection (${check_protocol}://$(container_ip):${check_port})"
   local max_attempts=10
   local sleep_time=1
@@ -194,6 +172,8 @@ test_connection() {
 }
 
 test_application() {
+  set -x
+  local cid_file=$CID_FILE_DIR/$(mktemp -u -p . --suffix .cid)
   # Verify that the HTTP connection can be established to test application container
   run_test_application &
 
@@ -212,8 +192,6 @@ test_application() {
 
   test_connection ${test_port_ssl} https
   check_result $?
-
-  cleanup_test_app
 }
 
 test_application_user() {
@@ -231,7 +209,7 @@ test_ssl() {
 }
 
 test_ssl_own_cert() {
-  cleanup_test_app
+  local cid_file=$CID_FILE_DIR/$(mktemp -u -p . --suffix .cid)
   ct_s2i_build_as_df file://${test_dir}/self-signed-ssl ${IMAGE_NAME} ${IMAGE_NAME}-test-self-signed-ssl ${s2i_args} $(ct_build_s2i_npm_variables)
   docker run -d --user=100001 ${run_args} --cidfile=${cid_file} ${IMAGE_NAME}-test-self-signed-ssl
   test_connection ${test_port_ssl} https
@@ -257,7 +235,7 @@ test_build_from_dockerfile() {
   check_result $?
 }
 
-cid_file=$(mktemp -u --suffix=.cid)
+
 
 # Since we built the candidate image locally, we don't want S2I attempt to pull
 # it from Docker hub
@@ -267,24 +245,6 @@ prepare
 run_s2i_build
 check_result $?
 
-function run_all_tests() {
-  for test_case in $TEST_LIST; do
-    echo "Running test $test_case ...."
-    TESTCASE_RESULT=0
-    $test_case
-    check_result $?
-    if [ $TESTCASE_RESULT -eq 0 ]; then
-      printf -v test_short_summary "${test_short_summary}[PASSED] $test_case\n"
-    else
-      printf -v test_short_summary "${test_short_summary}[FAILED] $test_case\n"
-      TESTSUITE_RESULT=1
-      [ -n "${FAIL_QUICKLY:-}" ] && return 1
-    fi
-    cleanup_test_app
-  done;
-}
-
 # Run the chosen tests
-TEST_LIST=${TESTS:-$TEST_LIST} run_all_tests
-
-cleanup
+TEST_SUMMARY=''
+TEST_SET=${TESTS:-$TEST_LIST} ct_run_tests_from_testset "php_tests"
