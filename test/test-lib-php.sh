@@ -8,8 +8,8 @@
 
 THISDIR=$(dirname ${BASH_SOURCE[0]})
 
-source ${THISDIR}/test-lib.sh
-source ${THISDIR}/test-lib-openshift.sh
+source "${THISDIR}/test-lib.sh"
+source "${THISDIR}/test-lib-openshift.sh"
 
 function test_php_integration() {
   ct_os_test_s2i_app "${IMAGE_NAME}" \
@@ -21,7 +21,7 @@ function test_php_integration() {
 # Check the imagestream
 function test_php_imagestream() {
   case ${OS} in
-    rhel7|centos7|rhel8) ;;
+    rhel7|centos7|rhel8|rhel9) ;;
     *) echo "Imagestream testing not supported for $OS environment." ; return 0 ;;
   esac
 
