@@ -51,7 +51,7 @@ if [ -f composer.json ]; then
   fi
 
   # Install App dependencies using Composer
-  ./composer.phar install --no-interaction --no-ansi --optimize-autoloader $COMPOSER_ARGS
+  php -d memory_limit=$PHP_MEMORY_LIMIT ./composer.phar install --no-interaction --no-ansi --optimize-autoloader $COMPOSER_ARGS
 
   if [ ! -f composer.lock ]; then
     echo -e "\nConsider adding a 'composer.lock' file into your source repository.\n"
