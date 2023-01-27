@@ -1,7 +1,7 @@
-PHP 8.0 container image
+PHP 8.1 container image
 =======================
 
-This container image includes PHP 8.0 as a [S2I](https://github.com/openshift/source-to-image) base image for your PHP 8.0 applications.
+This container image includes PHP 8.1 as a [S2I](https://github.com/openshift/source-to-image) base image for your PHP 8.1 applications.
 Users can choose between RHEL and CentOS Stream based builder images.
 The RHEL UBI images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/),
 the CentOS Stream images are available on [Quay.io](https://quay.io/organization/sclorg),
@@ -13,8 +13,8 @@ Note: while the examples in this README are calling `podman`, you can replace an
 Description
 -----------
 
-PHP 8.0 available as container is a base platform for
-building and running various PHP 8.0 applications and frameworks.
+PHP 8.1 available as container is a base platform for
+building and running various PHP 8.1 applications and frameworks.
 PHP is an HTML-embedded scripting language. PHP attempts to make it easy for developers
 to write dynamically generated web pages. PHP also offers built-in database integration
 for several commercial and non-commercial database management systems, so writing
@@ -28,12 +28,12 @@ the nodejs itself is included just to make the npm work.
 
 Usage in OpenShift
 ------------------
-In this example, we will assume that you are using the `ubi8/php-80` image, available via `php:80` imagestream tag in Openshift.
+In this example, we will assume that you are using the `ubi8/php-81` image, available via `php:8.1` imagestream tag in Openshift.
 
 To build a simple [cakephp-sample-app](https://github.com/sclorg/cakephp-ex.git) application in Openshift:
 
 ```
-oc new-app php:8.0~https://github.com/sclorg/cakephp-ex.git
+oc new-app php:8.1~https://github.com/sclorg/cakephp-ex.git
 ```
 
 To access the application:
@@ -72,10 +72,10 @@ To use the PHP image in a Dockerfile, follow these steps:
 #### 1. Pull a base builder image to build on
 
 ```
-podman pull ubi8/php-80
+podman pull ubi8/php-81
 ```
 
-An UBI image `ubi8/php-80` is used in this example. This image is usable and freely redistributable under the terms of the UBI End User License Agreement (EULA). See more about UBI at [UBI FAQ](https://developers.redhat.com/articles/ubi-faq).
+An UBI image `ubi8/php-81` is used in this example. This image is usable and freely redistributable under the terms of the UBI End User License Agreement (EULA). See more about UBI at [UBI FAQ](https://developers.redhat.com/articles/ubi-faq).
 
 #### 2. Pull an application code
 
@@ -97,7 +97,7 @@ For all these three parts, users can either setup all manually and use commands 
 
 ##### 3.1. To use your own setup, create a Dockerfile with this content:
 ```
-FROM ubi8/php-80
+FROM ubi8/php-81
 
 # Add application sources
 ADD app-src .
@@ -123,7 +123,7 @@ CMD /usr/libexec/s2i/run
 
 ##### 3.2. To use the Source-to-Image scripts and build an image using a Dockerfile, create a Dockerfile with this content:
 ```
-FROM ubi8/php-80
+FROM ubi8/php-81
 
 # Add application sources to a directory that the assemble script expects them
 # and set permissions so that the container runs without root access
@@ -175,7 +175,7 @@ The following environment variables set their equivalent property value in the p
   * Default: ON
 * **INCLUDE_PATH**
   * Path for PHP source files
-  * Default: .:/opt/app-root/src:/opt/rh/rh-php80/root/usr/share/pear (EL7)
+  * Default: .:/opt/app-root/src:/opt/rh/rh-php81/root/usr/share/pear (EL7)
   * Default: .:/opt/app-root/src:/usr/share/pear (EL8, Fedora)
 * **PHP_MEMORY_LIMIT**
   * Memory Limit
