@@ -11,8 +11,8 @@ EXPOSE 8443
 # Exposed ports:
 # * 8080 - alternative port for http
 
-ENV PHP_VERSION=8.0 \
-    PHP_VER_SHORT=80 \
+ENV PHP_VERSION=8.1 \
+    PHP_VER_SHORT=81 \
     NAME=php
 
 ENV SUMMARY="Platform for building and running PHP $PHP_VERSION applications" \
