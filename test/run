@@ -12,7 +12,6 @@ test -n "${VERSION-}" || false 'make sure $VERSION is defined'
 TEST_LIST="\
 test_s2i_usage
 test_docker_run_usage
-test_scl_usage
 test_application
 test_application_user
 test_ssl
