@@ -68,14 +68,11 @@ ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/sclorg/s2i-php-container.gi
 
 ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/sclorg/cakephp-ex.git#${BRANCH_TO_TEST}" . 'Welcome to your CakePHP application on OpenShift'
 
-# cakephp template does not work with version 5.6
-if [[ "${VERSION}" > "5.6" ]] ; then
-  ct_os_test_template_app ${IMAGE_NAME} \
-                        https://raw.githubusercontent.com/sclorg/cakephp-ex/${BRANCH_TO_TEST}/openshift/templates/cakephp.json \
-                        php \
-                        'Welcome to your CakePHP application on OpenShift' \
-                        8080 http 200 "-p SOURCE_REPOSITORY_REF=${BRANCH_TO_TEST} -p SOURCE_REPOSITORY_URL=https://github.com/sclorg/cakephp-ex.git -p PHP_VERSION=${VERSION} -p NAME=php-testing"
-fi
+ct_os_test_template_app ${IMAGE_NAME} \
+                      https://raw.githubusercontent.com/sclorg/cakephp-ex/${BRANCH_TO_TEST}/openshift/templates/cakephp.json \
+                      php \
+                      'Welcome to your CakePHP application on OpenShift' \
+                      8080 http 200 "-p SOURCE_REPOSITORY_REF=${BRANCH_TO_TEST} -p SOURCE_REPOSITORY_URL=https://github.com/sclorg/cakephp-ex.git -p PHP_VERSION=${VERSION} -p NAME=php-testing"
 
 # test image update with s2i
 old_image=$(ct_get_public_image_name "$OS" "$BASE_IMAGE_NAME" "$VERSION")

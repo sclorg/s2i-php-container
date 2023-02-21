@@ -1,4 +1,0 @@
-#!/bin/sh
-pushd ${HOME} >/dev/null
-tar cf - vendor
-popd >/dev/null
