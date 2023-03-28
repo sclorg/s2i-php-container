@@ -41,11 +41,12 @@ LABEL summary="${SUMMARY}" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 # Install Apache httpd and PHP
-RUN yum install -y centos-release-scl && \
-    INSTALL_PKGS="rh-php74 rh-php74-php rh-php74-php-mysqlnd rh-php74-php-pgsql rh-php74-php-bcmath \
+ARG INSTALL_PKGS="rh-php74 rh-php74-php rh-php74-php-mysqlnd rh-php74-php-pgsql rh-php74-php-bcmath \
                   rh-php74-php-gd rh-php74-php-intl rh-php74-php-ldap rh-php74-php-mbstring rh-php74-php-pdo \
                   rh-php74-php-process rh-php74-php-soap rh-php74-php-opcache rh-php74-php-xml \
-                  rh-php74-php-gmp rh-php74-php-pecl-apcu httpd24-mod_ssl" && \
+                  rh-php74-php-gmp rh-php74-php-pecl-apcu httpd24-mod_ssl"
+
+RUN yum install -y centos-release-scl && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS --nogpgcheck && \
     rpm -V $INSTALL_PKGS && \
     yum -y clean all --enablerepo='*'
