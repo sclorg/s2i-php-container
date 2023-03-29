@@ -149,6 +149,14 @@ test_connection() {
   return $result
 }
 
+
+test_config_writeable() {
+  local run_cmd="[ -w \${PHP_SYSCONF_PATH}/php.ini ] && [ -w \${PHP_SYSCONF_PATH}/php.d ]"
+
+  info "Checking if configuration is writeable"
+  docker run --rm "${IMAGE_NAME}" /bin/bash -c "${run_cmd}"
+}
+
 test_application() {
   set -x
   cid_file=$CID_FILE_DIR/$(mktemp -u -p . --suffix .cid)
@@ -169,6 +177,9 @@ test_application() {
   ct_check_testcase_result $?
 
   test_connection ${test_port_ssl} https
+  ct_check_testcase_result $?
+
+  test_config_writeable
   ct_check_testcase_result $?
 }
 
