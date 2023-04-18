@@ -180,6 +180,9 @@ The following environment variables set their equivalent property value in the p
 * **PHP_MEMORY_LIMIT**
   * Memory Limit
   * Default: 128M
+* **PHP_CLEAR_ENV**
+  * Sets to clear environment in FPM workers. See [FPM_CONFIGURATION](https://www.php.net/manual/en/install.fpm.configuration.php).
+  * Default: ON
 * **SESSION_NAME**
   * Name of the session
   * Default: PHPSESSID

@@ -66,6 +66,10 @@ if [ "x$PLATFORM" == "xel9" ] || [ "x$PLATFORM" == "xfedora" ]; then
     chmod -R a+rwx ${PHP_FPM_LOG_PATH}
     chown -R 1001:0 ${PHP_FPM_LOG_PATH}
   fi
+  if [ "${PHP_CLEAR_ENV:-true}" == "false" ]; then
+    echo "Setting clear_env to no in run script."
+    sed -e 's/^(clear_env)\s+.*/clear_env = no/' -i ${PHP_FPM_CONF_D_PATH}/${PHP_FPM_CONF_FILE}
+  fi
 
 fi
 
