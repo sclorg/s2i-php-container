@@ -35,7 +35,7 @@ function test_file_upload() {
 
   echo "Running file upload test for: $image_name"
   ct_os_new_project
-  ct_os_upload_image "$image_name" "$istag"
+  ct_os_upload_image "v3" "$image_name" "$istag"
 
   ct_os_deploy_s2i_image "$istag" "$app" --name "${service_name}"
   ct_os_wait_pod_ready "$service_name" 60
