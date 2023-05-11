@@ -51,6 +51,7 @@ if [ "$PLATFORM" == "el7" ]; then
 else
   chmod a+rwx "${PHP_SYSCONF_PATH}/php.ini"
   chmod -R a+rwx "${PHP_SYSCONF_PATH}/php.d"
+  chmod -R a+rwx "${PHP_SYSCONF_PATH}/php-fpm.d"
 fi
 
 if [ "x$PLATFORM" == "xel9" ] || [ "x$PLATFORM" == "xfedora" ]; then
