@@ -46,7 +46,7 @@ ARG INSTALL_PKGS="php php-fpm php-mysqlnd php-pgsql php-bcmath \
                   php-process php-soap php-opcache php-xml \
                   php-gmp php-pecl-apcu php-pecl-zip mod_ssl hostname"
 
-RUN dnf module -y switch-to php:8.1 && \
+RUN yum module -y enable php:$PHP_VERSION && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     yum reinstall -y tzdata && \
     rpm -V $INSTALL_PKGS && \
