@@ -170,7 +170,7 @@ test_clear_env_setup() {
 }
 
 clear_env_set() {
-  PHP_CLEAR_ENV=false test_application
+  PHP_CLEAR_ENV=OFF test_application
 }
 
 
@@ -257,7 +257,7 @@ ct_check_testcase_result $?
 
 TEST_SET=${TESTS:-$TEST_LIST} ct_run_tests_from_testset "php_tests"
 
-run_s2i_build "-e PHP_CLEAR_ENV=false"
+run_s2i_build "-e PHP_CLEAR_ENV=OFF"
 ct_check_testcase_result $?
 
 TEST_SET=${TESTS:-$TEST_CLEAR_ENV} ct_run_tests_from_testset "clear_env_set"

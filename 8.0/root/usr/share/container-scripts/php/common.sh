@@ -44,9 +44,9 @@ config_general() {
   if [ -d "/run/php-fpm" ]; then
     sed -i -E "/php_value\[session.save_path\]/d" ${PHP_FPM_CONF_D_PATH}/${PHP_FPM_CONF_FILE}
     sed -e '/catch_workers_output/d' -e '/error_log/d' -i ${PHP_FPM_CONF_D_PATH}/${PHP_FPM_CONF_FILE}
-    if [ "${PHP_CLEAR_ENV:-true}" == "false" ]; then
+    if [ "${PHP_CLEAR_ENV:-ON}" == "OFF" ]; then
       echo "Setting clear_env to no in config_general"
-      echo "clear_env = no" >> ${PHP_FPM_CONF_D_PATH}/${PHP_FPM_CONF_FILE}
+      sed -e 's/^[;]*\s*clear_env\s*=.*$/clear_env = no/' -i ${PHP_FPM_CONF_D_PATH}/${PHP_FPM_CONF_FILE}
     fi
   else
     sed -i '/php_value session.save_/d' ${HTTPD_MAIN_CONF_D_PATH}/${PHP_HTTPD_CONF_FILE}

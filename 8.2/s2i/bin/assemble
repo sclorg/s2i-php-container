@@ -65,6 +65,11 @@ if [ -f composer.json ]; then
   fi
 fi
 
+if [ "${PHP_CLEAR_ENV:-ON}" == "OFF" ]; then
+  echo "Setting clear_env to no in assemble script"
+  sed -e 's/^[;]*\s*clear_env\s*=.*$/clear_env = no/' -i ${PHP_FPM_CONF_D_PATH}/${PHP_FPM_CONF_FILE}
+fi
+
 # post-assemble files
 process_extending_files ./php-post-assemble/ ${PHP_CONTAINER_SCRIPTS_PATH}/post-assemble/
 
