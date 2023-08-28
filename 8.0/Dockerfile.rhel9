@@ -60,6 +60,7 @@ ENV PHP_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/php/ \
     PHP_FPM_CONF_D_PATH=/etc/php-fpm.d \
     PHP_FPM_CONF_FILE=www.conf \
     PHP_FPM_RUN_DIR=/run/php-fpm \
+    PHP_CLEAR_ENV=ON \
     PHP_MAIN_FPM_CONF_FILE=/etc/php-fpm.conf \
     PHP_FPM_LOG_PATH=/var/log/php-fpm \
     HTTPD_CONFIGURATION_PATH=${APP_ROOT}/etc/conf.d \
