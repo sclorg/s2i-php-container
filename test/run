@@ -198,7 +198,7 @@ test_application() {
   test_config_writeable
   ct_check_testcase_result $?
 
-  if [ "${OS}" == "rhel9" ] && [ "${PHP_CLEAR_ENV:-true}" == "false" ]; then
+  if [ "${OS}" == "rhel9" ] && [ "${PHP_CLEAR_ENV:-ON}" == "OFF" ]; then
     test_clear_env_setup
     ct_check_testcase_result $?
   fi
