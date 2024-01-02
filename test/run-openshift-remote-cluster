@@ -18,6 +18,7 @@ TEST_LIST="\
 test_php_integration
 test_php_imagestream
 test_php_template
+test_latest_imagestreams
 "
 
 trap ct_os_cleanup EXIT SIGINT

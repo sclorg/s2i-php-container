@@ -30,20 +30,29 @@ function test_php_imagestream() {
 # Check the template
 function test_php_template() {
   local supported_use_case
-  if [ "${OS}" == "rhel8" ] && [ "${VERSION}" == "7.4" ]; then
+  if [ "${VERSION}" == "7.4" ] || [ "${VERSION}" == "8.0" ] || [ "${VERSION}" == "8.1" ]; then
     supported_use_case="True"
+    BRANCH_TO_TEST="4.X"
   fi
-  if [ "${OS}" == "rhel7" ] && [ "${VERSION}" == "7.3" ]; then
+  if [ "${VERSION}" == "7.3" ]; then
     supported_use_case="True"
+    BRANCH_TO_TEST="master"
   fi
   if [ "${supported_use_case:-False}" == "True" ]; then
-    BRANCH_TO_TEST="master"
     ct_os_test_template_app "${IMAGE_NAME}" \
-                        https://raw.githubusercontent.com/sclorg/cakephp-ex/${BRANCH_TO_TEST}/openshift/templates/cakephp.json \
+                        "https://raw.githubusercontent.com/sclorg/cakephp-ex/${BRANCH_TO_TEST}/openshift/templates/cakephp.json" \
                         php \
                         'Welcome to your CakePHP application on OpenShift' \
                         8080 http 200 "-p SOURCE_REPOSITORY_REF=${BRANCH_TO_TEST} -p SOURCE_REPOSITORY_URL=https://github.com/sclorg/cakephp-ex.git -p PHP_VERSION=${VERSION} -p NAME=php-testing"
   fi
 }
 
+
+function test_latest_imagestreams() {
+  info "Testing the latest version in imagestreams"
+  # Switch to root directory of a container
+  pushd "${THISDIR}/../.." >/dev/null
+  ct_check_latest_imagestreams
+  popd >/dev/null
+}
 # vim: set tabstop=2:shiftwidth=2:expandtab:
