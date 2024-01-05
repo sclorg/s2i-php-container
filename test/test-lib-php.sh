@@ -30,11 +30,14 @@ function test_php_imagestream() {
 # Check the template
 function test_php_template() {
   local supported_use_case
-  if [ "${VERSION}" == "7.4" ] || [ "${VERSION}" == "8.0" ] || [ "${VERSION}" == "8.1" ]; then
+  if [ "${VERSION}" == "7.4" ] || [ "${VERSION}" == "8.0" ]; then
     supported_use_case="True"
     BRANCH_TO_TEST="4.X"
-  fi
-  if [ "${VERSION}" == "7.3" ]; then
+  # Version 8.1 is supported only for RHEL9
+  elif [ "${VERSION}" == "8.1" ] || [ "${VERSION}" == "8.2" ]; then
+    supported_use_case="True"
+    BRANCH_TO_TEST="5.X"
+  else
     supported_use_case="True"
     BRANCH_TO_TEST="master"
   fi
