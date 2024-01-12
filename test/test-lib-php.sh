@@ -30,22 +30,26 @@ function test_php_imagestream() {
 # Check the template
 function test_php_template() {
   local supported_use_case
+  local check_msg
   if [ "${VERSION}" == "7.4" ] || [ "${VERSION}" == "8.0" ]; then
     supported_use_case="True"
     BRANCH_TO_TEST="4.X"
+    check_msg="Welcome to CakePHP 4.5"
   # Version 8.1 is supported only for RHEL9
   elif [ "${VERSION}" == "8.1" ] || [ "${VERSION}" == "8.2" ]; then
     supported_use_case="True"
     BRANCH_TO_TEST="5.X"
+    check_msg="Welcome to CakePHP 5"
   else
     supported_use_case="True"
     BRANCH_TO_TEST="master"
+    check_msg="Welcome to your CakePHP application on OpenShift"
   fi
   if [ "${supported_use_case:-False}" == "True" ]; then
     ct_os_test_template_app "${IMAGE_NAME}" \
                         "https://raw.githubusercontent.com/sclorg/cakephp-ex/${BRANCH_TO_TEST}/openshift/templates/cakephp.json" \
                         php \
-                        'Welcome to your CakePHP application on OpenShift' \
+                        "$check_msg" \
                         8080 http 200 "-p SOURCE_REPOSITORY_REF=${BRANCH_TO_TEST} -p SOURCE_REPOSITORY_URL=https://github.com/sclorg/cakephp-ex.git -p PHP_VERSION=${VERSION} -p NAME=php-testing"
   fi
 }
