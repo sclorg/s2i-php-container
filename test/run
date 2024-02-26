@@ -9,6 +9,7 @@
 test -n "${IMAGE_NAME-}" || false 'make sure $IMAGE_NAME is defined'
 test -n "${VERSION-}" || false 'make sure $VERSION is defined'
 
+
 TEST_LIST="\
 test_s2i_usage
 test_docker_run_usage
@@ -18,6 +19,10 @@ test_ssl
 test_ssl_own_cert
 ct_npm_works
 test_build_from_dockerfile
+"
+
+TEST_CLEAR_ENV="\
+clear_env_set
 "
 
 # TODO: Make command compatible for Mac users
@@ -46,7 +51,7 @@ container_ip() {
 }
 
 run_s2i_build() {
-  ct_s2i_build_as_df file://${test_dir}/test-app ${IMAGE_NAME} ${IMAGE_NAME}-testapp ${s2i_args} $(ct_build_s2i_npm_variables)
+  ct_s2i_build_as_df file://${test_dir}/test-app ${IMAGE_NAME} ${IMAGE_NAME}-testapp ${s2i_args} $(ct_build_s2i_npm_variables) $1
 }
 
 prepare() {
@@ -157,8 +162,19 @@ test_config_writeable() {
   docker run --rm "${IMAGE_NAME}" /bin/bash -c "${run_cmd}"
 }
 
+test_clear_env_setup() {
+  local run_cmd="[ -f /etc/php-fpm.d/www.conf ] && grep \"^clear_env = no\" /etc/php-fpm.d/www.conf"
+
+  info "Checking if clear_env = no is set in /etc/php-fpm.d/www.conf file."
+  docker run --rm "${IMAGE_NAME}-testapp" /bin/bash -c "${run_cmd}"
+}
+
+clear_env_set() {
+  PHP_CLEAR_ENV=OFF test_application
+}
+
+
 test_application() {
-  set -x
   cid_file=$CID_FILE_DIR/$(mktemp -u -p . --suffix .cid)
   # Verify that the HTTP connection can be established to test application container
   run_test_application &
@@ -181,6 +197,11 @@ test_application() {
 
   test_config_writeable
   ct_check_testcase_result $?
+
+  if [ "${OS}" == "rhel9" ] && [ "${PHP_CLEAR_ENV:-ON}" == "OFF" ]; then
+    test_clear_env_setup
+    ct_check_testcase_result $?
+  fi
 }
 
 test_application_user() {
@@ -229,9 +250,14 @@ ct_init
 # Since we built the candidate image locally, we don't want S2I attempt to pull
 # it from Docker hub
 s2i_args="--pull-policy=never"
-
+#
 prepare
 run_s2i_build
 ct_check_testcase_result $?
 
 TEST_SET=${TESTS:-$TEST_LIST} ct_run_tests_from_testset "php_tests"
+
+run_s2i_build "-e PHP_CLEAR_ENV=OFF"
+ct_check_testcase_result $?
+
+TEST_SET=${TESTS:-$TEST_CLEAR_ENV} ct_run_tests_from_testset "clear_env_set"

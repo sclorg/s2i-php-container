@@ -14,50 +14,39 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - dockerfile: "Dockerfile"
-            dockerfile_path: "7.3"
-            registry_namespace: "centos7"
-            quayio_username: "QUAY_IMAGE_BUILDER_USERNAME"
-            quayio_token: "QUAY_IMAGE_BUILDER_TOKEN"
-            tag: "centos7"
-            suffix: "centos7"
-          - dockerfile: "Dockerfile"
-            dockerfile_path: "7.4"
-            registry_namespace: "centos7"
-            quayio_username: "QUAY_IMAGE_BUILDER_USERNAME"
-            quayio_token: "QUAY_IMAGE_BUILDER_TOKEN"
-            tag: "centos7"
-            suffix: "centos7"
-          - dockerfile: "Dockerfile.c9s"
-            dockerfile_path: "7.4"
-            registry_namespace: "sclorg"
-            quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
-            quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
-            tag: "c9s"
-            suffix: "c9s"
-          - dockerfile: "Dockerfile.fedora"
-            dockerfile_path: "8.0"
+          - dockerfile: "8.0/Dockerfile.fedora"
+            docker_context: "8.0"
             registry_namespace: "fedora"
             quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
             tag: "8.0"
-          - dockerfile: "Dockerfile.fedora"
-            dockerfile_path: "8.1"
+            image_name: "php-80"
+
+          - dockerfile: "8.1/Dockerfile.fedora"
+            docker_context: "8.1"
             registry_namespace: "fedora"
             quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
             tag: "8.1"
+            image_name: "php-81"
+
+          - dockerfile: "8.2/Dockerfile.fedora"
+            docker_context: "8.2"
+            registry_namespace: "fedora"
+            quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
+            quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
+            tag: "8.2"
+            image_name: "php-82"
 
     steps:
       - name: Build and push to quay.io registry
-        uses: sclorg/build-and-push-action@v2
+        uses: sclorg/build-and-push-action@v4
         with:
           registry: "quay.io"
           registry_namespace: ${{ matrix.registry_namespace }}
           registry_username: ${{ secrets[matrix.quayio_username] }}
           registry_token: ${{ secrets[matrix.quayio_token] }}
           dockerfile: ${{ matrix.dockerfile }}
-          docker_context: ${{ matrix.dockerfile_path }}
-          dockerfile_path: ${{ matrix.dockerfile_path }}
+          docker_context: ${{ matrix.docker_context }}
           tag: ${{ matrix.tag }}
-          suffix: ${{ matrix.suffix }}
+          image_name: ${{ matrix.image_name }}

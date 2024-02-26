@@ -10,6 +10,7 @@ Images available on Quay are:
 * CentOS Stream 9 [php-74](https://quay.io/repository/sclorg/php-74-c9s)
 * Fedora [php-80](https://quay.io/repository/fedora/php-80)
 * Fedora [php-81](https://quay.io/repository/fedora/php-81)
+* Fedora [php-82](https://quay.io/repository/fedora/php-82)
 
 This repository contains the source for building various versions of
 the PHP application as a reproducible Docker image using
@@ -33,6 +34,7 @@ PHP versions currently supported are:
 * [php-7.4](7.4)
 * [php-8.0](8.0)
 * [php-8.1](8.1)
+* [php-8.2](8.2)
 
 RHEL versions currently supported are:
 * RHEL7
@@ -96,6 +98,9 @@ see [usage documentation](8.0/README.md).
 
 For information about usage of Dockerfile for PHP 8.1,
 see [usage documentation](8.1/README.md).
+
+For information about usage of Dockerfile for PHP 8.2,
+see [usage documentation](8.2/README.md).
 
 Test
 ----
