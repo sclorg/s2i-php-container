@@ -4,7 +4,6 @@ PHP 7.4 container image
 This container image includes PHP 7.4 as a [S2I](https://github.com/openshift/source-to-image) base image for your PHP 7.4 applications.
 Users can choose between RHEL and CentOS based builder images.
 The RHEL UBI images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/),
-the CentOS images are available on [Quay.io](https://quay.io/organization/centos7),
 and the Fedora images are available in [Fedora Registry](https://registry.fedoraproject.org/).
 The resulting image can be run using [podman](https://github.com/containers/libpod).
 
@@ -319,8 +318,7 @@ See also
 --------
 Dockerfile and other sources are available on https://github.com/sclorg/s2i-php-container.
 In that repository you also can find another versions of Python environment Dockerfiles.
-Dockerfile for CentOS is called `Dockerfile`, Dockerfile for RHEL7 is called `Dockerfile.rhel7`,
-for RHEL8 it's `Dockerfile.rhel8` and the Fedora Dockerfile is called Dockerfile.fedora.
+Dockerfile for RHEL8  is called `Dockerfile.rhel8` and the Fedora Dockerfile is called Dockerfile.fedora.
 
 Security Implications
 ---------------------
