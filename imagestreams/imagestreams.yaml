@@ -13,9 +13,6 @@
   - filename: php-centos.json
     latest: "8.0-ubi8"
     distros:
-      - name: UBI 7
-        app_versions: ["7.3"]
-
       - name: UBI 8
         app_versions: ["7.4", "8.0", "8.2"]
 
@@ -25,18 +22,11 @@
   - filename: php-rhel.json
     latest: "8.0-ubi8"
     distros:
-      - name: UBI 7
-        app_versions: ["7.3"]
-
       - name: UBI 8
         app_versions: ["7.4", "8.0", "8.2"]
 
       - name: UBI 9
         app_versions: ["8.0", "8.1", "8.2"]
-    custom_tags:
-      - name: "7.3"
-        distro: UBI 7
-        app_version: "7.3"
 
   - filename: php-rhel-aarch64.json
     latest: "8.0-ubi8"

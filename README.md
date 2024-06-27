@@ -4,9 +4,6 @@ PHP Docker images
 [![Build and push images to Quay.io registry](https://github.com/sclorg/s2i-php-container/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/sclorg/s2i-php-container/actions/workflows/build-and-push.yml)
 
 Images available on Quay are:
-* CentOS 7 [php-72](https://quay.io/repository/centos7/php-72-centos7)
-* CentOS 7 [php-73](https://quay.io/repository/centos7/php-73-centos7)
-* CentOS 7 [php-74](https://quay.io/repository/centos7/php-74-centos7)
 * CentOS Stream 9 [php-74](https://quay.io/repository/sclorg/php-74-c9s)
 * Fedora [php-80](https://quay.io/repository/fedora/php-80)
 * Fedora [php-81](https://quay.io/repository/fedora/php-81)
@@ -37,12 +34,8 @@ PHP versions currently supported are:
 * [php-8.2](8.2)
 
 RHEL versions currently supported are:
-* RHEL7
 * RHEL8
 * RHEL9
-
-CentOS versions currently supported are:
-* CentOS7
 
 CenOS Stream versions currently supported are:
 * CentOS Stream 9
@@ -72,12 +65,12 @@ To build a PHP image, choose either the CentOS or RHEL based image:
     ```
     $ git clone --recursive https://github.com/sclorg/s2i-php-container.git
     $ cd s2i-php-container
-    $ make build TARGET=centos7 VERSIONS=7.3
+    $ make build TARGET=c9s VERSIONS=7.4
     ```
 
-Alternatively, you can pull the CentOS image from Docker Hub via:
+Alternatively, you can pull the CentOS Stream image from Docker Hub via:
 
-    $ podman pull centos7/php-73-centos7
+    $ podman pull registry.access.redhat.com/ubi8/php-74
 
 Note: while the installation steps are calling `podman`, you can replace any such calls by `docker` with the same arguments.
 
@@ -87,11 +80,11 @@ on all the supported versions of PHP.**
 
 Usage
 -----
-For information about usage of Dockerfile for PHP 7.4,
-see [usage documentation](7.4/README.md).
-
 For information about usage of Dockerfile for PHP 7.3,
 see [usage documentation](7.3/README.md).
+
+For information about usage of Dockerfile for PHP 7.4,
+see [usage documentation](7.4/README.md).
 
 For information about usage of Dockerfile for PHP 8.0,
 see [usage documentation](8.0/README.md).
@@ -121,11 +114,11 @@ Users can choose between testing a PHP test application based on a RHEL or CentO
     $ make test TARGET=rhel8 VERSIONS=7.4
     ```
 
-*  **CentOS based image**
+*  **CentOS Stream based image**
 
     ```
     $ cd s2i-php-container
-    $ make test TARGET=centos7 VERSIONS=7.3
+    $ make test TARGET=c9s VERSIONS=7.4
     ```
 
 **Notice: By omitting the `VERSIONS` parameter, the build/test action will be performed
@@ -136,11 +129,11 @@ Repository organization
 -----------------------
 * **`<php-version>`**
 
-    * **Dockerfile**
+    * **Dockerfile.c9s**
 
-        CentOS based Dockerfile.
+        CentOS Stream based Dockerfile.
 
-    * **Dockerfile.rhel7**
+    * **Dockerfile.rhel8**
 
         RHEL based Dockerfile. In order to perform build or test actions on this
         Dockerfile you need to run the action on properly subscribed RHEL machine.
