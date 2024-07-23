@@ -167,9 +167,6 @@ The following environment variables set their equivalent property value in the p
 * **DISPLAY_STARTUP_ERRORS**
   * Cause display errors which occur during PHP's startup sequence to be handled separately from display errors
   * Default: OFF
-* **TRACK_ERRORS**
-  * Store the last error/warning message in $php_errormsg (boolean)
-  * Default: OFF
 * **HTML_ERRORS**
   * Link errors to documentation related to the error
   * Default: ON
