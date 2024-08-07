@@ -11,8 +11,8 @@ EXPOSE 8443
 # Exposed ports:
 # * 8080 - alternative port for http
 
-ENV PHP_VERSION=8.2 \
-    PHP_VER_SHORT=82 \
+ENV PHP_VERSION=8.3 \
+    PHP_VER_SHORT=83 \
     NAME=php
 
 ENV SUMMARY="Platform for building and running PHP $PHP_VERSION applications" \
@@ -46,12 +46,12 @@ ARG INSTALL_PKGS="php php-fpm php-mysqlnd php-pgsql php-bcmath \
                   php-process php-soap php-opcache php-xml \
                   php-gmp php-pecl-apcu php-pecl-zip mod_ssl hostname"
 
-RUN yum module -y enable php:$PHP_VERSION && \
-    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
-    yum reinstall -y tzdata && \
+RUN dnf module -y enable php:$PHP_VERSION && \
+    dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
+    dnf reinstall -y tzdata && \
     rpm -V $INSTALL_PKGS && \
     php -v | grep -qe "v$PHP_VERSION\." && echo "Found VERSION $PHP_VERSION" && \
-    yum -y clean all --enablerepo='*'
+    dnf -y clean all --enablerepo='*'
 
 ENV PHP_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/php/ \
     APP_DATA=${APP_ROOT}/src \
