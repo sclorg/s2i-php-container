@@ -1,4 +1,4 @@
-FROM quay.io/fedora/s2i-base:38
+FROM quay.io/fedora/s2i-base:40
 
 # This image provides an Apache+PHP environment for running PHP
 # applications.
@@ -6,8 +6,8 @@ FROM quay.io/fedora/s2i-base:38
 EXPOSE 8080
 EXPOSE 8443
 
-ENV PHP_VERSION=8.2 \
-    PHP_SHORT_VER=82 \
+ENV PHP_VERSION=8.3 \
+    PHP_SHORT_VER=83 \
     PATH=$PATH:/usr/bin
 
 ENV SUMMARY="Platform for building and running PHP $PHP_VERSION applications" \
@@ -42,10 +42,10 @@ ARG INSTALL_PKGS="php php-fpm php-mysqlnd php-bcmath \
                   php-process php-soap php-opcache php-xml \
                   php-gmp php-pecl-apcu mod_ssl hostname"
 
-RUN yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS --nogpgcheck && \
+RUN dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS --nogpgcheck && \
     rpm -V $INSTALL_PKGS && \
     php -v | grep -qe "v$PHP_VERSION\." && echo "Found VERSION $PHP_VERSION" && \
-    yum -y clean all --enablerepo='*'
+    dnf -y clean all --enablerepo='*'
 
 ENV PHP_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/php/ \
     APP_DATA=${APP_ROOT}/src \

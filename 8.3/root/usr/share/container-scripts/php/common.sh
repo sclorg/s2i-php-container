@@ -2,7 +2,7 @@ if [ "x$PLATFORM" == "xel7" ]; then
   HTTPCONF_LINENO=151
 elif head "/etc/redhat-release" | grep -q "^Fedora"; then
   HTTPCONF_LINENO=156
-elif [ "x$PLATFORM" == "xel9" ]; then
+elif [ "x$PLATFORM" == "xel9" ] || [ "x$PLATFORM" == "xel10" ] ; then
   HTTPCONF_LINENO=156
 else
   HTTPCONF_LINENO=154

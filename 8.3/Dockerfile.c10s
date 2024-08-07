@@ -1,4 +1,4 @@
-FROM quay.io/sclorg/s2i-base-c9s:c9s
+FROM quay.io/sclorg/s2i-base-c10s:c10s
 
 # This image provides an Apache+PHP environment for running PHP
 # applications.
@@ -11,8 +11,8 @@ EXPOSE 8443
 # Exposed ports:
 # * 8080 - alternative port for http
 
-ENV PHP_VERSION=8.2 \
-    PHP_VER_SHORT=82 \
+ENV PHP_VERSION=8.3 \
+    PHP_VER_SHORT=83 \
     NAME=php
 
 ENV SUMMARY="Platform for building and running PHP $PHP_VERSION applications" \
@@ -32,12 +32,12 @@ LABEL summary="${SUMMARY}" \
       io.openshift.tags="builder,${NAME},${NAME}${PHP_VER_SHORT},${NAME}-${PHP_VER_SHORT}" \
       io.openshift.s2i.scripts-url="image:///usr/libexec/s2i" \
       io.s2i.scripts-url="image:///usr/libexec/s2i" \
-      name="sclorg/${NAME}-${PHP_VER_SHORT}-c9s" \
+      name="sclorg/${NAME}-${PHP_VER_SHORT}-c10s" \
       com.redhat.component="${NAME}-${PHP_VER_SHORT}-container" \
       version="1" \
       com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI" \
       help="For more information visit https://github.com/sclorg/s2i-${NAME}-container" \
-      usage="s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=${PHP_VERSION}/test/test-app sclorg/${NAME}-${PHP_VER_SHORT}-c9s sample-server" \
+      usage="s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=${PHP_VERSION}/test/test-app sclorg/${NAME}-${PHP_VER_SHORT}-c10s sample-server" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 # Install Apache httpd and PHP
@@ -46,12 +46,11 @@ ARG INSTALL_PKGS="php php-fpm php-mysqlnd php-pgsql php-bcmath \
                   php-process php-soap php-opcache php-xml \
                   php-gmp php-pecl-apcu php-pecl-zip mod_ssl hostname"
 
-RUN yum module -y enable php:$PHP_VERSION && \
-    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
-    yum reinstall -y tzdata && \
+RUN dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
+    dnf reinstall -y tzdata && \
     rpm -V $INSTALL_PKGS && \
     php -v | grep -qe "v$PHP_VERSION\." && echo "Found VERSION $PHP_VERSION" && \
-    yum -y clean all --enablerepo='*'
+    dnf -y clean all --enablerepo='*'
 
 ENV PHP_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/php/ \
     APP_DATA=${APP_ROOT}/src \
