@@ -1,0 +1,39 @@
+---
+# configuration file for https://github.com/sclorg/ci-scripts/tree/master/ocp-stream-generator
+
+- name: php
+  pretty_name: PHP
+  sample_repo: https://github.com/sclorg/cakephp-ex.git
+  category: builder
+  description: >-
+    Build and run PHP APP_VERSION applications on DISTRO_NAME. For more information
+    about using this builder image, including OpenShift considerations, see
+    https://github.com/sclorg/s2i-php-container/blob/master/APP_VERSION/README.md.
+  imagestream_files:
+  - filename: php-centos.json
+    latest: "8.0-ubi8"
+    distros:
+      - name: UBI 8
+        app_versions: ["7.4", "8.0", "8.2"]
+
+      - name: UBI 9
+        app_versions: ["8.0", "8.1", "8.2"]
+
+  - filename: php-rhel.json
+    latest: "8.0-ubi8"
+    distros:
+      - name: UBI 8
+        app_versions: ["7.4", "8.0", "8.2"]
+
+      - name: UBI 9
+        app_versions: ["8.0", "8.1", "8.2"]
+
+  - filename: php-rhel-aarch64.json
+    latest: "8.0-ubi8"
+    distros:
+      - name: UBI 8
+        app_versions: ["7.4", "8.0", "8.2"]
+
+      - name: UBI 9
+        app_versions: ["8.0", "8.1", "8.2"]
+...
