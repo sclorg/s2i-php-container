@@ -1,0 +1,21 @@
+#!/bin/sh
+
+DISTRO=`cat /etc/*-release | grep ^ID= | grep -Po '".*?"' | tr -d '"'`
+NAMESPACE=centos
+[[ $DISTRO =~ rhel* ]] && NAMESPACE=rhscl
+
+cat <<EOF
+This is a S2I PHP-${PHP_VERSION} ${DISTRO} base image:
+
+To use it in Openshift, run:
+
+oc new-app php:${PHP_VERSION}~https://github.com/sclorg/cakephp-ex.git
+
+To access the application:
+
+oc get pods
+oc exec <pod> -- curl 127.0.0.1:8080
+
+Alternatively, to run the image directly using podman or docker, or how to use it as a parent image in a Dockerfile, see documentation at
+https://github.com/sclorg/s2i-php-container/blob/master/${PHP_VERSION}/README.md
+EOF
