@@ -26,7 +26,7 @@ else
   rm -f /opt/app-root/etc/scl_enable
 fi
 
-if head "/etc/redhat-release" | grep -q -e "^Red Hat Enterprise Linux release 8" -e "^Red Hat Enterprise Linux release 9" -e "Fedora" -e "^CentOS Stream release 9"; then
+if head "/etc/redhat-release" | grep -q -e "^Red Hat Enterprise Linux release 8" -e "^Red Hat Enterprise Linux release 9" -e "Fedora" -e "^CentOS Stream release 9" -e "^CentOS Stream release 10"; then
     /usr/libexec/httpd-ssl-gencerts
 fi
 
@@ -54,7 +54,7 @@ else
   chmod -R a+rwx "${PHP_SYSCONF_PATH}/php-fpm.d"
 fi
 
-if [ "x$PLATFORM" == "xel9" ] || [ "x$PLATFORM" == "xfedora" ]; then
+if [ "x$PLATFORM" == "xel9" ] || [ "x$PLATFORM" == "xel10" ]  || [ "x$PLATFORM" == "xfedora" ]; then
   if [ -v PHP_FPM_RUN_DIR ]; then
     mkdir -p ${PHP_FPM_RUN_DIR}
     chmod -R a+rwx ${PHP_FPM_RUN_DIR}
