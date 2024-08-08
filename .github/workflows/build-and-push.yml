@@ -38,6 +38,14 @@ jobs:
             tag: "8.2"
             image_name: "php-82"
 
+          - dockerfile: "8.3/Dockerfile.fedora"
+            docker_context: "8.3"
+            registry_namespace: "fedora"
+            quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
+            quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
+            tag: "8.3"
+            image_name: "php-83"
+
     steps:
       - name: Build and push to quay.io registry
         uses: sclorg/build-and-push-action@v4
