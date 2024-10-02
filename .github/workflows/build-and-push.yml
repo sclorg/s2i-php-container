@@ -49,8 +49,8 @@ jobs:
           - dockerfile: "8.3/Dockerfile.c10s"
             docker_context: "8.3"
             registry_namespace: "sclorg"
-            quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
-            quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
+            quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
+            quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
             tag: "c10s"
             image_name: "php-83-c10s"
 
