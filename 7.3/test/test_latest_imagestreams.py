@@ -1,1 +1,0 @@
-../../test/test_latest_imagestreams.py

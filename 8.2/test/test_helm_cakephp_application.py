@@ -1,1 +1,0 @@
-../../test/test_helm_cakephp_application.py
