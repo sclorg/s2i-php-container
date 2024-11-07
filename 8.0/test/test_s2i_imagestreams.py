@@ -1,1 +1,0 @@
-../../test/test_s2i_imagestreams.py

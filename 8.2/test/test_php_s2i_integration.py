@@ -1,0 +1,1 @@
+../../test/test_php_s2i_integration.py

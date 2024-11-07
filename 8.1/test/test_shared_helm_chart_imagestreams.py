@@ -1,0 +1,1 @@
+../../test/test_shared_helm_chart_imagestreams.py
