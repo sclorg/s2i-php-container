@@ -28,7 +28,6 @@ For more information about concepts used in these container images, see the
 Versions
 --------
 PHP versions currently supported are:
-* [php-7.3](7.3)
 * [php-7.4](7.4)
 * [php-8.0](8.0)
 * [php-8.1](8.1)
@@ -83,8 +82,6 @@ on all the supported versions of PHP.**
 
 Usage
 -----
-For information about usage of Dockerfile for PHP 7.3,
-see [usage documentation](7.3/README.md).
 
 For information about usage of Dockerfile for PHP 7.4,
 see [usage documentation](7.4/README.md).
