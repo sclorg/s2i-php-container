@@ -26,16 +26,14 @@ else
   rm -f /opt/app-root/etc/scl_enable
 fi
 
-if head "/etc/redhat-release" | grep -q -e "^Red Hat Enterprise Linux release 8" -e "^Red Hat Enterprise Linux release 9" -e "Fedora" -e "^CentOS Stream release 9" -e "^CentOS Stream release 10"; then
-    /usr/libexec/httpd-ssl-gencerts
-fi
+/usr/libexec/httpd-ssl-gencerts
 
 mkdir -p ${HTTPD_CONFIGURATION_PATH}
 chmod -R a+rwx ${HTTPD_MAIN_CONF_PATH}
 chmod -R a+rwx ${HTTPD_MAIN_CONF_D_PATH}
 chmod -R ug+r   /etc/pki/tls/certs/localhost.crt
-chmod -R ug+r   /etc/pki/tls/private/localhost.key
 chown -R 1001:0 /etc/pki/tls/certs/localhost.crt
+chmod -R ug+r   /etc/pki/tls/private/localhost.key
 chown -R 1001:0 /etc/pki/tls/private/localhost.key
 mkdir -p ${APP_ROOT}/etc
 chmod -R a+rwx ${APP_ROOT}/etc
@@ -45,16 +43,12 @@ mkdir -p /tmp/sessions
 chmod -R a+rwx /tmp/sessions
 chown -R 1001:0 /tmp/sessions
 chown -R 1001:0 ${HTTPD_DATA_PATH}
-if [ "$PLATFORM" == "el7" ]; then
-  # Only run for el7 as this essentially becomes "chmod -R /etc" outside of SCL-based images
-  chmod -R a+rwx "${PHP_SYSCONF_PATH}"
-else
-  chmod a+rwx "${PHP_SYSCONF_PATH}/php.ini"
-  chmod -R a+rwx "${PHP_SYSCONF_PATH}/php.d"
-  chmod -R a+rwx "${PHP_SYSCONF_PATH}/php-fpm.d"
-fi
 
-if [ "x$PLATFORM" == "xel9" ] || [ "x$PLATFORM" == "xel10" ]  || [ "x$PLATFORM" == "xfedora" ]; then
+chmod a+rwx "${PHP_SYSCONF_PATH}/php.ini"
+chmod -R a+rwx "${PHP_SYSCONF_PATH}/php.d"
+chmod -R a+rwx "${PHP_SYSCONF_PATH}/php-fpm.d"
+
+if [ "x$PLATFORM" == "xel10" ] || [ "x$PLATFORM" == "xel9" ]  || [ "x$PLATFORM" == "xfedora" ]; then
   if [ -v PHP_FPM_RUN_DIR ]; then
     mkdir -p ${PHP_FPM_RUN_DIR}
     chmod -R a+rwx ${PHP_FPM_RUN_DIR}

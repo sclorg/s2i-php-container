@@ -56,7 +56,7 @@ fi
 
 
 
-if [ "x$PLATFORM" == "xel9" ] || [ "x$PLATFORM" == "xfedora" ]; then
+if [ "x$PLATFORM" == "xel10" ] || [ "x$PLATFORM" == "xel9" ] || [ "x$PLATFORM" == "xfedora" ]; then
   if [ -n "${PHP_FPM_RUN_DIR:-}" ]; then
     /bin/ln -s /dev/stderr ${PHP_FPM_LOG_PATH}/error.log
     mkdir -p ${PHP_FPM_RUN_DIR}
