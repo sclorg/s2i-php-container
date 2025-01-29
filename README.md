@@ -37,6 +37,7 @@ PHP versions currently supported are:
 RHEL versions currently supported are:
 * RHEL8
 * RHEL9
+* RHEL10
 
 CenOS Stream versions currently supported are:
 * CentOS Stream 9
