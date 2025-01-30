@@ -44,7 +44,7 @@ LABEL summary="${SUMMARY}" \
 ARG INSTALL_PKGS="php php-fpm php-mysqlnd php-pgsql php-bcmath \
                   php-gd php-intl php-ldap php-mbstring php-pdo \
                   php-process php-soap php-opcache php-xml \
-                  php-gmp php-pecl-apcu php-pecl-zip mod_ssl hostname"
+                  php-gmp php-apcu php-zip php-redis mod_ssl hostname"
 
 RUN dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     dnf reinstall -y tzdata && \
