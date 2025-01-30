@@ -973,6 +973,10 @@ sendmail_path = /usr/sbin/sendmail -t -i
 ; Add X-PHP-Originating-Script: that will include uid of the script followed by the filename
 mail.add_x_header = On
 
+; Use mixed LF and CRLF line separators to keep compatibility with some
+; RFC 2822 non conformant MTA.
+mail.mixed_lf_and_crlf = Off
+
 ; The path to a log file that will log all mail() calls. Log entries include
 ; the full path of the script, line number, To address and headers.
 ;mail.log =
@@ -1102,9 +1106,6 @@ mysqli.default_user =
 ; file will be able to reveal the password as well.
 ; http://php.net/mysqli.default-pw
 mysqli.default_pw =
-
-; Allow or prevent reconnect
-mysqli.reconnect = Off
 
 [mysqlnd]
 ; Enable / Disable collection of general statistics by mysqlnd which can be
@@ -1439,11 +1440,6 @@ zend.assertions = -1
 ; User-function to be called if an assertion fails.
 ; http://php.net/assert.callback
 ;assert.callback = 0
-
-; Eval the expression with current error_reporting().  Set to true if you want
-; error_reporting(0) around the eval().
-; http://php.net/assert.quiet-eval
-;assert.quiet_eval = 0
 
 [mbstring]
 ; language for internal character representation.
