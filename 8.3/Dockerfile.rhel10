@@ -41,19 +41,23 @@ LABEL summary="${SUMMARY}" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 # Install Apache httpd and PHP
-ARG INSTALL_PKGS="php php-fpm php-mysqlnd php-pgsql php-bcmath \
+ARG INSTALL_PKGS="php php-fpm mod_ssl hostname"
+ARG INSTALL_EXTS="php-json php-mysqli php-pgsql php-bcmath \
                   php-gd php-intl php-ldap php-mbstring php-pdo \
                   php-process php-soap php-opcache php-xml \
-                  php-gmp php-pecl-apcu php-pecl-zip mod_ssl hostname"
+                  php-gmp php-apcu php-zip php-redis"
 
 # This needs to be added for downloading packages
 RUN curl -fL -o /etc/pki/ca-trust/source/anchors/2022-IT-Root-CA.pem https://certs.corp.redhat.com/certs/2022-IT-Root-CA.pem
 RUN update-ca-trust extract
 
-RUN dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
+RUN dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS $INSTALL_EXTS && \
     dnf reinstall -y tzdata && \
     rpm -V $INSTALL_PKGS && \
-    php -v | grep -qe "v$PHP_VERSION\." && echo "Found VERSION $PHP_VERSION" && \
+    php -v | grep -qe "v$PHP_VERSION\." && \
+        echo "Found VERSION $PHP_VERSION" && \
+    for ext in $(echo $INSTALL_EXTS | sed s/php-//g) ; do php -m | grep -qi "$ext\$"; done && \
+        echo "Found requested extensions" && \
     dnf -y clean all --enablerepo='*'
 
 # Remove the certs
