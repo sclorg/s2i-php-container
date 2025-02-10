@@ -18,7 +18,7 @@ test_dir = Path(os.path.abspath(os.path.dirname(__file__)))
 class TestHelmRHELPHPImageStreams:
 
     def setup_method(self):
-        package_name = "php-imagestreams"
+        package_name = "redhat-php-imagestreams"
         path = test_dir
         self.hc_api = HelmChartsAPI(path=path, package_name=package_name, tarball_dir=test_dir, remote=True)
         self.hc_api.clone_helm_chart_repo(
