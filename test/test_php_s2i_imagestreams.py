@@ -20,7 +20,7 @@ SHORT_VERSION = "".join(VERSION.split("."))
 class TestPHPImagestreams:
 
     def setup_method(self):
-        self.oc_api = OpenShiftAPI(pod_name_prefix="php", version=VERSION)
+        self.oc_api = OpenShiftAPI(pod_name_prefix="php", version=VERSION, shared_cluster=True)
 
     def teardown_method(self):
         self.oc_api.delete_project()

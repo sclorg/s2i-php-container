@@ -18,7 +18,7 @@ OS = os.getenv("TARGET")
 class TestS2IPHPTemplate:
 
     def setup_method(self):
-        self.oc_api = OpenShiftAPI(pod_name_prefix="php-testing", version=VERSION)
+        self.oc_api = OpenShiftAPI(pod_name_prefix="php-testing", version=VERSION, shared_cluster=True)
 
     def teardown_method(self):
         self.oc_api.delete_project()

@@ -16,10 +16,10 @@ OS = os.getenv("TARGET")
 
 if VERSION == "7.4" or VERSION == "8.0":
     branch_to_test = "4.X"
-    check_msg = "Welcome to CakePHP 4.5"
+    check_msg = "Welcome to CakePHP"
 elif VERSION == "8.1" or VERSION == "8.2" or VERSION == "8.3":
     branch_to_test = "5.X"
-    check_msg = "Welcome to CakePHP 5"
+    check_msg = "Welcome to CakePHP"
 else:
     branch_to_test = "master"
     check_msg = "Welcome to your CakePHP application on OpenShift"
@@ -30,17 +30,17 @@ TAGS = {
 }
 TAG = TAGS.get(OS, None)
 
-DEPLOYED_MYSQL_IMAGE = "quay.io/sclorg/mysql-80-c8s"
-IMAGE_SHORT = f"mysql:8.0-el8"
-IMAGE_TAG = f"8.0-el8"
+# DEPLOYED_MYSQL_IMAGE = "quay.io/sclorg/mysql-80-c9s"
+# IMAGE_SHORT = f"mysql:8.0-el9"
+# IMAGE_TAG = f"8.0-el9"
 
 
 class TestDeployTemplate:
 
     def setup_method(self):
-        self.oc_api = OpenShiftAPI(pod_name_prefix="php-testing", version=VERSION)
+        self.oc_api = OpenShiftAPI(pod_name_prefix="php-testing", version=VERSION, shared_cluster=True)
         self.oc_api.import_is("imagestreams/php-rhel.json", "", skip_check=True)
-        assert self.oc_api.upload_image(DEPLOYED_MYSQL_IMAGE, IMAGE_SHORT)
+        #assert self.oc_api.upload_image(DEPLOYED_MYSQL_IMAGE, IMAGE_SHORT)
 
     def teardown_method(self):
         self.oc_api.delete_project()
@@ -62,12 +62,12 @@ class TestDeployTemplate:
             f"PHP_VERSION={VERSION}{TAG}",
             f"NAME={service_name}"
         ]
-        if template != "cakephp.json":
-            openshift_args.extend([
-                f"MYSQL_VERSION={IMAGE_TAG}",
-                f"DATABASE_USER=testu",
-                f"DATABASE_PASSWORD=testp"
-            ])
+        # if template != "cakephp.json":
+        #     openshift_args.extend([
+        #         f"MYSQL_VERSION={IMAGE_TAG}",
+        #         f"DATABASE_USER=testu",
+        #         f"DATABASE_PASSWORD=testp"
+        #     ])
         assert self.oc_api.deploy_template_with_image(
             image_name=IMAGE_NAME,
             template=template_url,
