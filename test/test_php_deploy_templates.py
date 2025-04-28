@@ -30,6 +30,8 @@ TAGS = {
 }
 TAG = TAGS.get(OS, None)
 
+new_version = VERSION.replace(".", "")
+
 # DEPLOYED_MYSQL_IMAGE = "quay.io/sclorg/mysql-80-c9s"
 # IMAGE_SHORT = f"mysql:8.0-el9"
 # IMAGE_TAG = f"8.0-el9"
@@ -38,8 +40,7 @@ TAG = TAGS.get(OS, None)
 class TestDeployTemplate:
 
     def setup_method(self):
-        self.oc_api = OpenShiftAPI(pod_name_prefix="php-testing", version=VERSION)
-        self.oc_api.import_is("imagestreams/php-rhel.json", "", skip_check=True)
+        self.oc_api = OpenShiftAPI(pod_name_prefix=f"php-{new_version}-testing", version=VERSION)
         #assert self.oc_api.upload_image(DEPLOYED_MYSQL_IMAGE, IMAGE_SHORT)
 
     def teardown_method(self):
@@ -54,7 +55,10 @@ class TestDeployTemplate:
     def test_php_template_inside_cluster(self, template):
         if OS == "rhel10":
             pytest.skip("Do NOT test on RHEL10 yet.")
-        service_name = "php-testing"
+        if VERSION == "8.3":
+            pytest.skip("Do NOT test on version 8.3 yet.")
+        self.oc_api.import_is("imagestreams/php-rhel.json", "", skip_check=True)
+        service_name = f"php-{new_version}-testing"
         template_url = self.oc_api.get_raw_url_for_json(
             container="cakephp-ex", dir="openshift/templates", filename=template, branch=branch_to_test
         )

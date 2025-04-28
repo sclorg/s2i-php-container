@@ -12,19 +12,19 @@ if not check_variables():
 VERSION = os.getenv("VERSION")
 IMAGE_NAME = os.getenv("IMAGE_NAME")
 OS = os.getenv("TARGET")
-
+new_version = VERSION.replace(".", "")
 
 # Replacement with 'test_python_s2i_app_ex'
 class TestS2IPHPTemplate:
 
     def setup_method(self):
-        self.oc_api = OpenShiftAPI(pod_name_prefix="php-testing", version=VERSION)
+        self.oc_api = OpenShiftAPI(pod_name_prefix=f"php-{new_version}-testing", version=VERSION)
 
     def teardown_method(self):
         self.oc_api.delete_project()
 
     def test_php_template_inside_cluster(self):
-        service_name = "php-testing"
+        service_name = f"php-{new_version}-testing"
         assert self.oc_api.deploy_s2i_app(
             image_name=IMAGE_NAME, app=f"https://github.com/sclorg/s2i-php-container.git",
             context="test/test-app",

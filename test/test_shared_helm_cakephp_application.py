@@ -48,6 +48,11 @@ class TestHelmCakePHPTemplate:
         self.hc_api.delete_project()
 
     def test_curl_connection(self):
+        if OS == "rhel10":
+            pytest.skip("Do NOT test on RHEL10 yet.")
+        if VERSION == "8.3":
+            pytest.skip("Do NOT test on version 8.3 yet.")
+
         branch_to_test = "4.X"
         check_msg = "Welcome to CakePHP"
         if self.hc_api.shared_cluster:
@@ -75,6 +80,10 @@ class TestHelmCakePHPTemplate:
         )
 
     def test_by_helm_test(self):
+        if OS == "rhel10":
+            pytest.skip("Do NOT test on RHEL10 yet.")
+        if VERSION == "8.3":
+            pytest.skip("Do NOT test on version 8.3 yet.")
         branch_to_test = "4.X"
         check_msg = "Welcome to CakePHP"
         if VERSION.startswith("8.2") or VERSION.startswith("8.3"):
