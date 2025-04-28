@@ -38,7 +38,7 @@ class TestHelmCakePHPTemplate:
     def setup_method(self):
         package_name = "redhat-php-cakephp-application"
         path = test_dir
-        self.hc_api = HelmChartsAPI(path=path, package_name=package_name, tarball_dir=test_dir, shared_cluster=True)
+        self.hc_api = HelmChartsAPI(path=path, package_name=package_name, tarball_dir=test_dir)
         self.hc_api.clone_helm_chart_repo(
             repo_url="https://github.com/sclorg/helm-charts", repo_name="helm-charts",
             subdir="charts/redhat"
@@ -68,7 +68,7 @@ class TestHelmCakePHPTemplate:
                 "name": "cakephp-example"
             }
         )
-        assert self.hc_api.is_s2i_pod_running(pod_name_prefix="cakephp-example", timeout=300)
+        assert self.hc_api.is_s2i_pod_running(pod_name_prefix="cakephp-example", timeout=480)
         assert self.hc_api.oc_api.check_response_inside_cluster(
             name_in_template="cakephp-example",
             expected_output=check_msg,
@@ -93,5 +93,5 @@ class TestHelmCakePHPTemplate:
                 "name": "cakephp-example"
             }
         )
-        assert self.hc_api.is_s2i_pod_running(pod_name_prefix="cakephp-example", timeout=300)
+        assert self.hc_api.is_s2i_pod_running(pod_name_prefix="cakephp-example", timeout=480)
         assert self.hc_api.test_helm_chart(expected_str=[check_msg])
