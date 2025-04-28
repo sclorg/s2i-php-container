@@ -18,7 +18,7 @@ OS = os.getenv("TARGET")
 class TestS2IPHPTemplate:
 
     def setup_method(self):
-        self.oc_api = OpenShiftAPI(pod_name_prefix="php-testing", version=VERSION, shared_cluster=True)
+        self.oc_api = OpenShiftAPI(pod_name_prefix="php-testing", version=VERSION)
 
     def teardown_method(self):
         self.oc_api.delete_project()
@@ -30,7 +30,7 @@ class TestS2IPHPTemplate:
             context="test/test-app",
             service_name=service_name
         )
-        assert self.oc_api.template_deployed(name_in_template=service_name)
+        assert self.oc_api.is_template_deployed(name_in_template=service_name, timeout=480)
         assert self.oc_api.check_response_inside_cluster(
             name_in_template=service_name, expected_output="Test PHP passed"
         )

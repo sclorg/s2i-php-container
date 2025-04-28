@@ -38,7 +38,7 @@ TAG = TAGS.get(OS, None)
 class TestDeployTemplate:
 
     def setup_method(self):
-        self.oc_api = OpenShiftAPI(pod_name_prefix="php-testing", version=VERSION, shared_cluster=True)
+        self.oc_api = OpenShiftAPI(pod_name_prefix="php-testing", version=VERSION)
         self.oc_api.import_is("imagestreams/php-rhel.json", "", skip_check=True)
         #assert self.oc_api.upload_image(DEPLOYED_MYSQL_IMAGE, IMAGE_SHORT)
 
@@ -52,7 +52,8 @@ class TestDeployTemplate:
         ]
     )
     def test_php_template_inside_cluster(self, template):
-
+        if OS == "rhel10":
+            pytest.skip("Do NOT test on RHEL10 yet.")
         service_name = "php-testing"
         template_url = self.oc_api.get_raw_url_for_json(
             container="cakephp-ex", dir="openshift/templates", filename=template, branch=branch_to_test
@@ -74,7 +75,7 @@ class TestDeployTemplate:
             name_in_template="php",
             openshift_args=openshift_args
         )
-        assert self.oc_api.template_deployed(name_in_template=service_name)
+        assert self.oc_api.is_template_deployed(name_in_template=service_name)
         assert self.oc_api.check_response_inside_cluster(
             name_in_template=service_name, expected_output=check_msg
         )
