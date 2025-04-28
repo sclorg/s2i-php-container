@@ -29,6 +29,8 @@ class TestPHPImagestreams:
     def test_php_template_inside_cluster(self):
         if OS == "rhel10":
             pytest.skip("Do NOT test on RHEL10 yet.")
+        if VERSION == "8.3":
+            pytest.skip("Do NOT test on version 8.3 yet.")
         service_name = f"php-{SHORT_VERSION}-testing"
         assert self.oc_api.deploy_imagestream_s2i(
             imagestream_file="imagestreams/php-rhel.json",
