@@ -20,10 +20,6 @@ function test_php_integration() {
 
 # Check the imagestream
 function test_php_imagestream() {
-  if [ "$OS" == "rhel10" ]; then
-    echo "Imagestreams are not released yet for RHEL10. Let's skip this test."
-    return
-  fi
   ct_os_test_image_stream_s2i "${THISDIR}/imagestreams/php-${OS%[0-9]*}.json" "${IMAGE_NAME}" \
                               "https://github.com/sclorg/s2i-php-container.git" \
                               test/test-app \
@@ -34,10 +30,6 @@ function test_php_imagestream() {
 function test_php_template() {
   local supported_use_case
   local check_msg
-  if [ "$OS" == "rhel10" ]; then
-    echo "Imagestreams are not released yet for RHEL10. Let's skip this test."
-    return
-  fi
   if [ "${VERSION}" == "7.4" ] || [ "${VERSION}" == "8.0" ]; then
     supported_use_case="True"
     BRANCH_TO_TEST="4.X"
