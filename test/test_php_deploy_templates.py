@@ -5,6 +5,8 @@ import pytest
 from container_ci_suite.openshift import OpenShiftAPI
 from container_ci_suite.utils import check_variables
 
+from constants import TAGS
+
 if not check_variables():
     print("At least one variable from IMAGE_NAME, OS, VERSION is missing.")
     sys.exit(1)
@@ -24,11 +26,7 @@ else:
     branch_to_test = "master"
     check_msg = "Welcome to your CakePHP application on OpenShift"
 
-TAGS = {
-    "rhel8": "-ubi8",
-    "rhel9": "-ubi9"
-}
-TAG = TAGS.get(OS, None)
+TAG = TAGS.get(OS)
 
 new_version = VERSION.replace(".", "")
 
@@ -53,10 +51,6 @@ class TestDeployTemplate:
         ]
     )
     def test_php_template_inside_cluster(self, template):
-        if OS == "rhel10":
-            pytest.skip("Do NOT test on RHEL10 yet.")
-        if VERSION == "8.3":
-            pytest.skip("Do NOT test on version 8.3 yet.")
         self.oc_api.import_is("imagestreams/php-rhel.json", "", skip_check=True)
         service_name = f"php-{new_version}-testing"
         template_url = self.oc_api.get_raw_url_for_json(
