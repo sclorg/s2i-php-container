@@ -20,7 +20,7 @@ function test_php_integration() {
 
 # Check the imagestream
 function test_php_imagestream() {
-  ct_os_test_image_stream_s2i "${THISDIR}/imagestreams/php-${OS%[0-9]*}.json" "${IMAGE_NAME}" \
+  ct_os_test_image_stream_s2i "${THISDIR}/imagestreams/php-${OS//[0-9]/}.json" "${IMAGE_NAME}" \
                               "https://github.com/sclorg/s2i-php-container.git" \
                               test/test-app \
                               "Test PHP passed"
