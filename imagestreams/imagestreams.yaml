@@ -17,7 +17,7 @@
         app_versions: ["7.4", "8.0", "8.2"]
 
       - name: UBI 9
-        app_versions: ["8.0", "8.1", "8.2", "8.3"]
+        app_versions: ["8.0", "8.2", "8.3"]
 
       - name: UBI 10
         app_versions: ["8.3"]
@@ -29,7 +29,7 @@
         app_versions: ["7.4", "8.0", "8.2"]
 
       - name: UBI 9
-        app_versions: ["8.0", "8.1", "8.2", "8.3"]
+        app_versions: ["8.0", "8.2", "8.3"]
 
       - name: UBI 10
         app_versions: ["8.3"]
@@ -41,7 +41,7 @@
         app_versions: ["7.4", "8.0", "8.2"]
 
       - name: UBI 9
-        app_versions: ["8.0", "8.1", "8.2", "8.3"]
+        app_versions: ["8.0", "8.2", "8.3"]
 
       - name: UBI 10
         app_versions: ["8.3"]
