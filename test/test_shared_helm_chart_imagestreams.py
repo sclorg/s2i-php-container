@@ -36,7 +36,7 @@ class TestHelmRHELPHPImageStreams:
             ("8.3-ubi9", "registry.redhat.io/ubi9/php-83:latest", True),
             ("8.2-ubi9", "registry.redhat.io/ubi9/php-82:latest", True),
             ("8.2-ubi8", "registry.redhat.io/ubi8/php-82:latest", True),
-            ("8.1-ubi9", "registry.redhat.io/ubi9/php-81:latest", True),
+            ("8.1-ubi9", "registry.redhat.io/ubi9/php-81:latest", False),
             ("8.0-ubi9", "registry.redhat.io/ubi9/php-80:latest", True),
             ("8.0-ubi8", "registry.redhat.io/ubi8/php-80:latest", False),
             ("7.4-ubi8", "registry.redhat.io/ubi8/php-74:latest", True),
