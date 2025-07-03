@@ -34,7 +34,7 @@ TAG = TAGS.get(OS)
 class TestHelmCakePHPTemplate:
 
     def setup_method(self):
-        package_name = "redhat-php-cakephp-application"
+        package_name = "redhat-cakephp-application-template"
         path = test_dir
         self.hc_api = HelmChartsAPI(path=path, package_name=package_name, tarball_dir=test_dir)
         self.hc_api.clone_helm_chart_repo(
@@ -54,7 +54,7 @@ class TestHelmCakePHPTemplate:
         self.hc_api.package_name = "redhat-php-imagestreams"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()
-        self.hc_api.package_name = "redhat-php-cakephp-application"
+        self.hc_api.package_name = "redhat-cakephp-application-template"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation(
             values={
