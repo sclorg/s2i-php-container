@@ -14,22 +14,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - dockerfile: "8.0/Dockerfile.fedora"
-            docker_context: "8.0"
-            registry_namespace: "fedora"
-            quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
-            quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
-            tag: "8.0"
-            image_name: "php-80"
-
-          - dockerfile: "8.1/Dockerfile.fedora"
-            docker_context: "8.1"
-            registry_namespace: "fedora"
-            quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
-            quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
-            tag: "8.1"
-            image_name: "php-81"
-
           - dockerfile: "8.2/Dockerfile.fedora"
             docker_context: "8.2"
             registry_namespace: "fedora"
