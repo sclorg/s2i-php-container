@@ -35,7 +35,7 @@ function test_php_template() {
     BRANCH_TO_TEST="4.X"
     check_msg="Welcome to CakePHP 4.5"
   # Version 8.1 is supported only for RHEL9
-  elif [ "${VERSION}" == "8.1" ] || [ "${VERSION}" == "8.2" ] || [ "${VERSION}" == "8.3" ]; then
+  elif [ "${VERSION}" == "8.2" ] || [ "${VERSION}" == "8.3" ]; then
     supported_use_case="True"
     BRANCH_TO_TEST="5.X"
     check_msg="Welcome to CakePHP 5"

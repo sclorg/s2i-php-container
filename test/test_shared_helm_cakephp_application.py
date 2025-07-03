@@ -23,7 +23,7 @@ OS = os.getenv("TARGET")
 
 if VERSION == "7.4" or VERSION == "8.0":
     check_msg = "Welcome to CakePHP"
-elif VERSION == "8.1" or VERSION == "8.2" or VERSION == "8.3":
+elif  VERSION == "8.2" or VERSION == "8.3":
     check_msg = "Welcome to CakePHP"
 else:
     check_msg = "Welcome to your CakePHP application on OpenShift"
