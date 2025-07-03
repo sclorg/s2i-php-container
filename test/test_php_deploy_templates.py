@@ -19,7 +19,7 @@ OS = os.getenv("TARGET")
 if VERSION == "7.4" or VERSION == "8.0":
     branch_to_test = "4.X"
     check_msg = "Welcome to CakePHP"
-elif VERSION == "8.1" or VERSION == "8.2" or VERSION == "8.3":
+elif VERSION == "8.2" or VERSION == "8.3":
     branch_to_test = "5.X"
     check_msg = "Welcome to CakePHP"
 else:
