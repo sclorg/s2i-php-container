@@ -19,6 +19,7 @@ test_ssl
 test_ssl_own_cert
 ct_npm_works
 test_build_from_dockerfile
+test_home_not_in_webroot
 "
 
 TEST_CLEAR_ENV="\
@@ -160,6 +161,25 @@ test_config_writeable() {
 
   info "Checking if configuration is writeable"
   docker run --rm "${IMAGE_NAME}" /bin/bash -c "${run_cmd}"
+}
+
+test_home_not_in_webroot() {
+  cid_file=$CID_FILE_DIR/$(mktemp -u -p . --suffix .cid)
+  docker run -d --cidfile=${cid_file} ${IMAGE_NAME}-testapp
+
+  # Wait for container to initialize fully
+  test_connection ${test_port}
+
+  info "Testing whether \$HOME points to web server Document root"
+  local homef=$(docker exec -it $(cat ${cid_file}) /bin/bash -c "echo \$HOME")
+  ct_check_testcase_result $?
+  if [ "${homef}" = "${homef##/opt/app-root/src}" ]; then
+    echo "Home folder not set to Document root"
+    return 0
+  fi
+
+  info "Home folder set to Document root"
+  return 1
 }
 
 test_clear_env_setup() {
