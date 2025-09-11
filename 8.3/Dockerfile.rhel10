@@ -34,7 +34,6 @@ LABEL summary="${SUMMARY}" \
       io.s2i.scripts-url="image:///usr/libexec/s2i" \
       name="ubi10/${NAME}-${PHP_VER_SHORT}" \
       com.redhat.component="${NAME}-${PHP_VER_SHORT}-container" \
-      version="1" \
       com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI" \
       help="For more information visit https://github.com/sclorg/s2i-${NAME}-container" \
       usage="s2i build https://github.com/sclorg/s2i-php-container.git --context-dir=${PHP_VERSION}/test/test-app ubi10/${NAME}-${PHP_VER_SHORT} sample-server" \
