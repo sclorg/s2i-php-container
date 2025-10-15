@@ -34,6 +34,9 @@ class TestHelmRHELPHPImageStreams:
         ],
     )
     def test_package_imagestream(self, version, registry, expected):
+        """
+        Test checks if Helm imagestreams are present
+        """
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()
         assert self.hc_api.check_imagestreams(version=version, registry=registry) == expected

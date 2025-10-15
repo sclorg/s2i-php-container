@@ -19,6 +19,10 @@ class TestDeployTemplate:
         ]
     )
     def test_php_template_inside_cluster(self, template):
+        """
+        Test checks if local imagestreams and example application `cakephp-ex` works with properly
+        and response is as expected
+        """
         self.oc_api.import_is("imagestreams/php-rhel.json", "", skip_check=True)
         service_name = f"php-{VARS.SHORT_VERSION}-testing"
         template_url = self.oc_api.get_raw_url_for_json(

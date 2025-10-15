@@ -17,6 +17,10 @@ class TestHelmCakePHPTemplate:
         self.hc_api.delete_project()
 
     def test_by_helm_test(self):
+        """
+        Test checks if Helm imagestream and Helm perl dancer application
+        works properly and response is as expected.
+        """
         self.hc_api.package_name = "redhat-php-imagestreams"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()

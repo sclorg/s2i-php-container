@@ -12,6 +12,11 @@ class TestPHPImagestreams:
         self.oc_api.delete_project()
 
     def test_php_template_inside_cluster(self):
+        """
+        Test checks if local repository with properly with `test/test-app`
+        response is as expected.
+        The imagestreams are used from this repository
+        """
         service_name = f"php-{VARS.SHORT_VERSION}-testing"
         assert self.oc_api.deploy_imagestream_s2i(
             imagestream_file="imagestreams/php-rhel.json",
