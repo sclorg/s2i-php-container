@@ -61,6 +61,10 @@ class TestPHPTestApplicationContainer:
         ]
     )
     def test_run_app_test(self, container_arg):
+        """
+        Test checks if php-version is proper one
+        and specific pages returns expected message or return code.
+        """
         cid_file_name = self.s2i_app.app_name
         assert self.s2i_app.create_container(
             cid_file_name=cid_file_name, container_args=f"--user=100001 {container_arg}"
@@ -116,6 +120,10 @@ class TestPHPClearEnvContainer:
             self.s2i_app.cleanup()
 
     def test_run_app_test(self):
+        """
+        Test checks if php-version is proper one
+        and specific pages returns expected message or return code.
+        """
         skip_clear_env_tests()
         cid_file_name = self.s2i_app.app_name
         assert self.s2i_app.create_container(cid_file_name=cid_file_name, container_args="--user=100001")
@@ -180,4 +188,7 @@ class TestPHPNPMtestContainer:
         self.s2i_app.cleanup()
 
     def test_npm_works(self):
+        """
+        Test checks if NPM is valid and works properly
+        """
         assert self.s2i_app.npm_works(image_name=VARS.IMAGE_NAME)

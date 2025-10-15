@@ -31,6 +31,10 @@ class TestPHPSslTestAppContainer:
         self.s2i_app.cleanup()
 
     def test_run_app_test(self):
+        """
+        Test checks if SSL certificates are different then in server one.
+        The SSL certificates should not be used in production.
+        """
         cid_file_name = self.s2i_app.app_name
         assert self.s2i_app.create_container(cid_file_name=cid_file_name, container_args="--user=100001")
         assert ContainerImage.wait_for_cid(cid_file_name=cid_file_name)

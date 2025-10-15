@@ -13,6 +13,10 @@ class TestS2IPHPTemplate:
         self.oc_api.delete_project()
 
     def test_php_template_inside_cluster(self):
+        """
+        Test checks if local repository with properly with `test/test-app`
+        response is as expected
+        """
         service_name = f"php-{VARS.SHORT_VERSION}-testing"
         assert self.oc_api.deploy_s2i_app(
             image_name=VARS.IMAGE_NAME, app="https://github.com/sclorg/s2i-php-container.git",
