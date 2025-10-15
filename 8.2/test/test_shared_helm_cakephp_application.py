@@ -1,1 +1,0 @@
-../../test/test_shared_helm_cakephp_application.py
