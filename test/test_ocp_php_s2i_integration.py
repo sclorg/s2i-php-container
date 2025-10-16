@@ -3,7 +3,6 @@ from container_ci_suite.openshift import OpenShiftAPI
 from conftest import VARS
 
 
-# Replacement with 'test_python_s2i_app_ex'
 class TestS2IPHPTemplate:
 
     def setup_method(self):

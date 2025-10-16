@@ -1,7 +1,7 @@
 import pytest
 from container_ci_suite.openshift import OpenShiftAPI
 
-from conftest import VARS, TAGS
+from conftest import VARS
 
 
 class TestDeployTemplate:
@@ -30,7 +30,7 @@ class TestDeployTemplate:
         )
         openshift_args = [
             f"SOURCE_REPOSITORY_REF={VARS.BRANCH_TO_TEST}",
-            f"PHP_VERSION={VARS.SHORT_VERSION}{TAGS.get(VARS.OS)}",
+            f"PHP_VERSION={VARS.SHORT_VERSION}{VARS.TAG}",
             f"NAME={service_name}"
         ]
         # if template != "cakephp.json":
