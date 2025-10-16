@@ -1,6 +1,6 @@
 from container_ci_suite.helm import HelmChartsAPI
 
-from conftest import VARS, TAGS
+from conftest import VARS
 
 
 class TestHelmCakePHPTemplate:
@@ -28,7 +28,7 @@ class TestHelmCakePHPTemplate:
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation(
             values={
-                "php_version": f"{VARS.VERSION}{TAGS.get(VARS.OS)}",
+                "php_version": f"{VARS.VERSION}{VARS.TAG}",
                 "namespace": self.hc_api.namespace,
                 "source_repository_ref": VARS.BRANCH_TO_TEST,
                 "name": "cakephp-example"
