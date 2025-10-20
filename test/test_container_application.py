@@ -113,11 +113,11 @@ class TestPHPTestApplicationContainer:
 
 class TestPHPClearEnvContainer:
     def setup_method(self):
-        self.s2i_app = build_s2i_app(test_app, container_args="-e PHP_CLEAR_ENV=OFF")
+        container_args = "-e PHP_CLEAR_ENV=OFF" if VARS.OS in ("rhel9", "rhel10") else ""
+        self.s2i_app = build_s2i_app(test_app, container_args=container_args)
 
     def teardown_method(self):
-        if self.s2i_app:
-            self.s2i_app.cleanup()
+        self.s2i_app.cleanup()
 
     def test_run_app_test(self):
         """
