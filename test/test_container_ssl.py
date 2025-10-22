@@ -48,8 +48,7 @@ class TestPHPSslTestAppContainer:
         server_cmd = f"openssl s_client -showcerts -servername {cip} -connect {cip}:8443 2>/dev/null"
         server_output = ContainerTestLibUtils.run_command(cmd=server_cmd)
         certificate_dir = tempfile.mkdtemp(prefix="/tmp/server_cert_dir")
-        with open(Path(certificate_dir) / "output", mode="wt+") as f:
-            f.write(server_output)
+        (Path(certificate_dir) / "output").write_text(server_output)
         server_cert = ContainerTestLibUtils.run_command(
             cmd=f"openssl x509 -inform pem -noout -text -in {Path(certificate_dir)}/output"
         )
