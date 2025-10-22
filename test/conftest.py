@@ -49,7 +49,6 @@ VARS = Vars(
 IMAGE_TAG = f"mysql:{VARS.MYSQL_VERSION}"
 
 
-
 def skip_clear_env_tests():
     if VARS.OS == "rhel8" and VERSION == "8.2":
         skip(f"Skipping clear env tests for {VARS.VERSION} on {VARS.OS}.")

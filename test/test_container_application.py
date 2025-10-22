@@ -113,7 +113,7 @@ class TestPHPTestApplicationContainer:
 
 class TestPHPClearEnvContainer:
     def setup_method(self):
-        container_args = "-e PHP_CLEAR_ENV=OFF" if VARS.OS in ("rhel9", "rhel10") else ""
+        container_args = "" if VARS.OS == "rhel8" else "-e PHP_CLEAR_ENV=OFF"
         self.s2i_app = build_s2i_app(test_app, container_args=container_args)
 
     def teardown_method(self):
@@ -158,26 +158,26 @@ class TestPHPClearEnvContainer:
         # test if configuration is writeable for php.ini
         assert PodmanCLIWrapper.podman_run_command_and_remove(
             cid_file_name=VARS.IMAGE_NAME,
-            cmd="[ -w \\${PHP_SYSCONF_PATH}/php.ini ]",
+            cmd="test -w \\${PHP_SYSCONF_PATH}/php.ini",
             return_output=False
         ) == 0
         # test if php.d directory is writeable
         assert PodmanCLIWrapper.podman_run_command_and_remove(
             cid_file_name=VARS.IMAGE_NAME,
-            cmd="[ -w \\${PHP_SYSCONF_PATH}/php.d ]",
+            cmd="test -w \\${PHP_SYSCONF_PATH}/php.d",
             return_output=False
         ) == 0
-        if VARS.OS == "rhel9" or VARS.OS == "rhel10":
+        if VARS.OS in ("rhel9", "rhel10"):
             # Checking if clear_env = no is set in /etc/php-fpm.d/www.conf file.
             file_content = PodmanCLIWrapper.podman_get_file_content(
                 cid_file_name=cid,
                 filename="/etc/php-fpm.d/www.conf"
             )
-            found = False
-            for line in file_content.split('\n'):
+            for line in file_content.splitlines():
                 if re.search("^clear_env = no", line):
-                    found = True
-            assert found
+                    break
+            else:
+                assert False, "'clear_env = no' not found in www.conf file."
 
 
 class TestPHPNPMtestContainer:

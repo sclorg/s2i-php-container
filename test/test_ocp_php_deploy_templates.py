@@ -1,4 +1,3 @@
-import pytest
 from container_ci_suite.openshift import OpenShiftAPI
 
 from conftest import VARS
