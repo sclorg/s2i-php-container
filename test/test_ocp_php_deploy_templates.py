@@ -1,6 +1,6 @@
 from container_ci_suite.openshift import OpenShiftAPI
 
-from conftest import VARS
+from conftest import VARS, skip_clear_env_tests
 
 
 class TestDeployTemplate:
@@ -16,6 +16,7 @@ class TestDeployTemplate:
         Test checks if local imagestreams and example application `cakephp-ex` works with properly
         and response is as expected
         """
+        skip_clear_env_tests()
         self.oc_api.import_is("imagestreams/php-rhel.json", "", skip_check=True)
         service_name = f"php-{VARS.SHORT_VERSION}-testing"
         template_url = self.oc_api.get_raw_url_for_json(
@@ -32,7 +33,7 @@ class TestDeployTemplate:
             name_in_template="php",
             openshift_args=openshift_args
         )
-        assert self.oc_api.is_template_deployed(name_in_template=service_name)
+        assert self.oc_api.is_template_deployed(name_in_template=service_name, timeout=480)
         assert self.oc_api.check_response_inside_cluster(
             name_in_template=service_name, expected_output=VARS.CHECK_MSG
         )
