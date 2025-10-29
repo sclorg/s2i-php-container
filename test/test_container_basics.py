@@ -53,6 +53,6 @@ class TestPHPContainer:
         assert cip
         assert self.app.test_response(
             url=cip,
-            expected_output=VARS.CHECK_MSG,
+            expected_output="Welcome to your CakePHP application on OpenShift",
             debug=True
         )

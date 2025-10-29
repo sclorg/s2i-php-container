@@ -25,6 +25,10 @@ Vars = namedtuple(
 VERSION = os.getenv("VERSION")
 OS = os.getenv("TARGET").lower()
 
+BRANCH_TO_TEST = "4.X"
+if VERSION == "8.2" or VERSION == "8.3":
+    BRANCH_TO_TEST = "5.X"
+
 VARS = Vars(
     OS=OS,
     TAG=TAGS.get(OS),
@@ -33,8 +37,8 @@ VARS = Vars(
     IS_MINIMAL="minimal" in VERSION,
     SHORT_VERSION=VERSION.replace(".", ""),
     TEST_DIR=Path(__file__).parent.absolute(),
-    BRANCH_TO_TEST="master",
-    CHECK_MSG="Welcome to your CakePHP",
+    BRANCH_TO_TEST=BRANCH_TO_TEST,
+    CHECK_MSG="Welcome to CakePHP",
 )
 
 
