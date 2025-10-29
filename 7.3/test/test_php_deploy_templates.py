@@ -1,1 +1,0 @@
-../../test/test_php_deploy_templates.py
