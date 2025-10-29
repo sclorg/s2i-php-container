@@ -48,11 +48,11 @@ Installation
 To build a PHP image, choose either the CentOS or RHEL based image:
 *  **RHEL based image**
 
-    These images are available in the [Red Hat Container Catalog](https://catalog.redhat.com/software/containers/ubi8/php-74/5f521244e05bbcd88f128b63).
+    These images are available in the [Red Hat Container Catalog](https://catalog.redhat.com/software/containers/ubi10/php-83/677d36336490940dce770abe).
     To download it run:
 
     ```
-    $ podman pull registry.access.redhat.com/ubi8/php-74
+    $ podman pull registry.access.redhat.com/ubi10/php-83
     ```
 
     To build a RHEL based PHP image, you need to run the build on a properly
@@ -61,19 +61,19 @@ To build a PHP image, choose either the CentOS or RHEL based image:
     ```
     $ git clone --recursive https://github.com/sclorg/s2i-php-container.git
     $ cd s2i-php-container
-    $ make build TARGET=rhel8 VERSIONS=7.4
+    $ make build TARGET=rhel10 VERSIONS=8.3
     ```
 
 *  **CentOS based image**
     ```
     $ git clone --recursive https://github.com/sclorg/s2i-php-container.git
     $ cd s2i-php-container
-    $ make build TARGET=c9s VERSIONS=7.4
+    $ make build TARGET=c10s VERSIONS=8.3
     ```
 
 Alternatively, you can pull the CentOS Stream image from Docker Hub via:
 
-    $ podman pull registry.access.redhat.com/ubi8/php-74
+    $ podman pull registry.access.redhat.com/ubi10/php-83
 
 Note: while the installation steps are calling `podman`, you can replace any such calls by `docker` with the same arguments.
 
@@ -110,19 +110,19 @@ Users can choose between testing a PHP test application based on a RHEL or CentO
 
     This image is not available as a trusted build in [Docker Index](https://index.docker.io).
 
-    To test a RHEL8 based PHP-7.4 image, you need to run the test on a properly
+    To test a RHEL10 based PHP-8.3 image, you need to run the test on a properly
     subscribed RHEL machine.
 
     ```
     $ cd s2i-php-container
-    $ make test TARGET=rhel8 VERSIONS=7.4
+    $ make test TARGET=rhel10 VERSIONS=8.3
     ```
 
 *  **CentOS Stream based image**
 
     ```
     $ cd s2i-php-container
-    $ make test TARGET=c9s VERSIONS=7.4
+    $ make test TARGET=c10s VERSIONS=8.3
     ```
 
 **Notice: By omitting the `VERSIONS` parameter, the build/test action will be performed
@@ -133,7 +133,7 @@ Repository organization
 -----------------------
 * **`<php-version>`**
 
-    * **Dockerfile.c9s**
+    * **Dockerfile.c10s**
 
         CentOS Stream based Dockerfile.
 
