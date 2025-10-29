@@ -1,8 +1,13 @@
 #!/bin/sh
 
 DISTRO=`cat /etc/*-release | grep ^ID= | grep -Po '".*?"' | tr -d '"'`
-NAMESPACE=centos
-[[ $DISTRO =~ rhel* ]] && NAMESPACE=rhscl
+NAMESPACE=sclorg
+if [[ $DISTRO =~ rhel* ]]; then
+  NAMESPACE=rhel10
+  DISTRO=""
+else
+  DISTRO="-c10s"
+fi
 
 cat <<EOF
 This is a S2I PHP-${PHP_VERSION} ${DISTRO} base image:
