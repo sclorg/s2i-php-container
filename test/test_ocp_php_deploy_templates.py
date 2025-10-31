@@ -24,7 +24,8 @@ class TestDeployTemplate:
         )
         openshift_args = [
             f"SOURCE_REPOSITORY_REF={VARS.BRANCH_TO_TEST}",
-            f"PHP_VERSION={VARS.SHORT_VERSION}{VARS.TAG}",
+            "SOURCE_REPOSITORY_URL=https://github.com/sclorg/cakephp-ex.git",
+            f"PHP_VERSION={VARS.VERSION}{VARS.TAG}",
             f"NAME={service_name}"
         ]
         assert self.oc_api.deploy_template_with_image(

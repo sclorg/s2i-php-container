@@ -18,7 +18,7 @@ TAGS = {
 
 Vars = namedtuple(
     "Vars", [
-        "OS", "TAG", "VERSION", "IMAGE_NAME", "IS_MINIMAL",
+        "OS", "TAG", "VERSION", "IMAGE_NAME",
         "SHORT_VERSION", "TEST_DIR", "BRANCH_TO_TEST", "CHECK_MSG"
     ]
 )
@@ -34,7 +34,6 @@ VARS = Vars(
     TAG=TAGS.get(OS),
     VERSION=VERSION,
     IMAGE_NAME=os.getenv("IMAGE_NAME"),
-    IS_MINIMAL="minimal" in VERSION,
     SHORT_VERSION=VERSION.replace(".", ""),
     TEST_DIR=Path(__file__).parent.absolute(),
     BRANCH_TO_TEST=BRANCH_TO_TEST,
