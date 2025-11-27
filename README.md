@@ -3,13 +3,6 @@ PHP Docker images
 
 [![Build and push images to Quay.io registry](https://github.com/sclorg/s2i-php-container/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/sclorg/s2i-php-container/actions/workflows/build-and-push.yml)
 
-Images available on Quay are:
-* CentOS Stream 9 [php-74](https://quay.io/repository/sclorg/php-74-c9s)
-* Fedora [php-80](https://quay.io/repository/fedora/php-80)
-* Fedora [php-81](https://quay.io/repository/fedora/php-81)
-* Fedora [php-82](https://quay.io/repository/fedora/php-82)
-* Fedora [php-83](https://quay.io/repository/fedora/php-83)
-
 This repository contains the source for building various versions of
 the PHP application as a reproducible Docker image using
 [source-to-image](https://github.com/openshift/source-to-image).
@@ -27,21 +20,19 @@ For more information about concepts used in these container images, see the
 
 Versions
 --------
-PHP versions currently supported are:
-* [php-7.4](7.4)
-* [php-8.0](8.0)
-* [php-8.1](8.1)
-* [php-8.2](8.2)
-* [php-8.3](8.3)
-
-RHEL versions currently supported are:
-* RHEL8
-* RHEL9
-* RHEL10
-
-CenOS Stream versions currently supported are:
-* CentOS Stream 9
-* CentOS Stream 10
+Currently supported versions are visible in the following table, expand an entry to see its container registry address.
+<!--
+Table start
+-->
+||CentOS Stream 9|CentOS Stream 10|Fedora|RHEL 8|RHEL 9|RHEL 10|
+|:--|:--:|:--:|:--:|:--:|:--:|:--:|
+|7.4||||<details><summary>✓</summary>`registry.redhat.io/rhel8/php-74`</details>|||
+|8.0|||||<details><summary>✓</summary>`registry.redhat.io/rhel9/php-80`</details>||
+|8.2|||<details><summary>✓</summary>`quay.io/fedora/php-82`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel8/php-82`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel9/php-82`</details>||
+|8.3|<details><summary>✓</summary>`quay.io/sclorg/php-83-c9s`</details>|<details><summary>✓</summary>`quay.io/sclorg/php-83-c10s`</details>|<details><summary>✓</summary>`quay.io/fedora/php-83`</details>||<details><summary>✓</summary>`registry.redhat.io/rhel9/php-83`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel10/php-83`</details>|
+<!--
+Table end
+-->
 
 Installation
 ------------
