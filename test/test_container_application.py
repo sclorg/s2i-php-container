@@ -192,3 +192,113 @@ class TestPHPNPMtestContainer:
         Test checks if NPM is valid and works properly
         """
         assert self.s2i_app.npm_works(image_name=VARS.IMAGE_NAME)
+
+
+class TestHTTPDRemoteIPContainer:
+    def setup_method(self):
+        container_args = "-e HTTPD_ENABLE_REMOTEIP=1"
+        self.s2i_app = build_s2i_app(test_app, container_args=container_args)
+
+    def teardown_method(self):
+        self.s2i_app.cleanup()
+
+    def test_remoteip_config_created(self):
+        """
+        Test checks if remoteip.conf is created when HTTPD_ENABLE_REMOTEIP=1
+        and contains the expected Apache mod_remoteip configuration.
+        """
+        cid_file_name = self.s2i_app.app_name
+        assert self.s2i_app.create_container(cid_file_name=cid_file_name, container_args="--user=100001")
+        assert ContainerImage.wait_for_cid(cid_file_name=cid_file_name)
+        cid = self.s2i_app.get_cid(cid_file_name=cid_file_name)
+        assert cid
+
+        # Wait for container to fully start and run pre-start scripts
+        import time
+        time.sleep(5)
+
+        # Verify remoteip.conf exists and contains expected directives
+        file_content = PodmanCLIWrapper.podman_get_file_content(
+            cid_file_name=cid,
+            filename="/opt/app-root/etc/conf.d/remoteip.conf"
+        )
+        assert file_content, "remoteip.conf file should exist"
+
+        # Check for required mod_remoteip directives
+        required_directives = [
+            "LoadModule remoteip_module modules/mod_remoteip.so",
+            "RemoteIPHeader X-Forwarded-For",
+            "RemoteIPTrustedProxy 10.0.0.0/8",
+            "RemoteIPTrustedProxy 172.16.0.0/12",
+            "RemoteIPTrustedProxy 192.168.0.0/16",
+            "RemoteIPTrustedProxy 169.254.0.0/16",
+            "RemoteIPTrustedProxy 127.0.0.0/8",
+        ]
+
+        for directive in required_directives:
+            assert directive in file_content, f"Missing directive: {directive}"
+
+    def test_remoteip_container_runs(self):
+        """
+        Test checks if container with HTTPD_ENABLE_REMOTEIP=1 starts successfully
+        and serves content properly.
+        """
+        cid_file_name = self.s2i_app.app_name
+        assert self.s2i_app.create_container(cid_file_name=cid_file_name, container_args="--user=100001")
+        assert ContainerImage.wait_for_cid(cid_file_name=cid_file_name)
+        cid = self.s2i_app.get_cid(cid_file_name=cid_file_name)
+        assert cid
+
+        # Wait for container to fully start
+        import time
+        time.sleep(5)
+
+        cip = self.s2i_app.get_cip(cid_file_name=cid_file_name)
+
+        # Only test HTTP responses if container has an IP (may not work in some rootless environments)
+        if cip:
+            # Verify container is serving content properly
+            assert self.s2i_app.test_response(url=cip)
+
+            # Verify HTTPS also works
+            assert self.s2i_app.test_response(
+                url=f"https://{cip}", port=8443
+            )
+
+
+class TestHTTPDRemoteIPDisabledContainer:
+    def setup_method(self):
+        # Build without HTTPD_ENABLE_REMOTEIP environment variable
+        self.s2i_app = build_s2i_app(test_app)
+
+    def teardown_method(self):
+        self.s2i_app.cleanup()
+
+    def test_remoteip_disabled_by_default(self):
+        """
+        Test checks if mod_remoteip is NOT enabled by default
+        when HTTPD_ENABLE_REMOTEIP is not set.
+        """
+        cid_file_name = self.s2i_app.app_name
+        assert self.s2i_app.create_container(cid_file_name=cid_file_name, container_args="--user=100001")
+        assert ContainerImage.wait_for_cid(cid_file_name=cid_file_name)
+        cid = self.s2i_app.get_cid(cid_file_name=cid_file_name)
+        assert cid
+
+        # Wait for container to fully start
+        import time
+        time.sleep(5)
+
+        # Verify remoteip.conf does NOT exist
+        result = PodmanCLIWrapper.podman_exec_shell_command(
+            cid_file_name=cid,
+            cmd="test -f /opt/app-root/etc/conf.d/remoteip.conf && echo exists || echo missing"
+        )
+        assert "missing" in result, "remoteip.conf should not exist when HTTPD_ENABLE_REMOTEIP is not set"
+
+        # Verify container still runs properly without remoteip
+        cip = self.s2i_app.get_cip(cid_file_name=cid_file_name)
+
+        # Only test HTTP response if container has an IP (may not work in some rootless environments)
+        if cip:
+            assert self.s2i_app.test_response(url=cip)
