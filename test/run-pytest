@@ -12,4 +12,7 @@ PYTHON_VERSION="3.12"
 if [[ ! -f "/usr/bin/python$PYTHON_VERSION" ]]; then
   PYTHON_VERSION="3.13"
 fi
+if [[ ! -f "/usr/bin/python$PYTHON_VERSION" ]]; then
+  PYTHON_VERSION="3.14"
+fi
 cd "${THISDIR}" && "python${PYTHON_VERSION}" -m pytest -s -rA --showlocals -vv test_container_*.py

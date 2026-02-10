@@ -249,6 +249,11 @@ yourself:
   * The [MaxKeepAliveRequests](http://httpd.apache.org/docs/current/mod/core.html#maxkeepaliverequests)
     directive limits the number of requests allowed per connection when `KeepAlive` is on. If it is set to 0, unlimited requests will be allowed.
   * Default: 100
+* **HTTPD_ENABLE_REMOTEIP**
+  * When set to 1, enables [mod_remoteip](https://httpd.apache.org/docs/2.4/mod/mod_remoteip.html)
+    to properly handle `X-Forwarded-For` headers from trusted reverse proxies (e.g., when running behind a load balancer or in Kubernetes).
+    This configures Apache to trust private IP ranges (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 169.254.0.0/16, 127.0.0.0/8).
+  * Default: not set (disabled)
 
   You can use a custom composer repository mirror URL to download packages instead of the default 'packagist.org':
 
