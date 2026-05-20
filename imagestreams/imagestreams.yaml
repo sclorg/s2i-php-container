@@ -20,10 +20,10 @@
         app_versions: ["8.0", "8.2", "8.3"]
 
       - name: UBI 10
-        app_versions: ["8.3"]
+        app_versions: ["8.3", "8.4"]
 
   - filename: php-rhel.json
-    latest: "8.3-ubi10"
+    latest: "8.4-ubi10"
     distros:
       - name: UBI 8
         app_versions: ["7.4", "8.2"]
@@ -32,10 +32,10 @@
         app_versions: ["8.0", "8.2", "8.3"]
 
       - name: UBI 10
-        app_versions: ["8.3"]
+        app_versions: ["8.3", "8.4"]
 
   - filename: php-rhel-aarch64.json
-    latest: "8.3-ubi10"
+    latest: "8.4-ubi10"
     distros:
       - name: UBI 8
         app_versions: ["7.4", "8.2"]
@@ -44,5 +44,5 @@
         app_versions: ["8.0", "8.2", "8.3"]
 
       - name: UBI 10
-        app_versions: ["8.3"]
+        app_versions: ["8.3", "8.4"]
 ...
