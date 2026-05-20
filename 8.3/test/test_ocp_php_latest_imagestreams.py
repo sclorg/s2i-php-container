@@ -1,0 +1,1 @@
+../../test/test_ocp_php_latest_imagestreams.py
