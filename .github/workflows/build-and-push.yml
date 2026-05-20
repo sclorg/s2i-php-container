@@ -30,6 +30,22 @@ jobs:
             tag: "8.3"
             image_name: "php-83"
 
+          - dockerfile: "8.4/Dockerfile.fedora"
+            docker_context: "8.4"
+            registry_namespace: "fedora"
+            quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
+            quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
+            tag: "8.4"
+            image_name: "php-84"
+
+          - dockerfile: "8.4/Dockerfile.c10s"
+            docker_context: "8.4"
+            registry_namespace: "sclorg"
+            quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
+            quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
+            tag: "c10s"
+            image_name: "php-84-c10s"
+
           - dockerfile: "8.3/Dockerfile.c10s"
             docker_context: "8.3"
             registry_namespace: "sclorg"
