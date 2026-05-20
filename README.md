@@ -30,6 +30,7 @@ Table start
 |8.0|||||<details><summary>✓</summary>`registry.redhat.io/rhel9/php-80`</details>||
 |8.2|||<details><summary>✓</summary>`quay.io/fedora/php-82`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel8/php-82`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel9/php-82`</details>||
 |8.3|<details><summary>✓</summary>`quay.io/sclorg/php-83-c9s`</details>|<details><summary>✓</summary>`quay.io/sclorg/php-83-c10s`</details>|<details><summary>✓</summary>`quay.io/fedora/php-83`</details>||<details><summary>✓</summary>`registry.redhat.io/rhel9/php-83`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel10/php-83`</details>|
+|8.4||<details><summary>✓</summary>`quay.io/sclorg/php-84-c10s`</details>|<details><summary>✓</summary>`quay.io/fedora/php-84`</details>|||<details><summary>✓</summary>`registry.redhat.io/rhel10/php-84`</details>|
 <!--
 Table end
 -->
@@ -89,6 +90,9 @@ see [usage documentation](8.2/README.md).
 
 For information about usage of Dockerfile for PHP 8.3,
 see [usage documentation](8.3/README.md).
+
+For information about usage of Dockerfile for PHP 8.4,
+see [usage documentation](8.4/README.md).
 
 Test
 ----

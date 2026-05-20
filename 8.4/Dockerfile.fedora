@@ -1,4 +1,4 @@
-FROM quay.io/fedora/s2i-base:40
+FROM quay.io/fedora/s2i-base:43
 
 # This image provides an Apache+PHP environment for running PHP
 # applications.
@@ -6,8 +6,8 @@ FROM quay.io/fedora/s2i-base:40
 EXPOSE 8080
 EXPOSE 8443
 
-ENV PHP_VERSION=8.3 \
-    PHP_SHORT_VER=83 \
+ENV PHP_VERSION=8.4 \
+    PHP_SHORT_VER=84 \
     PATH=$PATH:/usr/bin
 
 ENV SUMMARY="Platform for building and running PHP $PHP_VERSION applications" \
