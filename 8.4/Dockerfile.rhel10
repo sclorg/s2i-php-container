@@ -40,11 +40,11 @@ LABEL summary="${SUMMARY}" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 # Install Apache httpd and PHP
-ARG INSTALL_PKGS="php php-fpm mod_ssl hostname"
-ARG INSTALL_EXTS="php-json php-mysqli php-pgsql php-bcmath \
-                  php-gd php-intl php-ldap php-mbstring php-pdo \
-                  php-process php-soap php-opcache php-xml \
-                  php-gmp php-apcu php-zip php-redis"
+ARG INSTALL_PKGS="php${PHP_VERSION} php${PHP_VERSION}-fpm mod_ssl hostname"
+ARG INSTALL_EXTS="php${PHP_VERSION}-mysqlnd php${PHP_VERSION}-pgsql php${PHP_VERSION}-bcmath \
+                  php${PHP_VERSION}-gd php${PHP_VERSION}-intl php${PHP_VERSION}-ldap php${PHP_VERSION}-mbstring php${PHP_VERSION}-pdo \
+                  php${PHP_VERSION}-process php${PHP_VERSION}-soap php${PHP_VERSION}-xml \
+                  php${PHP_VERSION}-gmp php-zip php-redis"
 
 RUN dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS $INSTALL_EXTS && \
     dnf reinstall -y tzdata && \
