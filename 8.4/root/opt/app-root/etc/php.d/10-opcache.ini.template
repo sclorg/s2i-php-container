@@ -1,6 +1,3 @@
-; Enable Zend OPcache extension module
-zend_extension=opcache.so
-
 ; Determines if Zend OPCache is enabled
 opcache.enable=1
 
