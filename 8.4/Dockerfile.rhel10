@@ -51,7 +51,7 @@ RUN dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS $INSTALL_EXTS && \
     rpm -V $INSTALL_PKGS && \
     php -v | grep -qe "v$PHP_VERSION\." && \
         echo "Found VERSION $PHP_VERSION" && \
-    for ext in $(echo $INSTALL_EXTS | sed s/php${PHP_VERSION}-//g | sed s/pecl-//g)  ; do php -m | grep -qi "$ext\$"; done && \
+    for ext in $(echo $INSTALL_EXTS | sed s/php${PHP_VERSION}-//g | sed s/pecl-//g | sed s/redis6/redis/g)  ; do php -m | grep -qi "$ext"; done && \
         echo "Found requested extensions" && \
     dnf -y clean all --enablerepo='*'
 
