@@ -45,14 +45,16 @@ ARG INSTALL_PKGS="php${PHP_VERSION} php${PHP_VERSION}-fpm mod_ssl hostname"
 ARG INSTALL_EXTS="php${PHP_VERSION}-mysqlnd php${PHP_VERSION}-pgsql php${PHP_VERSION}-bcmath \
                   php${PHP_VERSION}-gd php${PHP_VERSION}-intl php${PHP_VERSION}-ldap php${PHP_VERSION}-mbstring php${PHP_VERSION}-pdo \
                   php${PHP_VERSION}-process php${PHP_VERSION}-soap php${PHP_VERSION}-xml \
-                  php${PHP_VERSION}-gmp php${PHP_VERSION}-pecl-apcu php${PHP_VERSION}-pecl-zip php${PHP_VERSION}-pecl-redis6"
+                  php${PHP_VERSION}-gmp"
+ARG INSTALL_EXTS_UNVERSIONED="php-zip php-redis php-apcu"
 
-RUN dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS $INSTALL_EXTS && \
+RUN dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS $INSTALL_EXTS $INSTALL_EXTS_UNVERSIONED&& \
     dnf reinstall -y tzdata && \
     rpm -V $INSTALL_PKGS && \
     php -v | grep -qe "v$PHP_VERSION\." && \
         echo "Found VERSION $PHP_VERSION" && \
-    for ext in $(echo $INSTALL_EXTS | sed s/php-//g) ; do php -m | grep -qi "$ext\$"; done && \
+    for ext in $(echo $INSTALL_EXTS | sed s/php${PHP_VERSION}-//g) ; do php -m | grep -qi "$ext\$"; done && \
+    for ext in $(echo $INSTALL_EXTS_UNVERSIONED | sed s/php-//g) ; do php -m | grep -qi "$ext\$"; done && \
         echo "Found requested extensions" && \
     dnf -y clean all --enablerepo='*'
 
